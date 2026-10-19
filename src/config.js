@@ -4,12 +4,12 @@
  */
 window.WEIWEB_CONFIG = {
   comments: {
-    enabled: false,          // 填好下面的 ID 后改成 true
+    enabled: true,
     provider: "giscus",
-    repo: "",                // 例如 "yourname/wei_web"
-    repoId: "",              // 在 giscus.app 生成
+    repo: "wei-erer/wei_web",
+    repoId: "R_kgDOVPvQ5w",
     category: "Comments",    // Discussions 分类名（建议用 Announcements 类型）
-    categoryId: "",          // 在 giscus.app 生成
+    categoryId: "DIC_kwDOVPvQ584DJBV6",
     lang: "zh-CN"
   }
 };
