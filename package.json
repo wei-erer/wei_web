@@ -1,0 +1,17 @@
+{
+  "name": "wei-web",
+  "version": "2.3.0",
+  "private": true,
+  "type": "module",
+  "description": "面向 Web 安全初学者的开源课程中心：13 个 PART / 82 节，单文件离线可用",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "verify": "node verify3.mjs",
+    "md": "node tools/export-md.mjs",
+    "check": "node check-inline.mjs",
+    "discussions": "node tools/fetch-discussions.mjs",
+    "pages": "node build.mjs && node tools/export-md.mjs && node tools/prepare-pages.mjs"
+  },
+  "keywords": ["ctf", "web-security", "learning", "offline", "single-file"]
+}
