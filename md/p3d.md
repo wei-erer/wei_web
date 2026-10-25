@@ -159,6 +159,12 @@ def index():
     return render_template_string(INDEX, rows=rows, uid=session["uid"])
 ```
 
+> 🧬 **安全触点 · 登录鉴权：Session / Cookie / Token 各自信任谁**
+>
+> Session 是服务端状态，Cookie 只是它的钥匙；JWT 是客户端保存的**签名声明**；Flask 默认把 session 放进签名 cookie，所以 `SECRET_KEY` 泄露就等于可以伪造身份。**CSRF 的根因也在这里**：浏览器会自动带 Cookie，但不会替你证明「这次操作是你想要的」。
+>
+> [图谱 · Session/JWT](#vulnmap/auth) · [图谱 · CSRF](#vulnmap/csrf) · [图谱 · 越权](#vulnmap/idor)
+
 **这一段里，哪些地方是「安全写法」**
 
 | 写法 | 为什么安全 |
@@ -209,6 +215,23 @@ with db() as c:
               (session["uid"], pid, qty, amount))
 ```
 
+> 🧬 **安全触点 · 同一个注入，不同数据库**
+>
+> SQLite 是教学环境，语法和权限模型都更简单；真实题目常见 MySQL / PostgreSQL。换数据库先做三件事：**确认元数据表、确认时间函数、确认当前账号权限**。注入的根因不变，但「怎么问出数据」和「拿到权限后能做什么」差别很大。
+>
+> [图谱 · SQL 注入](#vulnmap/sqli) · [图谱 · NoSQL](#vulnmap/nosql) · [图谱 · UDF 提权](#vulnmap/udf)
+
+**SQLite / MySQL / PostgreSQL：指纹与打法差异**
+
+| 数据库 | 指纹 / 元数据 | 时间盲注 | 常用取值 | 高权限路径 |
+| --- | --- | --- | --- | --- |
+| SQLite | `sqlite_master`；无 information_schema；`sqlite_version()` | 无 SLEEP；用重查询或 `randomblob` 计时 | `group_concat`、`substr` | 默认无 UDF；`load_extension` 通常关闭 |
+| MySQL | `information_schema`；`@@version`、`database()` | `SLEEP()`、`BENCHMARK()` | `group_concat`、`0x3a` | 高权限 + 可写 plugin_dir → UDF；`INTO OUTFILE` |
+| PostgreSQL | `information_schema`、`pg_catalog`；`version()` | `pg_sleep()` | `string_agg`、`\|\|` 拼接 | `COPY ... TO PROGRAM`（超级用户）、`pg_read_file` |
+| SQL Server | `sys.objects`；`@@version` | `WAITFOR DELAY` | `+` 拼接、`CHAR()` | `xp_cmdshell`（高权限） |
+
+关于 **MySQL UDF 提权**：它成立的前提是「数据库账号权限过高 + 能把共享库写进 plugin_dir + 数据库愿意加载它」。这不是「MySQL 默认就能提权」，而是 SQL 注入拿到高权限账号后的延伸。学习时重点看**权限从哪来、为什么能写文件、怎么修**，不要把它当成一套背下来就能打的 payload。只在本地隔离容器里验证。
+
 **数据层的三件事**
 
 | 事项 | 做法 | 防住了什么 |
@@ -256,6 +279,12 @@ orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (session["uid"],
 | 上传有白名单 | 搜 .filename / save( | 文件上传 |
 | 错误信息不回显 | 故意传错参数看报错 | 信息泄露 |
 | 依赖没有已知漏洞 | pip list → 对照 CVE | 组件漏洞 |
+
+> 🧬 **安全触点 · 扩展功能就是新的攻击面**
+>
+> 给站加两个功能：`/preview?url=` 远程取图 → **SSRF** 诞生；`render_template_string("Hi " + name)` → **SSTI** 诞生。先写功能，再画出「输入 → 哪个函数 → 什么后果」，最后才想 payload。
+>
+> [图谱 · SSTI](#vulnmap/ssti) · [图谱 · SSRF](#vulnmap/ssrf)
 
 1. 本地跑起来：`flask --app app run --debug`，用浏览器把四个页面都走一遍。
 2. 打开 Burp，浏览器代理到 127.0.0.1:8080，勾上 Intercept。

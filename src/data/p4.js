@@ -54,6 +54,11 @@ COURSE.modules.push({
       goal: "看懂 ThinkPHP 站点的目录结构、路由规则与常见漏洞位置，并能判断版本。",
       sections: [
         { type: "p", text: "ThinkPHP 是国内中小项目用得极多的 PHP 框架，也是国内 CTF 的常客。框架题的难度不在「挖洞」，而在「认出这是哪个框架、哪个版本」。" },
+        { type: "touch", title: "框架把「一个函数」放大成「一条链」", text: "框架的入口、路由、模板、ORM 会把同一份输入送到更多落点；版本号决定已知链。但根因仍是<b>「参数进了不该进的位置」</b>，只是路径更长。先认版本，再读入口，最后才套链。", links: [
+          { name: "图谱 · PHP 反序列化", href: "#vulnmap/php-deser" },
+          { name: "图谱 · RCE", href: "#vulnmap/rce" },
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" }
+        ]},
         { type: "table", title: "典型目录结构", head: ["路径", "作用", "能泄露什么"], rows: [
           ["public/index.php", "唯一入口文件", "入口写法暴露版本"],
           ["app/controller/", "控制器：处理请求", "业务逻辑、SQL 拼接、参数使用"],
@@ -123,6 +128,11 @@ class Index {
       goal: "看懂一个 Flask 应用，理解模板渲染为什么会产生 SSTI，并知道 Flask 的四个常见配置风险。",
       sections: [
         { type: "p", text: "Flask 是 CTF 里最常见的 Python 后端。它代码量小、结构清晰，所以几乎每道 Flask 题都可以「读源码做题」。" },
+        { type: "touch", title: "Flask 的雷区，与 Python 的对象图", text: "<code>debug=True</code>、<code>SECRET_KEY</code> 泄露、<code>render_template_string</code> 拼接、pickle 反序列化。前三个已经在 p3d 里出现过；pickle 是 Python 特有的对象图问题，和 JS 原型链不是一回事。", links: [
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" },
+          { name: "图谱 · Session/JWT", href: "#vulnmap/auth" },
+          { name: "图谱 · Python 反序列化", href: "#vulnmap/py-deser" }
+        ]},
         { type: "code", lang: "python", title: "一个最小 Flask 应用", src: `from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
@@ -183,6 +193,11 @@ request.args.get() / request.form.get() / request.json
       goal: "知道这三类技术栈各自的「考点地形」，遇到时知道往哪看、怎么确认。",
       sections: [
         { type: "p", text: "这三者不需要一开始就精通，但必须知道它们的典型漏洞形态。目标是：<b>看到站的指纹，就能立刻缩小到对应的漏洞集合</b>。" },
+        { type: "touch", title: "解析器与运行时默认信任了什么", text: "Java 的 XML 解析器默认可能允许 DTD（XXE），<code>readObject</code> 是反序列化入口；Node 的 <code>vm</code> 不是安全边界，原型链污染能影响子进程选项。看到这些技术栈，先问「它默认信任了什么」，而不是先找 payload。", links: [
+          { name: "图谱 · XXE", href: "#vulnmap/xxe" },
+          { name: "图谱 · Java 反序列化", href: "#vulnmap/java-deser" },
+          { name: "图谱 · 原型链污染", href: "#vulnmap/proto" }
+        ]},
         { type: "table", title: "Django（Python）", head: ["项目", "内容"], rows: [
           ["结构", "MTV：Model / Template / View，app 分模块"],
           ["默认安全", "模板自动转义（XSS 少见）、CSRF 默认开启"],

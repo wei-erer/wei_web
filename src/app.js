@@ -44,6 +44,28 @@
     return -1;
   }
 
+  function vulnData() {
+    return COURSE.vulnmap || { scenes: [], nodes: [], edges: [] };
+  }
+  function vulnNode(id) {
+    var ns = vulnData().nodes;
+    for (var i = 0; i < ns.length; i++) if (ns[i].id === id) return ns[i];
+    return null;
+  }
+  function vulnNodeForLesson(lid) {
+    var ns = vulnData().nodes;
+    for (var i = 0; i < ns.length; i++) {
+      if (ns[i].lesson === lid) return ns[i];
+      if ((ns[i].extraLessons || []).indexOf(lid) !== -1) return ns[i];
+    }
+    return null;
+  }
+  function vulnScene(id) {
+    var ss = vulnData().scenes;
+    for (var i = 0; i < ss.length; i++) if (ss[i].id === id) return ss[i];
+    return null;
+  }
+
   var el = {
     tree: document.getElementById("tree"),
     main: document.getElementById("main"),
@@ -54,6 +76,7 @@
     exportBtn: document.getElementById("export-btn"),
     themeBtn: document.getElementById("theme-btn"),
     mapbtn: document.getElementById("mapbtn"),
+    vulnbtn: document.getElementById("vulnbtn"),
     homeBtn: document.getElementById("homebtn"),
     reviewBtn: document.getElementById("reviewbtn"),
     discussBtn: document.getElementById("discussbtn"),
@@ -199,6 +222,10 @@
       if (s.head) hay += " " + s.head.join(" ");
       if (s.rows) hay += " " + s.rows.map(function (r) { return r.join(" "); }).join(" ");
       if (s.src) hay += " " + s.src;
+      if (s.type === "touch") {
+        hay += " " + (s.title || "") + " " + (s.text || "");
+        (s.links || []).forEach(function (l) { hay += " " + l.name; });
+      }
     });
     (lesson.quiz || []).forEach(function (q2) {
       hay += " " + q2;
@@ -302,6 +329,56 @@
     return wrap;
   }
 
+  function touchCard(s) {
+    var box = document.createElement("div");
+    box.className = "touchcard";
+    var label = document.createElement("div");
+    label.className = "tc-label";
+    label.textContent = "🧬 安全触点";
+    box.appendChild(label);
+    var h = document.createElement("div");
+    h.className = "tc-title";
+    h.textContent = s.title || "";
+    box.appendChild(h);
+    var p = document.createElement("div");
+    p.className = "tc-text";
+    p.innerHTML = s.text || "";
+    box.appendChild(p);
+    if (s.links && s.links.length) {
+      var links = document.createElement("div");
+      links.className = "tc-links";
+      s.links.forEach(function (l) {
+        var a = document.createElement("a");
+        a.href = l.href;
+        a.textContent = l.name;
+        links.appendChild(a);
+      });
+      box.appendChild(links);
+    }
+    return box;
+  }
+
+  function miniVulnCard(n) {
+    var card = document.createElement("div");
+    card.className = "vulncard";
+    card.innerHTML =
+      '<div class="vc-head"><span class="vc-label">🕸 图谱节点</span><span class="vc-scene"></span></div>' +
+      '<div class="vc-short"></div>' +
+      '<div class="vc-line"><b>生于</b><span class="vc-born"></span></div>' +
+      '<div class="vc-line"><b>根因</b><span class="vc-root"></span></div>' +
+      '<div class="vc-line"><b>修复</b><span class="vc-fix"></span></div>' +
+      '<div class="vc-foot"><span>先读根因，再看下面的利用与变体。</span><a class="vc-link">打开图谱节点 →</a></div>';
+    var sc = vulnScene(n.scene);
+    card.querySelector(".vc-scene").textContent = sc ? sc.name : "";
+    card.querySelector(".vc-short").textContent = n.short;
+    card.querySelector(".vc-born").textContent = n.born;
+    card.querySelector(".vc-root").textContent = n.root;
+    card.querySelector(".vc-fix").textContent = n.fix;
+    var a = card.querySelector(".vc-link");
+    a.href = "#vulnmap/" + n.id;
+    return card;
+  }
+
   function renderLesson(id) {
     var fi = flatIndex(id);
     if (fi < 0) fi = 0;
@@ -363,6 +440,9 @@
       el.main.appendChild(g);
     }
 
+    var vn = vulnNodeForLesson(l.id);
+    if (vn && l.id.indexOf("p5") === 0) el.main.appendChild(miniVulnCard(vn));
+
     // 正文
     (l.sections || []).forEach(function (s) {
       if (s.type === "p") {
@@ -378,6 +458,8 @@
           ul.appendChild(li);
         });
         el.main.appendChild(ul);
+      } else if (s.type === "touch") {
+        el.main.appendChild(touchCard(s));
       } else if (s.type === "note") {
         var nt = document.createElement("div");
         nt.className = "note";
@@ -729,6 +811,7 @@
 
   function renderDiscuss() {
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.homeBtn.classList.remove("active");
     el.reviewBtn.classList.remove("active");
     el.discussBtn.classList.add("active");
@@ -864,6 +947,23 @@
       check.appendChild(span);
       body.appendChild(check);
 
+      if (s.vulns && s.vulns.length) {
+        var vrow = document.createElement("div");
+        vrow.className = "stage-vulns";
+        var vlab = document.createElement("b");
+        vlab.textContent = "顺路会遇到：";
+        vrow.appendChild(vlab);
+        s.vulns.forEach(function (id) {
+          var n = vulnNode(id);
+          if (!n) return;
+          var a = document.createElement("a");
+          a.href = "#vulnmap/" + id;
+          a.textContent = n.name;
+          vrow.appendChild(a);
+        });
+        body.appendChild(vrow);
+      }
+
       card.appendChild(body);
       el.main.appendChild(card);
     });
@@ -886,6 +986,323 @@
     el.main.appendChild(grid);
 
     window.scrollTo(0, 0);
+  }
+
+  /* ---------- 漏洞图谱 ---------- */
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (k) {
+        e.setAttribute(k, attrs[k]);
+      });
+    }
+    return e;
+  }
+
+  function gdBlock(parent, label, text) {
+    var b = document.createElement("div");
+    b.className = "gd-block";
+    var l = document.createElement("b");
+    l.textContent = label;
+    var p = document.createElement("p");
+    p.textContent = text;
+    b.appendChild(l);
+    b.appendChild(p);
+    parent.appendChild(b);
+  }
+
+  function renderVulnDetail(box, n) {
+    var vm = vulnData();
+    var sc = vulnScene(n.scene);
+    box.innerHTML = "";
+    var eye = document.createElement("div");
+    eye.className = "gd-eyebrow";
+    eye.textContent = "🕸 图谱节点";
+    box.appendChild(eye);
+    var h = document.createElement("h2");
+    h.className = "gd-title";
+    h.textContent = n.name;
+    box.appendChild(h);
+    var scene = document.createElement("div");
+    scene.className = "gd-scene";
+    scene.textContent = sc ? "生于：" + sc.name : "";
+    box.appendChild(scene);
+    var short = document.createElement("p");
+    short.className = "gd-short";
+    short.textContent = n.short;
+    box.appendChild(short);
+    gdBlock(box, "诞生条件", n.born);
+    gdBlock(box, "根因", n.root);
+    gdBlock(box, "怎么观察", n.observe);
+    gdBlock(box, "修复方向", n.fix);
+    gdBlock(box, "手动复现", n.repro);
+
+    var rel = vm.edges.filter(function (e) { return e.from === n.id || e.to === n.id; });
+    if (rel.length) {
+      var chain = document.createElement("div");
+      chain.className = "gd-block";
+      var cl = document.createElement("b");
+      cl.textContent = "可接成链";
+      chain.appendChild(cl);
+      rel.forEach(function (e) {
+        var other = vulnNode(e.from === n.id ? e.to : e.from);
+        if (!other) return;
+        var a = document.createElement("a");
+        a.className = "gd-chain";
+        a.href = "#vulnmap/" + other.id;
+        a.textContent = (e.from === n.id ? "→ " : "← ") + other.name + " · " + e.label;
+        chain.appendChild(a);
+      });
+      box.appendChild(chain);
+    }
+
+    var search = document.createElement("div");
+    search.className = "gd-search";
+    search.innerHTML = '<div class="gd-search-label">自己去找文章：</div>';
+    var kw = document.createElement("code");
+    kw.textContent = n.search;
+    search.appendChild(kw);
+    var bing = document.createElement("a");
+    bing.href = "https://www.bing.com/search?q=" + encodeURIComponent(n.search + " 原理");
+    bing.target = "_blank";
+    bing.rel = "noopener noreferrer";
+    bing.textContent = "Bing ↗";
+    var google = document.createElement("a");
+    google.href = "https://www.google.com/search?q=" + encodeURIComponent(n.search + " 原理");
+    google.target = "_blank";
+    google.rel = "noopener noreferrer";
+    google.textContent = "Google ↗";
+    search.appendChild(bing);
+    search.appendChild(google);
+    box.appendChild(search);
+
+    var foot = document.createElement("div");
+    foot.className = "gd-foot";
+    var lesson = flatIndex(n.lesson) >= 0 ? ALL[flatIndex(n.lesson)].lesson : null;
+    if (lesson) {
+      var la = document.createElement("a");
+      la.className = "gd-lesson";
+      la.href = "#" + lesson.id;
+      la.textContent = "读这一节：" + lesson.title + " →";
+      foot.appendChild(la);
+    }
+    var back = document.createElement("a");
+    back.href = "#vulnmap";
+    back.className = "gd-back";
+    back.textContent = "回到全图";
+    foot.appendChild(back);
+    box.appendChild(foot);
+  }
+
+  function renderVulnmap(selectedId, sceneFilter) {
+    var vm = vulnData();
+    var filter = sceneFilter || "";
+    el.mapbtn.classList.remove("active");
+    el.homeBtn.classList.remove("active");
+    el.reviewBtn.classList.remove("active");
+    el.discussBtn.classList.remove("active");
+    el.vulnbtn.classList.add("active");
+
+    el.main.innerHTML = "";
+    var crumb = document.createElement("div");
+    crumb.className = "crumb";
+    crumb.innerHTML = "<b></b> / 漏洞图谱";
+    crumb.querySelector("b").textContent = COURSE.name;
+    el.main.appendChild(crumb);
+
+    var h1 = document.createElement("h1");
+    h1.className = "ltitle-h";
+    h1.textContent = vm.title || "漏洞图谱";
+    el.main.appendChild(h1);
+
+    var sub = document.createElement("div");
+    sub.className = "vulnmap-sub";
+    sub.textContent = vm.subtitle || "";
+    el.main.appendChild(sub);
+
+    var note = document.createElement("div");
+    note.className = "note";
+    note.textContent = vm.note || "";
+    el.main.appendChild(note);
+
+    var toolbar = document.createElement("div");
+    toolbar.className = "gfilters";
+    var chips = [{ id: "", name: "全部" }].concat(vm.scenes || []);
+    chips.forEach(function (c) {
+      var b = document.createElement("button");
+      b.className = "gchip" + ((c.id === filter || (!c.id && !filter)) ? " active" : "");
+      b.textContent = c.id ? c.name.replace(/ \/.*$/, "") : c.name;
+      b.onclick = function () {
+        renderVulnmap(selectedId, c.id);
+      };
+      toolbar.appendChild(b);
+    });
+    el.main.appendChild(toolbar);
+
+    var layout = document.createElement("div");
+    layout.className = "vulnmap-layout";
+    var canvas = document.createElement("div");
+    canvas.className = "vulnmap-canvas";
+    var aside = document.createElement("aside");
+    aside.className = "vulnmap-detail";
+    layout.appendChild(canvas);
+    layout.appendChild(aside);
+    el.main.appendChild(layout);
+
+    var width = 600;
+    var nodeX = 235;
+    var nodeW = 310;
+    var nodeH = 34;
+    var rowGap = 44;
+    var groupGap = 12;
+    var startY = 66;
+    var yPos = startY;
+    var groups = (vm.scenes || []).map(function (s) {
+      var list = (vm.nodes || []).filter(function (n) { return n.scene === s.id; });
+      var g = { scene: s, nodes: list, y: yPos, h: Math.max(1, list.length) * rowGap + 8 };
+      list.forEach(function (n, i) {
+        n._cy = g.y + 8 + i * rowGap + nodeH / 2;
+        n._gy = g.y + 8 + i * rowGap;
+      });
+      yPos += g.h + groupGap;
+      return g;
+    });
+    var height = yPos + 8;
+
+    var svg = svgEl("svg", {
+      viewBox: "0 0 " + width + " " + height,
+      width: "100%",
+      role: "img",
+      "aria-label": "漏洞图谱：技术现场与漏洞节点的关系"
+    });
+
+    // 顶部：这张图的主线
+    var root = svgEl("text", { x: 10, y: 24, class: "map-root" });
+    root.textContent = "不可信数据 → 被当成：代码 / 路径 / 身份 / 查询 / 对象 / 请求";
+    svg.appendChild(root);
+
+    // 分组底色
+    groups.forEach(function (g, i) {
+      var bg = svgEl("rect", {
+        x: 0, y: g.y, width: width, height: g.h, rx: 10,
+        class: "map-group-bg" + (i % 2 ? " alt" : "")
+      });
+      svg.appendChild(bg);
+    });
+
+    // 技术现场 → 漏洞节点
+    groups.forEach(function (g) {
+      g.nodes.forEach(function (n) {
+        var dim = filter && n.scene !== filter;
+        var path = svgEl("path", {
+          d: "M 158 " + (g.y + 31) + " C 196 " + (g.y + 31) + ", 196 " + n._cy + ", " + nodeX + " " + n._cy,
+          class: "map-edge-birth" + (dim ? " dim" : "")
+        });
+        svg.appendChild(path);
+      });
+    });
+
+    // 漏洞 → 漏洞的链
+    (vm.edges || []).forEach(function (e) {
+      var a = vulnNode(e.from);
+      var b = vulnNode(e.to);
+      if (!a || !b) return;
+      var dim = filter && (a.scene !== filter || b.scene !== filter);
+      var path = svgEl("path", {
+        d: "M " + (nodeX + nodeW) + " " + a._cy + " C 596 " + a._cy + ", 596 " + b._cy + ", " + (nodeX + nodeW) + " " + b._cy,
+        class: "map-edge-chain" + (dim ? " dim" : "")
+      });
+      var title = svgEl("title");
+      title.textContent = e.label || "";
+      path.appendChild(title);
+      svg.appendChild(path);
+    });
+
+    // 技术现场卡片
+    groups.forEach(function (g) {
+      var dim = filter && g.scene.id !== filter;
+      var card = svgEl("g", { class: "map-scene-g" + (dim ? " dim" : "") });
+      card.appendChild(svgEl("rect", { x: 8, y: g.y + 6, width: 150, height: 48, rx: 8, class: "map-scene" }));
+      var name = svgEl("text", { x: 20, y: g.y + 26, class: "map-scene-name" });
+      name.textContent = g.scene.name;
+      card.appendChild(name);
+      var sub = svgEl("text", { x: 20, y: g.scene.sub ? g.y + 42 : g.y + 40, class: "map-scene-sub" });
+      sub.textContent = g.scene.sub || "";
+      card.appendChild(sub);
+      svg.appendChild(card);
+    });
+
+    // 漏洞节点
+    (vm.nodes || []).forEach(function (n) {
+      var dim = filter && n.scene !== filter;
+      var g = svgEl("g", {
+        class: "map-node-g" + (n.id === selectedId ? " selected" : "") + (dim ? " dim" : ""),
+        "data-id": n.id,
+        tabindex: "0",
+        role: "button",
+        "aria-label": n.name
+      });
+      var rect = svgEl("rect", {
+        x: nodeX, y: n._gy, width: nodeW, height: nodeH, rx: 7, class: "map-node"
+      });
+      g.appendChild(rect);
+      var dot = svgEl("circle", { cx: nodeX + 12, cy: n._gy + nodeH / 2, r: 3, class: "map-node-dot" });
+      g.appendChild(dot);
+      var label = svgEl("text", { x: nodeX + 23, y: n._cy + 4, class: "map-node-name" });
+      label.textContent = n.name;
+      g.appendChild(label);
+      var arrow = svgEl("text", { x: nodeX + nodeW - 18, y: n._cy + 4, class: "map-node-arrow" });
+      arrow.textContent = "↗";
+      g.appendChild(arrow);
+      g.addEventListener("click", function () {
+        location.hash = "vulnmap/" + n.id;
+      });
+      g.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          location.hash = "vulnmap/" + n.id;
+        }
+      });
+      var t = svgEl("title");
+      t.textContent = n.short;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+
+    canvas.appendChild(svg);
+
+    var legend = document.createElement("div");
+    legend.className = "map-legend";
+    legend.innerHTML =
+      '<span><i class="lg-birth"></i>诞生关系</span>' +
+      '<span><i class="lg-chain"></i>可组合成链</span>' +
+      '<span class="lg-tip">点节点看根因、复现与搜索词</span>';
+    canvas.appendChild(legend);
+    var scrollHint = document.createElement("div");
+    scrollHint.className = "map-scroll-hint";
+    scrollHint.textContent = "← 左右滑动查看完整图谱 →";
+    canvas.appendChild(scrollHint);
+
+    if (selectedId && vulnNode(selectedId)) {
+      renderVulnDetail(aside, vulnNode(selectedId));
+    } else {
+      aside.innerHTML =
+        '<div class="gd-eyebrow">🕸 怎么用这张图</div>' +
+        '<h2 class="gd-title">先知道有什么，再自己深挖</h2>' +
+        '<p class="gd-short">左边是技术现场，右边是它最容易生出的漏洞。点任意节点，看它的「根因 / 观察 / 修复 / 复现」。</p>' +
+        '<ol class="gd-loop"></ol>' +
+        '<div class="gd-count"></div>' +
+        '<div class="gd-note">不要沿着这张图背 payload。每学一个节点，至少做一次本地复现，并写三行根因笔记。</div>';
+      var loop = aside.querySelector(".gd-loop");
+      (vm.loop || []).forEach(function (x) {
+        var li = document.createElement("li");
+        li.textContent = x;
+        loop.appendChild(li);
+      });
+      aside.querySelector(".gd-count").textContent = (vm.nodes || []).length + " 个节点 · " + (vm.scenes || []).length + " 个技术现场 · 虚线 " + (vm.edges || []).length + " 条链";
+    }
+
+    // 图谱页不再强制滚到顶部：点节点时保持当前阅读位置
   }
 
   /* ---------- 学习面板 ---------- */
@@ -941,6 +1358,7 @@
 
   function renderHome() {
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.reviewBtn.classList.remove("active");
     el.discussBtn.classList.remove("active");
     el.homeBtn.classList.add("active");
@@ -1008,7 +1426,7 @@
 
     var h2 = document.createElement("h2");
     h2.className = "sec";
-    h2.textContent = "本周计划（22 周排完 82 节）";
+    h2.textContent = "本周计划（22 周排完 83 节）";
     el.main.appendChild(h2);
 
     var plan = document.createElement("div");
@@ -1104,6 +1522,7 @@
   /* ---------- 复习卡页面 ---------- */
   function renderReview(practiceKey) {
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.homeBtn.classList.remove("active");
     el.discussBtn.classList.remove("active");
     el.reviewBtn.classList.add("active");
@@ -1201,12 +1620,26 @@
   /* ---------- 路由 ---------- */
   function route() {
     var h = (location.hash || "").replace(/^#/, "");
+    var isGraph = h === "vulnmap" || h.indexOf("vulnmap/") === 0;
+    el.main.classList.toggle("graph-view", isGraph);
     if (h === "roadmap") {
       el.mapbtn.classList.add("active");
+      el.vulnbtn.classList.remove("active");
       el.homeBtn.classList.remove("active");
       el.reviewBtn.classList.remove("active");
       el.discussBtn.classList.remove("active");
       renderRoadmap();
+      renderTree(el.search.value);
+      return;
+    }
+    if (h === "vulnmap" || h.indexOf("vulnmap/") === 0) {
+      var sel = h.indexOf("vulnmap/") === 0 ? h.slice(8) : "";
+      el.mapbtn.classList.remove("active");
+      el.vulnbtn.classList.add("active");
+      el.homeBtn.classList.remove("active");
+      el.reviewBtn.classList.remove("active");
+      el.discussBtn.classList.remove("active");
+      renderVulnmap(sel);
       renderTree(el.search.value);
       return;
     }
@@ -1226,6 +1659,7 @@
       return;
     }
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.homeBtn.classList.remove("active");
     el.reviewBtn.classList.remove("active");
     el.discussBtn.classList.remove("active");
@@ -1288,6 +1722,9 @@
   el.exportBtn.addEventListener("click", exportNotes);
   el.mapbtn.addEventListener("click", function () {
     location.hash = "roadmap";
+  });
+  el.vulnbtn.addEventListener("click", function () {
+    location.hash = "vulnmap";
   });
   el.homeBtn.addEventListener("click", function () {
     location.hash = "home";

@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>wei_web · CTF Web 学习中心</title>
-<meta name="description" content="wei_web —— 面向零基础的 CTF Web 方向系统化学习中心">
+<meta name="description" content="wei_web —— 面向零基础的 CTF Web 方向系统化学习中心，含按「诞生地」组织的漏洞图谱">
 <!--
   欢迎来到 wei_web。
   这里有几个开发时留下的注释，其中一个藏着你的第一个 flag。
   提示：按 F12 打开开发者工具，查看 <head>。
 -->
-<!-- build: 2026-10 · 内容版本 v2.0 · 作者 wei -->
-<!-- 版本记录：13 个 PART · 82 节 · 技术栈路线 7 阶段 · 22 周计划 -->
+<!-- build: 2026-10 · 内容版本 v2.4 · 作者 wei -->
+<!-- 版本记录：12 个 PART · 83 节 · 漏洞图谱 18 节点 · 技术栈路线 7 阶段 · 22 周计划 -->
 <!-- flag{w3lc0me_t0_w3b} -->
 <!-- 部署前记得把这条注释删掉（笑） -->
 <style>
@@ -205,6 +206,7 @@ body {
 /* ---------- 内容区 ---------- */
 .main { flex: 1; min-width: 0; }
 .main-inner { max-width: 880px; margin: 0 auto; padding: 34px 34px 90px; }
+.main-inner.graph-view { max-width: 1120px; }
 
 .crumb { font-size: 12px; color: var(--text-faint); margin-bottom: 10px; }
 .crumb b { color: var(--accent); font-weight: 600; }
@@ -416,6 +418,136 @@ table.datatable td code { font-family: var(--mono); font-size: 12px; color: var(
 .crossitem b { display: block; margin-bottom: 2px; }
 .crossitem span { color: var(--text-dim); font-size: 12.5px; }
 
+/* ---------- 安全触点 ---------- */
+.touchcard {
+  border: 1px solid var(--border); border-left: 3px solid var(--ok);
+  background: linear-gradient(180deg, rgba(47, 162, 76, .08), transparent);
+  border-radius: var(--radius); padding: 14px 16px; margin: 0 0 18px;
+}
+.tc-label { font-size: 10.5px; letter-spacing: .6px; color: var(--ok); font-weight: 700; }
+.tc-title { font-size: 14.5px; font-weight: 700; margin: 4px 0 6px; }
+.tc-text { font-size: 13.5px; color: var(--text-dim); line-height: 1.8; }
+.tc-text code { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+.tc-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.tc-links a {
+  font-size: 12px; color: var(--accent); text-decoration: none;
+  border: 1px solid var(--border); background: var(--bg-card);
+  border-radius: 99px; padding: 3px 10px;
+}
+.tc-links a:hover { border-color: var(--accent); }
+
+/* ---------- 图谱节点卡（嵌在课程里） ---------- */
+.vulncard {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--bg-card), transparent);
+  padding: 15px 17px; margin: 0 0 22px;
+}
+.vc-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 7px; }
+.vc-label { font-size: 10.5px; letter-spacing: .6px; color: var(--accent); font-weight: 700; }
+.vc-scene {
+  font-size: 11px; color: var(--text-faint);
+  border: 1px solid var(--border); border-radius: 99px; padding: 1px 8px;
+}
+.vc-short { font-size: 15px; font-weight: 600; margin-bottom: 9px; }
+.vc-line { display: flex; gap: 9px; font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 3px; }
+.vc-line b { flex: 0 0 32px; color: var(--text-faint); font-weight: 600; font-size: 12px; }
+.vc-foot {
+  display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  align-items: center; margin-top: 10px; padding-top: 9px;
+  border-top: 1px dashed var(--border); font-size: 11.5px; color: var(--text-faint);
+}
+.vc-link { color: var(--accent); text-decoration: none; white-space: nowrap; }
+.vc-link:hover { text-decoration: underline; }
+
+/* ---------- 漏洞图谱页 ---------- */
+.vulnmap-sub { color: var(--text-dim); font-size: 13.5px; margin: -2px 0 14px; }
+.gfilters { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.gchip {
+  border: 1px solid var(--border); background: var(--bg-card); color: var(--text-dim);
+  border-radius: 99px; padding: 4px 10px; font-size: 11.5px; cursor: pointer; font-family: inherit;
+}
+.gchip:hover { border-color: var(--accent); color: var(--text); }
+.gchip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.vulnmap-layout { display: flex; gap: 16px; align-items: flex-start; }
+.vulnmap-canvas {
+  flex: 1; min-width: 0; background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 8px 4px;
+  overflow-x: auto;
+}
+.vulnmap-canvas svg { display: block; overflow: visible; min-width: 560px; }
+.vulnmap-detail {
+  flex: 0 0 292px; position: sticky; top: 18px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px 16px 14px; max-height: calc(100vh - 36px); overflow: auto;
+}
+.gd-eyebrow { font-size: 10.5px; letter-spacing: .6px; color: var(--accent); font-weight: 700; }
+.gd-title { font-size: 19px; margin: 4px 0 3px; line-height: 1.4; }
+.gd-scene { font-size: 11.5px; color: var(--text-faint); margin-bottom: 10px; }
+.gd-short { font-size: 13.5px; color: var(--text); margin: 0 0 12px; line-height: 1.7; }
+.gd-block { margin-bottom: 11px; }
+.gd-block b { display: block; font-size: 10.5px; color: var(--text-faint); font-weight: 700; letter-spacing: .4px; margin-bottom: 2px; }
+.gd-block p { margin: 0; font-size: 12.5px; color: var(--text-dim); line-height: 1.75; }
+.gd-chain { display: block; font-size: 12px; color: var(--accent); text-decoration: none; padding: 3px 0; line-height: 1.5; }
+.gd-chain:hover { text-decoration: underline; }
+.gd-search { border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 10px; font-size: 11.5px; color: var(--text-dim); }
+.gd-search-label { margin-bottom: 5px; color: var(--text-faint); font-weight: 600; }
+.gd-search code {
+  display: block; font-family: var(--mono); font-size: 11px; color: var(--accent);
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 5px 7px; margin-bottom: 7px; white-space: normal; word-break: break-word;
+}
+.gd-search a { color: var(--accent); text-decoration: none; margin-right: 12px; }
+.gd-search a:hover { text-decoration: underline; }
+.gd-foot { display: flex; flex-direction: column; gap: 6px; border-top: 1px dashed var(--border); margin-top: 12px; padding-top: 10px; font-size: 12px; }
+.gd-lesson { color: var(--accent); text-decoration: none; line-height: 1.5; }
+.gd-lesson:hover { text-decoration: underline; }
+.gd-back { color: var(--text-faint); text-decoration: none; }
+.gd-loop { margin: 10px 0 12px; padding-left: 18px; font-size: 12.5px; color: var(--text-dim); line-height: 1.75; }
+.gd-loop li { margin-bottom: 5px; }
+.gd-count { font-size: 11.5px; color: var(--accent); margin-bottom: 10px; }
+.gd-note { font-size: 11.5px; color: var(--text-faint); line-height: 1.7; border-top: 1px dashed var(--border); padding-top: 9px; }
+
+.map-root { fill: var(--text-dim); font-size: 11.5px; font-weight: 600; }
+.map-group-bg { fill: var(--bg-card-2); opacity: .35; }
+.map-group-bg.alt { opacity: .22; }
+.map-scene { fill: var(--bg); stroke: var(--border); }
+.map-scene-name { fill: var(--text); font-size: 12px; font-weight: 700; }
+.map-scene-sub { fill: var(--text-faint); font-size: 10px; }
+.map-edge-birth { fill: none; stroke: var(--border); stroke-width: 1.2; }
+.map-edge-birth.dim { opacity: .15; }
+.map-edge-chain { fill: none; stroke: var(--warn); stroke-width: 1.2; stroke-dasharray: 4 4; opacity: .6; }
+.map-edge-chain.dim { opacity: .08; }
+.map-node-g { cursor: pointer; outline: none; }
+.map-node { fill: var(--bg-card); stroke: var(--border); }
+.map-node-g:hover .map-node, .map-node-g:focus .map-node { stroke: var(--accent); }
+.map-node-g.selected .map-node { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.6; }
+.map-node-g.dim { opacity: .25; }
+.map-node-dot { fill: var(--accent); }
+.map-node-name { fill: var(--text); font-size: 12px; pointer-events: none; }
+.map-node-arrow { fill: var(--text-faint); font-size: 12px; pointer-events: none; }
+.map-legend { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 6px 8px 4px; font-size: 10.5px; color: var(--text-faint); }
+.map-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.map-legend i { display: inline-block; width: 20px; height: 0; border-top: 1.5px solid var(--border); }
+.map-legend i.lg-chain { border-top: 1.5px dashed var(--warn); }
+.map-legend .lg-tip { margin-left: auto; }
+.map-scroll-hint { display: none; text-align: center; color: var(--text-faint); font-size: 10.5px; padding: 2px 0 6px; }
+
+.stage-vulns { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: -2px 0 12px; font-size: 12px; color: var(--text-dim); }
+.stage-vulns b { color: var(--warn); font-weight: 600; margin-right: 2px; }
+.stage-vulns a {
+  color: var(--text); text-decoration: none; border: 1px solid var(--border);
+  background: var(--bg-card); padding: 2px 8px; border-radius: 99px;
+}
+.stage-vulns a:hover { border-color: var(--accent); color: var(--accent); }
+
+@media (max-width: 1160px) {
+  .vulnmap-layout { flex-direction: column; align-items: stretch; }
+  .vulnmap-canvas { max-width: 100%; }
+  .vulnmap-detail { flex: none; width: 100%; position: static; max-height: none; }
+  .map-scroll-hint { display: block; }
+}
+
 /* 移动端 */
 @media (max-width: 860px) {
   .app { flex-direction: column; }
@@ -447,6 +579,7 @@ table.datatable td code { font-family: var(--mono); font-size: 12px; color: var(
     <div class="search-wrap">
       <button class="mapbtn" id="homebtn">🏠 学习面板 <span class="ar">→</span></button>
       <button class="mapbtn" id="mapbtn">🗺 技术栈认知路线 <span class="ar">→</span></button>
+      <button class="mapbtn" id="vulnbtn">🕸 漏洞图谱 <span class="ar">→</span></button>
       <button class="mapbtn" id="reviewbtn">🔁 复习卡 <span class="ar">→</span></button>
       <button class="mapbtn" id="discussbtn">💬 讨论区 <span class="ar">→</span></button>
       <input id="search" class="search" type="search" placeholder="搜索课程 / 知识点…" autocomplete="off">
@@ -476,7 +609,7 @@ window.WEIWEB_CONFIG = {
     provider: "giscus",
     repo: "wei-erer/wei_web",
     repoId: "R_kgDOVPvQ5w",
-    category: "Comments",
+    category: "Comments",    // Discussions 分类名（建议用 Announcements 类型）
     categoryId: "DIC_kwDOVPvQ584DJBV6",
     lang: "zh-CN"
   }
@@ -489,16 +622,16 @@ window.WEIWEB_CONFIG = {
 const COURSE = {
   name: "wei_web",
   subtitle: "CTF Web 方向 · 系统化学习中心",
-  version: "v2.0",
+  version: "v2.4",
   weeks: 36,
   intro:
-    "这门课面向「以后专攻 Web 方向」的长期目标：不追求速成，而是把基础、语言、框架、漏洞、工具、方法论六层打通。每节都按「原理 → 动手 → 靶场 → 自测」四步走。原始依据为 MoeCTF 2026 Web 入门指北，并在其上扩展为一套完整的 Web 安全学习体系。",
+    "这门课面向「以后专攻 Web 方向」的长期目标：把基础、语言、框架、漏洞、工具、方法论六层打通。v2.4 起不再把漏洞分成「基础 / 高级」两个 PART，而是做成一张按「诞生地」组织的漏洞图谱：先知道有什么、为什么会有，再自己找文章、手动复现。每节仍按「原理 → 动手 → 靶场 → 自测」四步走，但重心从「怎么打」移到「这一行代码为什么会制造漏洞」。",
 
   /* 技术栈认知路线：用户指定的主线路径 + 每阶段该掌握什么 */
   roadmap: {
     title: "Web 方向技术栈认知路线",
     note:
-      "这条路线不是「全部学会才能做题」，而是「按这个顺序建立认知，越往后越能看懂题目的源码」。每一阶段只要达到该阶段的验收标准就可以往下走，回头补细节。",
+      "这条路线不是「全部学会才能做题」，而是「按这个顺序建立认知，越往后越能看懂题目的源码」。每一阶段只要达到该阶段的验收标准就可以往下走，回头补细节。每个阶段下面会标出「顺路会遇到」的漏洞节点，点进去就是图谱里的根因、复现与搜索词。",
     stages: [
       {
         stage: "S1",
@@ -512,6 +645,7 @@ const COURSE = {
           "开发者工具：Elements / Network / Sources / Application",
         ],
         check: "能在不刷新页面的情况下，用控制台改掉页面内容、读出页面里的隐藏变量。",
+        vulns: ["xss", "proto"],
         tracks: ["入门必备"],
       },
       {
@@ -526,6 +660,7 @@ const COURSE = {
           "序列化 serialize / 反序列化 unserialize 与魔术方法",
         ],
         check: "看到一段 PHP 源码，能指出「用户输入从哪进来、经过什么处理、最终到了哪个危险函数」。",
+        vulns: ["upload", "lfi", "rce", "php-deser"],
         tracks: ["CTF 高频", "语言特性"],
       },
       {
@@ -539,6 +674,7 @@ const COURSE = {
           "如何通过目录结构 / 报错 / Composer 文件识别框架与版本",
         ],
         check: "拿到一个 ThinkPHP 站，能定位入口、猜出路由、判断版本区间。",
+        vulns: ["rce", "php-deser"],
         tracks: ["框架层"],
         optional: true,
       },
@@ -554,6 +690,7 @@ const COURSE = {
           "把手工测试写成一键脚本",
         ],
         check: "能用 20 行以内脚本，复现你手工在 Burp 里做过的一次测试。",
+        vulns: ["sqli"],
         tracks: ["自动化"],
       },
       {
@@ -567,6 +704,7 @@ const COURSE = {
           "Werkzeug 调试模式与 PIN 相关考点",
         ],
         check: "能写一个带表单的 Flask 小站，并自己构造一次 SSTI。",
+        vulns: ["auth", "ssti", "py-deser", "ssrf"],
         tracks: ["框架层"],
       },
       {
@@ -580,6 +718,7 @@ const COURSE = {
           "Spring 常见漏洞：Actuator 暴露、SpEL 注入、路由绕过",
         ],
         check: "能看懂一段 Java 反序列化链的调用路径，说出触发点。",
+        vulns: ["java-deser", "xxe"],
         tracks: ["语言特性", "进阶"],
         optional: true,
       },
@@ -594,6 +733,7 @@ const COURSE = {
           "大小写特性与路径处理差异",
         ],
         check: "能解释 Object.prototype 被污染后，为什么会影响无关代码。",
+        vulns: ["proto", "rce"],
         tracks: ["语言特性", "进阶"],
         optional: true,
       },
@@ -607,6 +747,234 @@ const COURSE = {
       { name: "抓包与改包", detail: "Burp Suite / Yakit / curl / 浏览器 Network" },
       { name: "方法论", detail: "拿到题怎么入手、卡住怎么破局、WriteUp 怎么复盘" },
     ],
+  },
+
+  /* 漏洞图谱：v2.4 的核心。节点按「诞生地」挂回技术栈，不按难度分基础/高级。 */
+  vulnmap: {
+    title: "漏洞图谱",
+    subtitle: "先知道有什么、为什么会有，再自己去复现",
+    note:
+      "这张图不是 payload 大全，而是「漏洞出生地」地图。左边是技术现场，右边是它最容易生出的漏洞；虚线表示两个漏洞可以接成一条链。点开一个节点，只看四件事：一句话是什么、诞生在哪、根因是什么、怎么观察。想深入，再按节点里的关键词去找博客、去靶场手动复现。",
+    loop: [
+      "先在图谱里挑一个节点，读「一句话 / 根因 / 怎么观察」，不要急着背 payload。",
+      "按节点给出的英文关键词，找 2 篇高质量文章（优先官方文档、PortSwigger、HackTricks）。",
+      "在本地靶场手动复现：先证明「数据被当成了什么」，再谈具体 payload。",
+      "写三行笔记：根因、修复点、换一个语言/框架是否还成立。",
+      "回到图谱，把相关节点连起来看（如 上传 → 包含 → RCE），理解漏洞链而不是单点。"
+    ],
+    scenes: [
+      { id: "s-browser", name: "浏览器 / 前端 JS", sub: "DOM · 输出编码" },
+      { id: "s-http", name: "HTTP / Cookie", sub: "自动携带 · 同源策略" },
+      { id: "s-auth", name: "登录 / 鉴权", sub: "Session · Token" },
+      { id: "s-business", name: "业务流程", sub: "归属 · 状态 · 金额" },
+      { id: "s-response", name: "响应 / 错误", sub: "报错 · 备份 · source map" },
+      { id: "s-data", name: "数据库", sub: "SQL · NoSQL · 权限" },
+      { id: "s-file", name: "文件系统", sub: "上传 · 路径 · 包含 · 执行" },
+      { id: "s-template", name: "模板引擎", sub: "Jinja2 · Twig · FreeMarker" },
+      { id: "s-parser", name: "XML / 解析器", sub: "DTD · 外部实体" },
+      { id: "s-serial", name: "序列化 / 对象", sub: "unserialize · pickle · readObject" },
+      { id: "s-node", name: "Node.js 运行时", sub: "原型 · 沙箱 · 子进程" },
+      { id: "s-server", name: "服务端请求", sub: "HTTP 客户端 · 内网 · 元数据" }
+    ],
+    nodes: [
+      {
+        id: "xss", name: "XSS 跨站脚本", scene: "s-browser", lesson: "p5l5",
+        short: "用户输入被浏览器当成 HTML/JS 执行。",
+        born: "搜索回显、留言/昵称、innerHTML 拼接、模板的 |safe。",
+        root: "输出时没有按 HTML / 属性 / JS / URL 的上下文编码，数据越过了「文本」边界。",
+        observe: "输入一个带标签的字符串，看它出现在源码里是文本，还是变成了 DOM 节点。",
+        fix: "按上下文编码；少用 innerHTML；CSP、HttpOnly、Trusted Types 做纵深防御。",
+        search: "XSS 输出编码 上下文 CSP Trusted Types",
+        repro: "本地留言板：同一条输入分别用 textContent 与 innerHTML 渲染，对比 DOM；再打开 CSP 看拦截。"
+      },
+      {
+        id: "csrf", name: "CSRF 跨站请求伪造", scene: "s-http", lesson: "p5l10",
+        short: "借浏览器自动携带的 Cookie，发一个用户没想发的请求。",
+        born: "Cookie 会话 + 只校验「登录了」的敏感操作（转账、改密、绑定）。",
+        root: "身份凭据由浏览器自动附带，而操作本身没有绑定「本次请求」的额外凭证。",
+        observe: "在另一个源构造表单自动提交；看目标是否只凭 Cookie 就执行。",
+        fix: "CSRF Token、SameSite、Origin/Referer 校验、敏感操作二次验证。",
+        search: "CSRF SameSite token origin 校验",
+        repro: "本地两个端口：A 站登录，B 站放自动提交表单，观察 A 站 Cookie 是否被带上。"
+      },
+      {
+        id: "auth", name: "Session / JWT 绕过", scene: "s-auth", lesson: "p5l15",
+        short: "身份凭据可预测、可伪造，或服务端根本没校验签名。",
+        born: "Session ID、Cookie 里的 role、JWT 的 alg/kid、Flask 的签名 cookie。",
+        root: "把「客户端提交的身份」当成可信身份；或密钥、算法、随机性不足。",
+        observe: "解码 token、改 role/uid、试 alg=none / 弱密钥 / 空 session。",
+        fix: "服务端会话、强随机 ID、固定算法与强密钥、退出即失效。",
+        search: "JWT alg none 弱密钥 session fixation Flask SECRET_KEY",
+        repro: "本地 Flask 站：改 session cookie 看是否被拒；再用 flask-unsign 验证弱 SECRET_KEY。"
+      },
+      {
+        id: "idor", name: "越权与逻辑漏洞", scene: "s-business", lesson: "p5l16",
+        short: "功能按设计跑，但「这个对象是不是你的」没校验。",
+        born: "订单 id、用户 id、文件 id 来自请求；后台接口只在前端隐藏。",
+        root: "把「参数里的对象归属」交给客户端决定，服务端只按 id 查询。",
+        observe: "把自己的 id 改成相邻值；用普通账号重放管理员请求。",
+        fix: "从 session 取 user_id；每个对象查询都带归属条件；后端统一鉴权。",
+        search: "IDOR 水平越权 垂直越权 对象归属",
+        repro: "本地商城：两个账号各下一单，改 order id 互看，记录修复前后的响应。"
+      },
+      {
+        id: "info", name: "信息泄露", scene: "s-response", lesson: "p5l2",
+        short: "响应、备份、版本库把「不该给的地图」给了出去。",
+        born: "报错页、.git、备份文件、source map、默认后台、版本头。",
+        root: "生产环境保留了开发/调试/历史产物；错误信息直接回显。",
+        observe: "看响应头、robots、.git/config、备份名、报错堆栈、source map。",
+        fix: "上线清理；关闭详细报错；source map 不发布；敏感配置只放服务端。",
+        search: "信息泄露 .git source map 备份文件 报错",
+        repro: "本地起一个带 .git 和 .env 的站，用 git-dumper 还原，体会「泄露 → 源码 → 新漏洞」。"
+      },
+      {
+        id: "sqli", name: "SQL 注入", scene: "s-data", lesson: "p5l3", extraLessons: ["p5l4"],
+        short: "用户输入变成了 SQL 语句的一部分。",
+        born: "字符串拼接 SQL；ORDER BY / LIMIT / 表名等不能参数化的位置。",
+        root: "SQL 结构由字符串拼接决定，数据越过了「值」的边界。",
+        observe: "加引号看报错；真假条件看响应；order by 猜字段；不同数据库看指纹。",
+        fix: "参数化/预编译；无法参数化的标识符用白名单；数据库最小权限。",
+        search: "SQL 注入 参数化 联合查询 盲注 information_schema",
+        repro: "SQLite 与 MySQL 各起一个本地库，用同一段拼接代码，对比 sqlite_master / information_schema。"
+      },
+      {
+        id: "nosql", name: "NoSQL 注入", scene: "s-data", lesson: "p5l17",
+        short: "查询条件从字符串变成了对象，操作符被注入。",
+        born: "MongoDB 登录/查询直接接收 JSON 或 qs 解析后的对象。",
+        root: "把用户提交的对象原样当查询条件，$ne / $regex 等操作符生效。",
+        observe: "在参数里加 [$ne]=1 或 JSON 的 {\"$ne\":null}，看是否绕过。",
+        fix: "强制类型转换；拒绝 $ 开头的键；查询条件白名单；应用层比对密码。",
+        search: "NoSQL injection MongoDB $ne $regex",
+        repro: "Node + MongoDB 本地登录接口，分别传字符串和对象，打印最终 query。"
+      },
+      {
+        id: "udf", name: "数据库 UDF 提权", scene: "s-data", lesson: "p3d4",
+        short: "数据库高权限账号把攻击者的共享库加载进进程，执行系统命令。",
+        born: "旧版 MySQL + FILE/SUPER 权限 + plugin_dir 可写；SQLi 拿到高权限账号。",
+        root: "数据库账号权限过大，且允许从可写目录加载原生代码。",
+        observe: "查 @@version、current_user()、@@plugin_dir、secure_file_priv；确认能否写文件。",
+        fix: "数据库最小权限；禁止 FILE/SUPER；plugin 目录只读；升级数据库；SQLi 参数化。",
+        search: "MySQL UDF 提权 plugin_dir FILE 权限",
+        repro: "仅在本地隔离容器里：低版本 MySQL + 高权限账号，验证 UDF 的加载条件；不要对真实目标尝试。"
+      },
+      {
+        id: "upload", name: "文件上传", scene: "s-file", lesson: "p5l6",
+        short: "用户控制文件名/内容，文件又落在可执行目录。",
+        born: "头像、附件、导入功能；只查后缀、Content-Type 或前端 JS。",
+        root: "上传校验信任客户端元数据；上传目录与 Web 根目录未隔离。",
+        observe: "改后缀/Content-Type/文件名；看返回路径能否访问、是否被解析。",
+        fix: "白名单 + 重命名 + 上传目录禁执行 + 存储分离 + 内容校验。",
+        search: "文件上传 绕过 解析漏洞 .htaccess 图片马",
+        repro: "Upload-Labs 前 5 关，每关只记录「校验发生在哪一层」。"
+      },
+      {
+        id: "lfi", name: "路径穿越 / 文件包含", scene: "s-file", lesson: "p5l7",
+        short: "用户控制路径，读到任意文件，或把文件当代码包含。",
+        born: "下载/预览的 ?page=；include/require；模板路径拼接。",
+        root: "路径由输入拼接，没有白名单或 realpath 边界校验。",
+        observe: "试 ../、绝对路径、php://filter；看回显、报错或文件内容。",
+        fix: "键值白名单映射；realpath 后校验目录；禁用远程包含；最小文件权限。",
+        search: "path traversal LFI php://filter 日志包含",
+        repro: "本地 PHP：写一个 ?page= 的包含点，先用 php://filter 读源码，再试日志包含。"
+      },
+      {
+        id: "rce", name: "命令 / 代码执行", scene: "s-file", lesson: "p5l8",
+        short: "用户输入进入了 shell 或语言求值器。",
+        born: "system/exec/passthru；eval/assert；反引号；模板或表达式引擎。",
+        root: "数据被拼进命令/代码字符串，没有做到「参数与代码分离」。",
+        observe: "加分隔符 ; | &&、$()、反引号；看回显、延时或带外。",
+        fix: "避免 shell；用参数数组与 escapeshellarg；禁用危险函数；最小权限。",
+        search: "命令注入 代码执行 无回显 带外",
+        repro: "本地 ping 接口：先证明分隔符生效，再改成参数数组修复，复测同一 payload。"
+      },
+      {
+        id: "ssti", name: "SSTI 模板注入", scene: "s-template", lesson: "p5l11",
+        short: "用户输入被模板引擎当成模板源码求值。",
+        born: "render_template_string 拼接；Twig createTemplate；FreeMarker 动态模板。",
+        root: "把「模板源码」和「模板变量」混为一谈，用户能写表达式。",
+        observe: "输入 {{7*7}} / ${7*7} / <%= 7*7 %>，看是否求值。",
+        fix: "用户输入只作为变量；固定模板；沙箱与最小对象暴露；关闭调试。",
+        search: "SSTI Jinja2 Twig FreeMarker 沙箱",
+        repro: "本地 Flask：先 {{7*7}}，再 {{config}}，最后只做到「证明对象可达」，不急着 RCE。"
+      },
+      {
+        id: "xxe", name: "XXE 外部实体", scene: "s-parser", lesson: "p5l12",
+        short: "XML 解析器把外部实体指向的文件/URL 读了进来。",
+        born: "XML 上传、SOAP、SVG、Office 解析；默认开启 DTD 的解析器。",
+        root: "解析器允许 DTD/外部实体，且解析结果会回显或被使用。",
+        observe: "加 DOCTYPE 实体读 file:///etc/passwd；无回显试 DNSLog 或外部 DTD。",
+        fix: "禁用 DTD 与外部实体；用 defusedxml；不需要 XML 就换 JSON。",
+        search: "XXE 外部实体 盲 XXE OOB DTD",
+        repro: "本地 Python lxml / PHP libxml 两个解析点，对比默认配置与禁用实体后的结果。"
+      },
+      {
+        id: "php-deser", name: "PHP 反序列化", scene: "s-serial", lesson: "p5l13",
+        short: "可控序列化字符串还原成对象，魔术方法被自动触发。",
+        born: "unserialize($_COOKIE/$_GET)；框架 cache/session；phar://。",
+        root: "反序列化不可信数据，且类里有危险魔术方法/调用链。",
+        observe: "找 unserialize 入口；列 __wakeup/__destruct/__toString；跟属性到危险函数。",
+        fix: "不反序列化外部数据；用 JSON；签名/白名单；升级框架。",
+        search: "PHP 反序列化 魔术方法 pop chain phar",
+        repro: "写两个类做最小 pop 链，本地 unserialize 触发；再用 phpggc 看真实框架链。"
+      },
+      {
+        id: "py-deser", name: "Python 反序列化", scene: "s-serial", lesson: "p5l19",
+        short: "pickle / PyYAML 等把字节还原成对象，可能触发任意调用。",
+        born: "pickle.loads、yaml.load（非 safe）、joblib、Flask 缓存。",
+        root: "反序列化不可信字节；Python 对象图可在还原时执行代码。",
+        observe: "看数据开头（pickle 常见 0x80 04）；找 loads/load 调用；确认是否 safe_load。",
+        fix: "不反序列化不可信数据；用 JSON；yaml.safe_load；签名/HMAC。",
+        search: "Python pickle 反序列化 yaml.load RCE",
+        repro: "本地写一个 pickle.dumps 的简单对象，再用 RestrictedUnpickler 限制，观察拦截点。"
+      },
+      {
+        id: "java-deser", name: "Java 反序列化", scene: "s-serial", lesson: "p5l14",
+        short: "readObject 还原对象，第三方库的调用链被串起来。",
+        born: "rememberMe、rO0AB、RMI/JNDI、Fastjson @type、XStream。",
+        root: "反序列化不可信字节；classpath 里存在可利用的 gadget 链。",
+        observe: "看到 rO0AB/rememberMe/@type；读 pom.xml 或 Web-INF/lib 定版本。",
+        fix: "禁用/限制反序列化；升级组件；JEP 290 过滤器；不信任外部序列化数据。",
+        search: "Java 反序列化 ysoserial CommonsCollections Shiro Fastjson",
+        repro: "本地用 ysoserial URLDNS 做「只发 DNS」的无害验证，理解链的入口与出口。"
+      },
+      {
+        id: "proto", name: "原型链污染", scene: "s-node", lesson: "p5l18",
+        short: "__proto__ 被写进公共原型，之后所有对象都带上被污染的属性。",
+        born: "deepMerge / 深拷贝 / qs 解析 / 配置合并；JSON 里的 __proto__。",
+        root: "递归合并时没有过滤 __proto__/constructor/prototype，写穿了对象原型。",
+        observe: "提交 {\"__proto__\":{\"x\":1}}，看后续对象/模板/子进程选项是否变化。",
+        fix: "拒绝危险键；Object.create(null)；Map；升级 lodash/qs 等依赖。",
+        search: "prototype pollution __proto__ deepMerge Node.js",
+        repro: "本地写一个不安全的 merge，污染后打印 {}.x；再换 Object.create(null) 复测。"
+      },
+      {
+        id: "ssrf", name: "SSRF 服务端请求", scene: "s-server", lesson: "p5l9",
+        short: "服务器替你访问了你指定的、它本不该访问的地址。",
+        born: "URL 预览、远程图片、webhook、PDF 生成、文件导入。",
+        root: "服务端把用户给的 URL 直接交给 HTTP 客户端，没有出站白名单。",
+        observe: "喂自己的地址/DNSLog 看回连；试 127.0.0.1、内网段、云元数据 169.254.169.254。",
+        fix: "出站白名单代理；解析后校验 IP；禁跳转；禁危险协议；网络层隔离。",
+        search: "SSRF 内网 169.254.169.254 DNS rebinding gopher",
+        repro: "本地两个服务：A 站 URL 预览，B 站只监听 127.0.0.1；从 A 访问 B，证明边界被绕过。"
+      }
+    ],
+    edges: [
+      { from: "xss", to: "csrf", label: "XSS 可读 Token，绕过 CSRF 防护" },
+      { from: "upload", to: "lfi", label: "图片马需要文件包含来执行" },
+      { from: "lfi", to: "rce", label: "包含即执行" },
+      { from: "upload", to: "rce", label: "上传可执行文件" },
+      { from: "sqli", to: "udf", label: "高权限 DB + 可写 plugin 目录" },
+      { from: "udf", to: "rce", label: "数据库进程执行系统代码" },
+      { from: "ssti", to: "rce", label: "模板引擎进入语言运行时" },
+      { from: "xxe", to: "ssrf", label: "外部实体可以让解析器发请求" },
+      { from: "xxe", to: "lfi", label: "外部实体可以读本地文件" },
+      { from: "php-deser", to: "rce", label: "魔术方法链接到危险函数" },
+      { from: "py-deser", to: "rce", label: "对象图还原时执行调用" },
+      { from: "java-deser", to: "rce", label: "gadget 链接到命令执行" },
+      { from: "proto", to: "rce", label: "污染到子进程/模板配置" },
+      { from: "ssrf", to: "info", label: "读云元数据与内网信息" },
+      { from: "auth", to: "idor", label: "身份可伪造后越权" }
+    ]
   },
 
   modules: [],
@@ -627,7 +995,7 @@ COURSE.modules.push({
       est: 15,
       goal: "不用自己判断从哪开始——照这份清单走完前 10 节（约 4–5 周），你就具备了继续往下学的全部前提。",
       sections: [
-        { type: "p", text: "如果你是刚接触 Web 安全的新手、每周能投入 2–3 小时，不要一次性打开 82 节被吓到，<b>先只做这 10 节</b>。它们按依赖顺序排好，每节都能独立完成，不会卡在「前置知识没学」上。" },
+        { type: "p", text: "如果你是刚接触 Web 安全的新手、每周能投入 2–3 小时，不要一次性打开 83 节被吓到，<b>先只做这 10 节</b>。它们按依赖顺序排好，每节都能独立完成，不会卡在「前置知识没学」上。" },
         { type: "table", title: "前 10 节（约 4–5 周）", head: ["顺序", "哪一节", "为什么先学它", "学完能做什么"], rows: [
           ["1", "p0l2 授权与法律边界", "先划清底线，避免把练习做成入侵", "能判断一个测试行为合不合法"],
           ["2", "p0b1 终端 / Shell / 命令行", "后面所有操作都在命令行里", "知道自己敲的命令属于哪个环境"],
@@ -641,7 +1009,7 @@ COURSE.modules.push({
           ["10", "p2l5 第一个 flag（动手）", "验证你确实会了", "能拿到 flag{w3lc0me_t0_w3b}"]
         ]},
         { type: "h", text: "别等「学完再做题」：工具和刷题要尽早" },
-        { type: "p", text: "一个常见的误区是「先把语言、框架、漏洞都学完，再开始做题」。实际正相反：<b>简单的 CTF 题不需要完整学语言</b>，学会抓包改包就能打掉一批新手题。所以这一版把工具和刷题提到 PART 3，Python 放在 PHP 之前，并把基础（PART 0–4）压到 7 周。<b>全部 82 节都要学，没有选修。</b>" },
+        { type: "p", text: "一个常见的误区是「先把语言、框架、漏洞都学完，再开始做题」。实际正相反：<b>简单的 CTF 题不需要完整学语言</b>，学会抓包改包就能打掉一批新手题。所以这一版把工具和刷题提到 PART 3，Python 放在 PHP 之前，并把基础（PART 0–4）压到 7 周。<b>全部 83 节都要学，没有选修。</b>" },
         { type: "table", title: "节奏对比", head: ["部分", "旧节奏", "新节奏", "为什么"], rows: [
           ["PART 0–4 基础（含工具与编程）", "10 周", "7 周", "基础靠「用到」，不靠一次学透"],
           ["PART 6 框架", "6 周", "2 周", "只求认得出、会查，不求精通"],
@@ -670,14 +1038,14 @@ COURSE.modules.push({
       id: "p0l1",
       title: "这门课的结构与用法",
       est: 15,
-      goal: "搞清 13 个模块的关系，知道自己现在该从哪一节开始。",
+      goal: "搞清 12 个模块的关系，知道自己现在该从哪一节开始。",
       sections: [
-        { type: "p", text: "这门课分 13 个模块、一共 82 节。它不是「先学完所有语言再做题」，而是<b>四条线并行</b>：地基线（浏览器/HTTP）、工具线（抓包/靶场/查手册）、脚本线（Python 优先）、漏洞与流程线（18 类漏洞 + 渗透流程）。" },
+        { type: "p", text: "这门课分 12 个模块、一共 83 节。它不是「先学完所有语言再做题」，而是<b>四条线并行</b>：地基线（浏览器/HTTP）、工具线（抓包/靶场/查手册）、脚本线（Python 优先）、漏洞与流程线（18 个漏洞节点 + 渗透流程）。漏洞不再分基础/高级，而是收进一张按「诞生地」组织的图谱。" },
         { type: "table", title: "四条线怎么并行", head: ["轨道", "内容", "什么时候开始", "学到什么程度"], rows: [
           ["地基线", "PART 0 / 0.5 / 1 / 2 / 2.5：环境、浏览器、HTTP、六段旅程", "第 1 天", "能拆请求、能读页面源码"],
           ["工具线", "PART 3：Burp、靶场、信息收集、查手册", "第 3 周（地基一半时）", "能改包、能打最简单的题"],
           ["脚本线", "PART 4 的 Python 三节 + PART 5：写站、写脚本", "第 4 周（和工具线交替）", "能写脚本复现手工操作"],
-          ["漏洞线", "PART 7 / 8 的 18 节 + PART 9 渗透流程", "第 10 周（脚本能跑之后）", "每类漏洞能独立复现并写记录"]
+          ["漏洞线", "PART 7 的 19 节（18 个节点 + 图谱总览）+ PART 8 渗透流程", "第 10 周（脚本能跑之后）", "每个节点能独立复现并写记录"]
         ]},
         { type: "p", text: "模块顺序按依赖排好了，但<b>可以并行</b>：学到 PART 3 的工具时，就可以去 CTFHub 打最简单的题；Python 脚本可以在做题过程中练，不必等「学完 Python」；PHP 放在 Python 之后，因为读 PHP 源码要等你有能力打题了才有意义。" },
         { type: "note", text: "如果你完全零基础：先按 PART 0 → 0.5 → 1 → 2 走，然后 <b>在 PART 3 的工具部分停下来去打几道新手题</b>，再回来继续。所有模块都要学，但没有「必须全部学完才能开始做题」这回事。" },
@@ -687,7 +1055,7 @@ COURSE.modules.push({
       code: [],
       labs: [],
       quiz: [
-        "13 个模块分成哪四条线？哪两条可以最早并行？",
+        "12 个模块分成哪四条线？哪两条可以最早并行？",
         "你现在应该从哪一节开始？为什么？",
         "为什么 PHP 放在 Python 之后学？"
       ]
@@ -999,11 +1367,11 @@ if __name__ == "__main__":
     },
     {
       id: "p0b6",
-      title: "2–3 小时/周怎么学：22 周计划（82 节全学）",
+      title: "2–3 小时/周怎么学：22 周计划（83 节全学）",
       est: 20,
-      goal: "按每周 2–3 小时的节奏排出可执行的计划：22 周走完 82 节，工具与刷题从第 3 周就开始。",
+      goal: "按每周 2–3 小时的节奏排出可执行的计划：22 周走完 83 节，工具与刷题从第 3 周就开始。",
       sections: [
-        { type: "p", text: "先说结论：<b>每周 2–3 小时，22 周能把 82 节全部走完一遍</b>。关键不是「学完再练」，而是<b>学到工具那部分就开始打题</b>，边打边补语言。" },
+        { type: "p", text: "先说结论：<b>每周 2–3 小时，22 周能把 83 节全部走完一遍</b>。关键不是「学完再练」，而是<b>学到工具那部分就开始打题</b>，边打边补语言。" },
         { type: "table", title: "22 周计划（按 2.5 小时/周）", head: ["周次", "学什么", "节数", "这一阶段的验收"], rows: [
           ["第 1 周", "PART 0 + 0.5：开课准备、命令行、WSL、起服务", "10 节", "能在 Ubuntu 里起服务、跑 20 个命令"],
           ["第 1–2 周", "PART 1：HTML/CSS/JS/控制台/读源码", "6 节", "能在控制台改页面、拿到第一个 flag"],
@@ -1012,10 +1380,9 @@ if __name__ == "__main__":
           ["第 4–7 周", "PART 4：JS / Python / PHP（Python 在 PHP 前）", "8 节", "能写 20 行脚本复现一次手工测试"],
           ["第 7–9 周", "PART 5：自己写一个 Web 应用（Flask 小站）", "5 节", "能跑起自己的站，并用 Burp 打它"],
           ["第 9–10 周", "PART 6：技术栈识别（快速过）", "5 节", "看到站能猜出后端与框架"],
-          ["第 10–15 周", "PART 7：漏洞体系 9 节 + 靶场", "9 节", "每类漏洞能独立复现"],
-          ["第 15–18 周", "PART 8：高级漏洞 9 节", "9 节", "能读源码找链，不靠背 payload"],
-          ["第 18–20 周", "PART 9：渗透流程（收集/验证/后渗透/报告）+ 解题方法论", "11 节", "能写出一份合格的验证记录与报告"],
-          ["第 20–22 周", "PART 10：实战复盘", "4 节", "能独立完成一遍完整流程并复盘"]
+          ["第 10–18 周", "PART 7：漏洞图谱 19 节（18 个节点 + 总览）+ 靶场", "19 节", "每个节点能独立复现，并能说出根因与修复"],
+          ["第 18–20 周", "PART 8：渗透流程（收集/验证/后渗透/报告）+ 解题方法论", "11 节", "能写出一份合格的验证记录与报告"],
+          ["第 20–22 周", "PART 9：实战复盘", "4 节", "能独立完成一遍完整流程并复盘"]
         ]},
         { type: "h", text: "「2 小时」怎么切" },
         { type: "list", items: [
@@ -1029,7 +1396,7 @@ if __name__ == "__main__":
           "基础部分（PART 0–4）不要反复回炉：过一遍就往前走，后面用到了自然会补。",
           "PART 6 框架只花 2 周快速过：认得出技术栈就够了，框架细节遇到题目再查。",
           "某一节连续两次都卡住超过 40 分钟：记下「卡在哪」，先走下一节，别停在一节上。",
-          "漏洞部分（PART 7 / 8）反过来要慢：每节必须在靶场上动手一次，不能只读。"
+          "漏洞部分（PART 7）反过来要慢：每个节点必须在靶场上动手一次，不能只读。"
         ]},
         { type: "note", text: "最重要的不是速度，是<b>每周真的打开一次</b>。建议把「周三晚 20:00 学 1 小时 + 周六上午 1.5 小时」写进日历，比任何学习方法都有效。" }
       ],
@@ -1170,6 +1537,10 @@ box.onclick = () => alert("你点了我");` },
   .then(r => r.json())          // 把响应体当 JSON 解析
   .then(data => console.log(data))
   .catch(err => console.error(err));` },
+        { type: "touch", title: "为什么会有 XSS", text: "同一段字符串，放进 <code>textContent</code> 是文本，放进 <code>innerHTML</code> 就变成 HTML；浏览器一旦把它当标签/脚本解析，XSS 就诞生了。浏览器不是没防：<b>CSP</b> 限制能执行什么、<b>HttpOnly</b> 保护凭据不被脚本读取、<b>Trusted Types</b> 限制危险赋值，同源策略则限制跨源读取；但每种防护都有前提和绕过史——这正是图谱里 XSS 节点要追的主线。", links: [
+          { name: "图谱 · XSS", href: "#vulnmap/xss" },
+          { name: "读 XSS 的诞生", href: "#p5l5" }
+        ]},
         { type: "note", text: "fetch 是异步的。代码写完之后不会立刻拿到结果，所以要用 .then 或 async/await。<b>在控制台里直接写返回值，会看到 Promise {&lt;pending&gt;} —— 这不是错，是还没回来。</b>" }
       ],
       code: [],
@@ -1494,7 +1865,7 @@ COURSE.modules.push({
   id: "p2b",
   title: "PART 2.5 · Web 全景与攻击面",
   weeks: "第 3 周",
-  summary: "学漏洞之前，先建立「整张地图」：一次请求要穿过哪些层、每一段谁在做事、每一段可能出什么问题。这一 PART 是后面 PART 7 的索引——看到任何漏洞，你都能把它放回这张图上的某个位置。",
+  summary: "学漏洞之前，先建立「整张地图」：一次请求要穿过哪些层、每一段谁在做事、每一段可能出什么问题。这一 PART 是 PART 7 漏洞图谱的底图——看到任何漏洞，你都能把它放回「六段旅程」的某个位置。",
   lessons: [
     {
       id: "p2b1",
@@ -1616,7 +1987,7 @@ COURSE.modules.push({
           ["① Web 基础", "HTTP/HTTPS、请求响应、状态码、Cookie/Session、Token/JWT、同源策略与 CORS、DNS 与代理", "PART 2 / 2.5", "能逐行拆请求、说清登录状态怎么维持"],
           ["② 工具链", "抓包与改包（Burp/Yakit）、curl、编解码、浏览器 DevTools、Docker 靶场", "PART 1 / 3", "能独立改包复现一次测试"],
           ["③ 开发与代码", "一门后端语言（PHP/Python/Java）、数据库基础、前端基础、Git 与 CI 概念", "PART 4 / 5 / 6", "能读懂一段源码，指出输入进了哪个函数"],
-          ["④ 漏洞与利用", "OWASP Top 10、注入、XSS、CSRF、SSRF、文件类、认证与越权、反序列化、逻辑缺陷", "PART 7 / 8", "每类能写出最小复现和修复方式"]
+          ["④ 漏洞与利用", "OWASP Top 10、注入、XSS、CSRF、SSRF、文件类、认证与越权、反序列化、逻辑缺陷", "PART 7（漏洞图谱）", "每个节点能写出最小复现和修复方式"]
         ]},
         { type: "p", text: "这四块不是线性学完再回头，而是<b>循环</b>：学到漏洞（④）发现读不懂源码，就回代码（③）；读代码时看不懂请求，就回基础（①）；做不动实验，就补工具（②）。每循环一圈，你的理解都会深一层。" },
         { type: "steps", items: [
@@ -1644,12 +2015,12 @@ COURSE.modules.push({
       sections: [
         { type: "p", text: "学之前先看清「以后能去哪」，你才知道该把时间花在哪。以 Web 为技术基石，企业安全岗大致分三条主线——它们都要求「懂 Web 怎么跑」，但侧重点完全不同。" },
         { type: "table", title: "三类岗位", head: ["方向", "日常在做什么", "核心场景", "最吃哪块能力"], rows: [
-          ["渗透测试 / 安全攻防", "找漏洞、打点、写报告；研究新的攻击面与绕过", "攻防演练（HVV）、白帽子众测、上线前渗透评估、边界突破打点", "漏洞与利用（PART 7/8）+ 工具（PART 3）+ 流程与报告（PART 9）"],
+          ["渗透测试 / 安全攻防", "找漏洞、打点、写报告；研究新的攻击面与绕过", "攻防演练（HVV）、白帽子众测、上线前渗透评估、边界突破打点", "漏洞与利用（PART 7）+ 工具（PART 3）+ 流程与报告（PART 8）"],
           ["应用安全 / DevSecOps", "在软件全生命周期里推进安全（SDL），用 SAST/SCA 审计源码，制定规范，做安全左移", "架构安全评审、API 网关鉴权治理、WAF/RASP 规则运营、越权与业务逻辑缺陷排查、SRC 审核", "开发与代码（PART 4/5/6）+ 漏洞原理（PART 7）+ 读源码能力"],
           ["终端与主机安全", "服务器、办公终端、容器宿主机的加固与检测；分析恶意进程、外联与异常行为", "EDR 检测与响应、主机加固、入侵排查", "运行环境与网络基础 + 日志分析（本课程覆盖较少）"]
         ]},
         { type: "table", title: "按方向调整学习重点", head: ["你的方向", "本课程重点", "可以后补"], rows: [
-          ["渗透 / 攻防", "PART 7/8 全部 + 工具 PART 3 + 流程 PART 9", "PART 6 的 Java/Node 细节"],
+          ["渗透 / 攻防", "PART 7 全部 + 工具 PART 3 + 流程 PART 8", "PART 6 的 Java/Node 细节"],
           ["应用安全 / DevSecOps", "PART 4 读源码 + PART 6 框架 + PART 7 原理", "PART 3 的扫描器细节"],
           ["主机安全", "PART 0.5 命令行 + PART 2 HTTP + 网络基础", "PART 7 中偏业务的逻辑漏洞"],
           ["还没想好", "按课程顺序走完前 10 节 + PART 7", "到了大三再定向"]
@@ -1885,7 +2256,7 @@ docker run -d -p 8090:80 vulnerables/web-dvwa` },
           ["CSRF", "CSRF", "p5l10"],
           ["模板注入", "SSTI", "p5l11"],
           ["XXE", "XXE", "p5l12"],
-          ["反序列化", "deserialization", "p5l13 / p5l14"],
+          ["反序列化", "deserialization", "p5l13 / p5l19 / p5l14"],
           ["JWT", "JWT", "p5l15"],
           ["越权 / 逻辑漏洞", "IDOR / access control / business logic", "p5l16"]
         ]},
@@ -1904,7 +2275,7 @@ docker run -d -p 8090:80 vulnerables/web-dvwa` },
   → 改：按目标的引号/路径/编码改 payload
   → 验：Burp Repeater 发一次，看响应差异
   → 记：把「生效的 payload + 为什么」写进笔记` },
-        { type: "note", text: "手册是字典，不是教材。只收藏不查、只查不复盘，都是白费——这也是「太笼统」的来源：课程给地图，具体路线要你自己在靶场上走一遍。" }
+        { type: "note", text: "手册是字典，不是教材。只收藏不查、只查不复盘，都是白费。课程给的是<b>漏洞图谱</b>和「诞生地」，具体路线要你自己在靶场上走一遍：先在图谱里定位节点，再带着节点里的英文关键词去手册里查。" }
       ],
       code: [],
       labs: [
@@ -1995,6 +2366,11 @@ await fetch("https://other.site/api", { credentials: "include" });` },
           "<b>忘了判 res.ok</b>：404 页面也会被当成成功，然后 json() 解析报错。",
           "<b>CORS 被拦</b>：浏览器里跨域请求会先发预检（OPTIONS），对方没放行就失败——这不是你的代码错，是浏览器在保护用户。"
         ]},
+        { type: "touch", title: "同一门 JS，两种运行环境", text: "浏览器里的 JS 受同源策略、CSP、DOM 边界约束，漏洞形态是 <b>XSS</b>；Node 里的 JS 能读文件、起子进程，漏洞形态是<b>原型链污染、沙箱逃逸、命令执行</b>。先问「这段代码跑在哪」，再问「它能碰到什么」——同一句 <code>eval</code> 在两个环境里的后果完全不同。", links: [
+          { name: "图谱 · XSS", href: "#vulnmap/xss" },
+          { name: "图谱 · 原型链污染", href: "#vulnmap/proto" },
+          { name: "图谱 · RCE", href: "#vulnmap/rce" }
+        ]},
         { type: "note", text: "CTF 里这个知识点的用处：<b>看到页面调用了什么接口、传了什么参数，就能自己构造请求重放</b>。前端代码在浏览器里，永远是可读可改可调用的。" }
       ],
       code: [],
@@ -2071,6 +2447,11 @@ for (const k in window) if (k.startsWith("__")) console.log(k);` },
       goal: "在自己的机器上装好 Python、会建虚拟环境、会跑 .py 文件、会用 pip 装库。",
       sections: [
         { type: "p", text: "Python 是 Web 选手的「手」：批量请求、编码处理、盲注自动化、日志分析，全靠它。先把它装顺手，后面每一节都会用到。" },
+        { type: "touch", title: "Python 的反序列化，以及「原型链」的误称", text: "Python 没有 JS 的原型链，<b>别把 prototype pollution 硬套过来</b>。Python 对应的是<b>对象图</b>：pickle 在还原对象时可以触发 <code>__reduce__</code>，Jinja2 沙箱逃逸走的是 <code>__class__.__mro__.__subclasses__()</code>。学习时抓住共同点：<b>用户可控的数据被还原成了对象/类引用</b>，而不是「Python 也有原型」。", links: [
+          { name: "图谱 · Python 反序列化", href: "#vulnmap/py-deser" },
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" },
+          { name: "读 Python 反序列化", href: "#p5l19" }
+        ]},
         { type: "h", text: "第一步：确认装没装" },
         { type: "code", lang: "bash", title: "Windows 与 Ubuntu 的差别", src: `# Windows（PowerShell / cmd）
 py --version            # 官方安装器默认带 py 启动器
@@ -2264,6 +2645,12 @@ if __name__ == "__main__":
       goal: "读懂一段 PHP 源码，指出用户输入从哪进来、进了哪个函数。",
       sections: [
         { type: "p", text: "PHP 是 CTF Web 出现频率最高的后端语言。语法松散、上手快，但正是这些「松散」制造了大部分考点。" },
+        { type: "touch", title: "PHP 的三个高频诞生点", text: "<code>$_FILES</code> + <code>move_uploaded_file</code> → 文件上传；<code>include($_GET['page'])</code> → 文件包含；<code>system($_GET['cmd'])</code> → 命令执行。它们不是三个孤立的「高级漏洞」，而是<b>三类 PHP API 被用户输入直接控制</b>的结果。先能指出「输入进了哪个函数」，再谈绕过。", links: [
+          { name: "图谱 · 文件上传", href: "#vulnmap/upload" },
+          { name: "图谱 · 包含/穿越", href: "#vulnmap/lfi" },
+          { name: "图谱 · RCE", href: "#vulnmap/rce" },
+          { name: "图谱 · PHP 反序列化", href: "#vulnmap/php-deser" }
+        ]},
         { type: "code", lang: "php", title: "基础语法：和 JS 的对照", src: `<?php
 $name = "wei";                 // 变量以 $ 开头，不用声明类型
 $arr  = [1, 2, 3];             // 数组（索引）
@@ -2397,6 +2784,10 @@ extract($_GET);                  // 用户能覆盖任意变量！?is_admin=1
       goal: "拿到一个 PHP 文件，10 分钟内定位可能的漏洞点，并写出对应的验证 payload。",
       sections: [
         { type: "p", text: "这节是手法训练。千变万化的代码，用固定四步就能扫出可疑点——这也是真实代码审计的最小流程。" },
+        { type: "touch", title: "读源码就是读「出生证明」", text: "同一个漏洞换语言就换写法，但根因不变：<b>入口 → 变量 → 落点 → 判断</b>。读源码时先找「哪一行让数据越过了边界」，再去看 payload；只会背 payload，等于只会抄答案。", links: [
+          { name: "打开漏洞图谱", href: "#vulnmap" },
+          { name: "图谱使用说明", href: "#p5l1" }
+        ]},
         { type: "table", title: "四步法", head: ["步骤", "搜什么", "产出"], rows: [
           ["① 找入口", "$_GET / $_POST / $_COOKIE / $_REQUEST / $_FILES / $_SERVER", "所有可控变量清单"],
           ["② 跟变量", "变量被赋给了谁、传给了谁", "数据流图（脑内画）"],
@@ -2584,6 +2975,11 @@ def index():
         return redirect("/login")
     rows = db().execute("SELECT * FROM products").fetchall()
     return render_template_string(INDEX, rows=rows, uid=session["uid"])` },
+        { type: "touch", title: "登录鉴权：Session / Cookie / Token 各自信任谁", text: "Session 是服务端状态，Cookie 只是它的钥匙；JWT 是客户端保存的<b>签名声明</b>；Flask 默认把 session 放进签名 cookie，所以 <code>SECRET_KEY</code> 泄露就等于可以伪造身份。<b>CSRF 的根因也在这里</b>：浏览器会自动带 Cookie，但不会替你证明「这次操作是你想要的」。", links: [
+          { name: "图谱 · Session/JWT", href: "#vulnmap/auth" },
+          { name: "图谱 · CSRF", href: "#vulnmap/csrf" },
+          { name: "图谱 · 越权", href: "#vulnmap/idor" }
+        ]},
         { type: "table", title: "这一段里，哪些地方是「安全写法」", head: ["写法", "为什么安全"], rows: [
           ["session[\"uid\"] = row[\"id\"]", "身份由服务端签名，用户改不了"],
           ["SQL 用 ? 占位符", "参数化查询，杜绝注入"],
@@ -2620,6 +3016,18 @@ with db() as c:
         raise ValueError("库存不足")
     c.execute("INSERT INTO orders(user_id, product_id, qty, amount) VALUES(?,?,?,?)",
               (session["uid"], pid, qty, amount))` },
+        { type: "touch", title: "同一个注入，不同数据库", text: "SQLite 是教学环境，语法和权限模型都更简单；真实题目常见 MySQL / PostgreSQL。换数据库先做三件事：<b>确认元数据表、确认时间函数、确认当前账号权限</b>。注入的根因不变，但「怎么问出数据」和「拿到权限后能做什么」差别很大。", links: [
+          { name: "图谱 · SQL 注入", href: "#vulnmap/sqli" },
+          { name: "图谱 · NoSQL", href: "#vulnmap/nosql" },
+          { name: "图谱 · UDF 提权", href: "#vulnmap/udf" }
+        ]},
+        { type: "table", title: "SQLite / MySQL / PostgreSQL：指纹与打法差异", head: ["数据库", "指纹 / 元数据", "时间盲注", "常用取值", "高权限路径"], rows: [
+          ["SQLite", "<code>sqlite_master</code>；无 information_schema；<code>sqlite_version()</code>", "无 SLEEP；用重查询或 <code>randomblob</code> 计时", "<code>group_concat</code>、<code>substr</code>", "默认无 UDF；<code>load_extension</code> 通常关闭"],
+          ["MySQL", "<code>information_schema</code>；<code>@@version</code>、<code>database()</code>", "<code>SLEEP()</code>、<code>BENCHMARK()</code>", "<code>group_concat</code>、<code>0x3a</code>", "高权限 + 可写 plugin_dir → UDF；<code>INTO OUTFILE</code>"],
+          ["PostgreSQL", "<code>information_schema</code>、<code>pg_catalog</code>；<code>version()</code>", "<code>pg_sleep()</code>", "<code>string_agg</code>、<code>||</code> 拼接", "<code>COPY ... TO PROGRAM</code>（超级用户）、<code>pg_read_file</code>"],
+          ["SQL Server", "<code>sys.objects</code>；<code>@@version</code>", "<code>WAITFOR DELAY</code>", "<code>+</code> 拼接、<code>CHAR()</code>", "<code>xp_cmdshell</code>（高权限）"]
+        ]},
+        { type: "p", text: "关于 <b>MySQL UDF 提权</b>：它成立的前提是「数据库账号权限过高 + 能把共享库写进 plugin_dir + 数据库愿意加载它」。这不是「MySQL 默认就能提权」，而是 SQL 注入拿到高权限账号后的延伸。学习时重点看<b>权限从哪来、为什么能写文件、怎么修</b>，不要把它当成一套背下来就能打的 payload。只在本地隔离容器里验证。" },
         { type: "table", title: "数据层的三件事", head: ["事项", "做法", "防住了什么"], rows: [
           ["参数化", "永远用 ? 占位符", "SQL 注入"],
           ["事务", "扣库存与建订单放同一事务", "并发下超卖/半成功"],
@@ -2655,6 +3063,10 @@ orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (session["uid"],
           ["上传有白名单", "搜 .filename / save(", "文件上传"],
           ["错误信息不回显", "故意传错参数看报错", "信息泄露"],
           ["依赖没有已知漏洞", "pip list → 对照 CVE", "组件漏洞"]
+        ]},
+        { type: "touch", title: "扩展功能就是新的攻击面", text: "给站加两个功能：<code>/preview?url=</code> 远程取图 → <b>SSRF</b> 诞生；<code>render_template_string(\"Hi \" + name)</code> → <b>SSTI</b> 诞生。先写功能，再画出「输入 → 哪个函数 → 什么后果」，最后才想 payload。", links: [
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" },
+          { name: "图谱 · SSRF", href: "#vulnmap/ssrf" }
         ]},
         { type: "steps", items: [
           "本地跑起来：<code>flask --app app run --debug</code>，用浏览器把四个页面都走一遍。",
@@ -2738,6 +3150,11 @@ COURSE.modules.push({
       goal: "看懂 ThinkPHP 站点的目录结构、路由规则与常见漏洞位置，并能判断版本。",
       sections: [
         { type: "p", text: "ThinkPHP 是国内中小项目用得极多的 PHP 框架，也是国内 CTF 的常客。框架题的难度不在「挖洞」，而在「认出这是哪个框架、哪个版本」。" },
+        { type: "touch", title: "框架把「一个函数」放大成「一条链」", text: "框架的入口、路由、模板、ORM 会把同一份输入送到更多落点；版本号决定已知链。但根因仍是<b>「参数进了不该进的位置」</b>，只是路径更长。先认版本，再读入口，最后才套链。", links: [
+          { name: "图谱 · PHP 反序列化", href: "#vulnmap/php-deser" },
+          { name: "图谱 · RCE", href: "#vulnmap/rce" },
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" }
+        ]},
         { type: "table", title: "典型目录结构", head: ["路径", "作用", "能泄露什么"], rows: [
           ["public/index.php", "唯一入口文件", "入口写法暴露版本"],
           ["app/controller/", "控制器：处理请求", "业务逻辑、SQL 拼接、参数使用"],
@@ -2807,6 +3224,11 @@ class Index {
       goal: "看懂一个 Flask 应用，理解模板渲染为什么会产生 SSTI，并知道 Flask 的四个常见配置风险。",
       sections: [
         { type: "p", text: "Flask 是 CTF 里最常见的 Python 后端。它代码量小、结构清晰，所以几乎每道 Flask 题都可以「读源码做题」。" },
+        { type: "touch", title: "Flask 的雷区，与 Python 的对象图", text: "<code>debug=True</code>、<code>SECRET_KEY</code> 泄露、<code>render_template_string</code> 拼接、pickle 反序列化。前三个已经在 p3d 里出现过；pickle 是 Python 特有的对象图问题，和 JS 原型链不是一回事。", links: [
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" },
+          { name: "图谱 · Session/JWT", href: "#vulnmap/auth" },
+          { name: "图谱 · Python 反序列化", href: "#vulnmap/py-deser" }
+        ]},
         { type: "code", lang: "python", title: "一个最小 Flask 应用", src: `from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
@@ -2867,6 +3289,11 @@ request.args.get() / request.form.get() / request.json
       goal: "知道这三类技术栈各自的「考点地形」，遇到时知道往哪看、怎么确认。",
       sections: [
         { type: "p", text: "这三者不需要一开始就精通，但必须知道它们的典型漏洞形态。目标是：<b>看到站的指纹，就能立刻缩小到对应的漏洞集合</b>。" },
+        { type: "touch", title: "解析器与运行时默认信任了什么", text: "Java 的 XML 解析器默认可能允许 DTD（XXE），<code>readObject</code> 是反序列化入口；Node 的 <code>vm</code> 不是安全边界，原型链污染能影响子进程选项。看到这些技术栈，先问「它默认信任了什么」，而不是先找 payload。", links: [
+          { name: "图谱 · XXE", href: "#vulnmap/xxe" },
+          { name: "图谱 · Java 反序列化", href: "#vulnmap/java-deser" },
+          { name: "图谱 · 原型链污染", href: "#vulnmap/proto" }
+        ]},
         { type: "table", title: "Django（Python）", head: ["项目", "内容"], rows: [
           ["结构", "MTV：Model / Template / View，app 分模块"],
           ["默认安全", "模板自动转义（XSS 少见）、CSRF 默认开启"],
@@ -2947,50 +3374,63 @@ curl -s https://target.com/robots.txt` },
 
 
 /* ===== p5a.js ===== */
-/* PART 5 · 漏洞体系（上）：信息泄露 → SSRF */
+/* PART 7 · 漏洞图谱（上）：节点按「诞生地」组织，不再分基础/高级 */
 COURSE.modules.push({
   id: "p5",
-  title: "PART 7 · 漏洞体系",
-  weeks: "第 10–15 周",
-  summary: "18 类漏洞。每节按「原理 → 判断 → 最小复现 → 修复」写，全部要学；细节和变体去 HackTricks / seccmd 查（方法见 p6l5）。",
+  title: "PART 7 · 漏洞图谱",
+  weeks: "第 10–18 周 · 随技术栈穿插",
+  summary: "不再分「基础漏洞 / 高级漏洞」。18 个节点按诞生地挂回浏览器、会话、数据库、文件、模板、解析器、序列化与外部请求；每节保留最小复现，但先讲清根因。先看图知道有什么，再自己找文章、手动复现。",
   lessons: [
     {
       id: "p5l1",
-      title: "漏洞全景与分类",
+      title: "先看图谱：漏洞不是清单，是数据被误用的位置",
       est: 20,
-      goal: "建立一张漏洞地图：看到一个输入，就知道该翻哪一节的 payload。",
+      goal: "能看着图谱说出 18 个节点分别诞生在哪一层，并用自己的话解释「根因」和「修复」的关系。",
       sections: [
-        { type: "p", text: "所有 Web 漏洞都长着同一张脸：<b>来自不可信来源的数据，被当成代码 / 路径 / 身份 / 请求 / 数据结构来用了。</b>区别只在「被当成什么」。记住这张表，比背 18 个名词管用。" },
-        { type: "table", title: "按「被污染成什么」分类", head: ["被当成", "代表漏洞", "一句话原理"], rows: [
-          ["代码", "SQLi / XSS / 命令执行 / SSTI / XXE / 反序列化", "数据被拼进了「会被执行」的位置"],
-          ["路径", "路径穿越 / 文件包含 / 文件上传", "数据决定了「读/写/执行哪个文件」"],
-          ["身份", "认证绕过 / JWT 伪造 / Session 伪造 / CSRF", "数据被当成了「你是谁」的凭证"],
-          ["服务端请求", "SSRF", "数据变成了「让服务器替你发的请求」"],
-          ["数据与流程", "信息泄露 / 逻辑漏洞 / 越权", "数据或流程本身就能被看到、被绕过"],
-          ["对象结构", "原型链污染", "数据被合并进了对象的原型链"]
+        { type: "p", text: "从这一节开始，不再分「基础漏洞 / 高级漏洞」。漏洞没有难度等级，只有<b>「诞生在哪一层、需要什么前置知识」</b>。同样是 SQL 注入，SQLite 和 MySQL 的写法不同；同样是反序列化，PHP、Python、Java 的对象模型完全不同。按语言、框架、数据层去挂，才记得住。" },
+        { type: "p", text: "先打开左侧的 <b>🕸 漏洞图谱</b>。图上每个节点只回答四个问题：<b>一句话是什么、诞生在哪、根因是什么、怎么观察</b>。点开节点还有「手动复现」和「搜什么关键词」。这张图是索引，不是教材；真正的深度靠你自己找文章、复现、写笔记。" },
+        { type: "table", title: "技术现场 → 图谱节点 → 根因一句话", head: ["技术现场", "节点", "根因一句话"], rows: [
+          ["浏览器 / 前端 JS", "<a href=\"#vulnmap/xss\">XSS</a>、<a href=\"#vulnmap/proto\">原型链污染</a>", "数据被当成 HTML/JS，或对象原型被写穿"],
+          ["HTTP / Cookie", "<a href=\"#vulnmap/csrf\">CSRF</a>", "浏览器自动带凭据，操作没绑定本次请求"],
+          ["登录 / 鉴权", "<a href=\"#vulnmap/auth\">Session/JWT</a>、<a href=\"#vulnmap/idor\">越权</a>", "身份由客户端决定，或对象归属没校验"],
+          ["业务流程", "<a href=\"#vulnmap/idor\">逻辑漏洞</a>", "服务端把「钱、状态、归属」交给前端"],
+          ["响应 / 错误", "<a href=\"#vulnmap/info\">信息泄露</a>", "开发产物和报错把地图送出去"],
+          ["数据库", "<a href=\"#vulnmap/sqli\">SQLi</a>、<a href=\"#vulnmap/nosql\">NoSQL</a>、<a href=\"#vulnmap/udf\">UDF</a>", "输入变成查询结构；账号权限过大"],
+          ["文件系统", "<a href=\"#vulnmap/upload\">上传</a>、<a href=\"#vulnmap/lfi\">穿越/包含</a>、<a href=\"#vulnmap/rce\">RCE</a>", "输入决定路径，文件被当代码执行"],
+          ["模板引擎", "<a href=\"#vulnmap/ssti\">SSTI</a>", "输入被当模板源码求值"],
+          ["XML / 解析器", "<a href=\"#vulnmap/xxe\">XXE</a>", "解析器信任外部实体"],
+          ["序列化", "<a href=\"#vulnmap/php-deser\">PHP</a> / <a href=\"#vulnmap/py-deser\">Python</a> / <a href=\"#vulnmap/java-deser\">Java</a> 反序列化", "不可信字节被还原成对象"],
+          ["Node.js 运行时", "<a href=\"#vulnmap/proto\">原型链污染</a>", "合并函数写穿 Object.prototype"],
+          ["服务端请求", "<a href=\"#vulnmap/ssrf\">SSRF</a>", "服务端替攻击者访问内网"]
         ]},
-        { type: "h", text: "拿到一道题，先问三个问题" },
+        { type: "h", text: "学习闭环：一个节点怎么学" },
         { type: "steps", items: [
-          "<b>输入从哪进来</b>：URL 参数、表单、JSON、Cookie、请求头（Referer / XFF / UA）、文件名、甚至上传的图片内容。",
-          "<b>它被送到了哪里</b>：数据库、文件系统、shell、模板引擎、反序列化函数、内网 HTTP 请求。这一步决定漏洞类型。",
-          "<b>中间有没有过滤，过滤做在哪一层</b>：前端 JS（等于没有）、后端关键字替换（通常可绕）、WAF（看规则）、类型强转（最有效）。"
+          "选一个节点，先读「一句话 / 根因 / 怎么观察」，<b>不要急着背 payload</b>。",
+          "按节点给出的英文关键词，找 2 篇高质量文章（优先官方文档、PortSwigger、HackTricks）。",
+          "在本地靶场手动复现：先证明「数据被当成了什么」，再谈具体 payload。",
+          "写三行笔记：根因、修复点、换一个语言/框架是否还成立。",
+          "回到图谱，把相关节点连起来看（如 上传 → 包含 → RCE），理解漏洞链而不是单点。"
         ]},
-        { type: "h", text: "学习顺序（不要跳）" },
+        { type: "h", text: "三个必须做到的标准" },
         { type: "list", items: [
-          "<b>先会读源码</b>：同一个 payload 在 PHP / Python / Java 里长得完全不一样，读不懂源码就只能背题。",
-          "<b>再认漏洞</b>：能在一段代码里指认出「这行是注入点」，比记住 100 个 payload 有价值。",
-          "<b>然后练 payload</b>：把每一类的 3–5 个标准 payload 练到能默写。",
-          "<b>最后练思路</b>：真实题目不会告诉你「这是 SQL 注入」，要靠 PART 9 的决策树自己判断。"
+          "<b>能画出数据流</b>：输入从哪来 → 经过什么处理 → 落到哪个危险函数。",
+          "<b>能说出修复</b>：改哪一行、为什么能根治，而不是只加一个关键字过滤。",
+          "<b>能换环境</b>：PHP 的 SQLi 换成 Flask + SQLite 还成立吗？成立的部分才是原理。",
+          "<b>能连成链</b>：上传 → 包含 → RCE；SQLi → UDF → RCE；XSS → 读 Token → 绕过 CSRF。"
         ]},
-        { type: "note", text: "分类不是为了考试，是为了<b>检索</b>：看到「输入进了数据库」就去翻 SQLi 那节；看到「要求输入 URL」就去翻 SSRF 那节。本 PART 的每一节都按同一个结构写：原理 → 判断 → 利用 → 修复。" }
+        { type: "note", text: "会打不等于会。payload 是结果，<b>根因</b>才是可迁移的东西。你如果能解释「为什么这一行会产生漏洞」，修复和变体都是自然推导出来的；反过来，只会背 payload，换个框架就归零。" }
       ],
       code: [],
-      labs: [{ name: "OWASP Top 10（2021）", url: "https://owasp.org/www-project-top-ten/" }],
+      labs: [
+        { name: "🕸 漏洞图谱（本页左侧入口）", url: "#vulnmap" },
+        { name: "OWASP Top 10（2021）", url: "https://owasp.org/www-project-top-ten/" }
+      ],
       quiz: [
-        "把 18 类漏洞按「被当成什么」分成 6 组，各写一个例子。",
-        "「文件上传」和「文件包含」为什么分在不同组？",
-        "为什么说「前端过滤等于没有过滤」？",
-        "拿到一道陌生题目，你会先看哪三样东西？"
+        "为什么不再按「基础 / 高级」给漏洞分类？",
+        "一个漏洞的「诞生地」由哪三件事决定？",
+        "为什么说「会打不等于会」？",
+        "挑一个节点，说出它的根因和修复点。",
+        "上传、文件包含、RCE 怎么接成一条链？"
       ]
     },
     {
@@ -3547,13 +3987,8 @@ if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_
 
 
 /* ===== p5b.js ===== */
-/* PART 8 · 高级漏洞（下）：CSRF → 原型链污染 */
-COURSE.modules.push({
-  id: "p5b",
-  title: "PART 8 · 高级漏洞",
-  weeks: "第 15–18 周",
-  summary: "需要更多前置知识的漏洞：CSRF、模板注入、XML、反序列化、认证绕过、逻辑漏洞、NoSQL、原型链污染。全部要学，学到这里你已经开始「读源码找链」而不是「背 payload」。",
-  lessons: [
+/* PART 7 · 漏洞图谱（下）：不单独成 PART，追加到 p5 模块后按诞生地重排 */
+const P5_EXTRA = [
     {
       id: "p5l10",
       title: "CSRF：借你的手发请求",
@@ -3739,7 +4174,7 @@ echo $twig->createTemplate('Hello ' . $_GET['name'])->render([]);
     },
     {
       id: "p5l13",
-      title: "反序列化（PHP）",
+      title: "反序列化（PHP）：魔术方法与 pop 链",
       est: 40,
       goal: "看懂 PHP 序列化字符串，理解魔术方法如何被串成利用链（pop chain）。",
       sections: [
@@ -3815,7 +4250,7 @@ echo serialize($payload);
     },
     {
       id: "p5l14",
-      title: "反序列化（Java）与组件漏洞",
+      title: "反序列化（Java）：readObject 与组件链",
       est: 40,
       goal: "知道 Java 反序列化的入口、识别组件与版本，理解 ysoserial 与 JNDI 注入。",
       sections: [
@@ -4083,16 +4518,98 @@ console.log(b.isAdmin);  // true
         "污染之后通常要怎么才能造成实际危害？",
         "列出两种防御方式。"
       ]
+    },
+    {
+      id: "p5l19",
+      title: "反序列化（Python）：pickle 与对象图",
+      est: 35,
+      goal: "能解释 pickle 为什么能执行代码，分清 Python 对象图与 JS 原型链的区别，知道 safe_load / RestrictedUnpickler 的边界。",
+      sections: [
+        { type: "p", text: "先纠正一个容易混的说法：<b>Python 没有 JS 那种原型链</b>，把 prototype pollution 的术语硬套到 Python 上会越学越乱。Python 的反序列化问题来自另一件事：<b>pickle 在还原对象时，会按照字节流里的指令重建对象、导入模块、调用可调用对象</b>。用户可控的字节被还原成对象图，就等于把「构造对象」的权力交给了攻击者。" },
+        { type: "code", lang: "python", title: "最小原理：__reduce__ 决定怎么还原", src: `import pickle, os
+
+class Evil:
+    def __reduce__(self):
+        # 反序列化时，pickle 会调用 os.system("id")
+        return (os.system, ("id",))
+
+payload = pickle.dumps(Evil())
+pickle.loads(payload)      # 还原的那一刻执行命令` },
+        { type: "p", text: "`__reduce__` 只是最直观的入口。真实题目里，危险点可能是 <code>yaml.load</code>、<code>joblib.load</code>、Flask 的缓存、Celery 任务、机器学习模型。共同点只有一个：<b>不可信字节被当成了对象图</b>。" },
+        { type: "table", title: "别把概念混在一起：JS 与 Python 对照", head: ["你听到的说法", "JS 里是什么", "Python 里对应什么"], rows: [
+          ["原型链污染", "<code>__proto__</code> / <code>Object.prototype</code>", "没有原型链；对应对象图、MRO、子类遍历"],
+          ["沙箱逃逸", "vm / prototype gadget", "<code>__class__.__mro__.__subclasses__()</code>、pickle gadget"],
+          ["反序列化", "JSON 本身不执行；node-serialize 等库才危险", "pickle / yaml.load / joblib / torch.load"],
+          ["模板注入", "EJS / Pug 等模板", "Jinja2 表达式求值（SSTI，不是反序列化）"]
+        ]},
+        { type: "h", text: "怎么找入口" },
+        { type: "steps", items: [
+          "全局搜 <code>pickle.loads</code>、<code>pickle.load</code>、<code>yaml.load</code>、<code>joblib.load</code>、<code>torch.load</code>。",
+          "看数据是否可控：Cookie、上传文件、缓存、队列消息、模型文件。",
+          "看有没有安全替代：<code>yaml.safe_load</code>、<code>RestrictedUnpickler</code>、HMAC 签名。",
+          "看版本与依赖：老版本库可能默认不安全，或存在已知 gadget。",
+          "确认「还原时到底调用了什么」——这才是根因，不是 payload 长什么样。"
+        ]},
+        { type: "code", lang: "python", title: "安全与不安全的写法", src: `import yaml, pickle
+
+# ❌ 不安全：yaml.load 可以构造任意 Python 对象
+data = yaml.load(untrusted, Loader=yaml.Loader)
+
+# ✅ 安全：只解析基础类型
+data = yaml.safe_load(untrusted)
+
+# ✅ 如果必须用 pickle：白名单类 + 签名校验
+class SafeUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if (module, name) not in ALLOWED:
+            raise pickle.UnpicklingError("blocked")
+        return super().find_class(module, name)` },
+        { type: "h", text: "修复" },
+        { type: "list", items: [
+          "能不反序列化就不反序列化：跨边界优先用 JSON。",
+          "必须用 YAML 时用 <code>safe_load</code>；必须用 pickle 时用白名单 <code>RestrictedUnpickler</code>。",
+          "给序列化数据加 HMAC 签名，验证来源后再还原。",
+          "不要反序列化用户上传的模型/缓存/队列消息；隔离解析进程与权限。",
+          "升级依赖，排查历史上默认不安全的库。"
+        ]},
+        { type: "note", text: "Python 的 SSTI 也会走 <code>__class__.__mro__</code>，但那是<b>模板表达式求值</b>，不是反序列化。两者都涉及对象图，别混为一谈——这也是「按诞生地学」比「按 payload 学」更清楚的原因。" }
+      ],
+      code: [],
+      labs: [
+        { name: "Python 官方文档 · pickle", url: "https://docs.python.org/3/library/pickle.html" },
+        { name: "HackTricks · Python 沙箱与反序列化", url: "https://book.hacktricks.wiki/en/generic-methodologies-and-resources/python/bypass-python-sandboxes/index.html" }
+      ],
+      quiz: [
+        "Python 有原型链污染吗？如果没有，对应的风险是什么？",
+        "pickle 在反序列化时为什么会执行代码？",
+        "yaml.load 和 yaml.safe_load 的区别是什么？",
+        "RestrictedUnpickler 解决的是哪一层问题？",
+        "为什么说 SSTI 和反序列化都涉及对象图，但不是一回事？"
+      ]
     }
-  ]
+];
+
+const P5_MOD = COURSE.modules.filter(function (m) { return m.id === "p5"; })[0];
+P5_MOD.lessons = P5_MOD.lessons.concat(P5_EXTRA);
+
+// 按「诞生地」重排：浏览器 → 会话 → 鉴权 → 业务 → 数据 → 文件 → 模板 → 解析 → 序列化 → Node → 服务端请求
+const P5_ORDER = [
+  "p5l1",
+  "p5l5", "p5l10", "p5l15", "p5l16", "p5l2",
+  "p5l3", "p5l4", "p5l17", "p5l6", "p5l7", "p5l8",
+  "p5l11", "p5l12", "p5l13", "p5l19", "p5l14", "p5l18", "p5l9"
+];
+P5_MOD.lessons.sort(function (a, b) {
+  return P5_ORDER.indexOf(a.id) - P5_ORDER.indexOf(b.id);
 });
+P5_MOD.summary = "不再分「基础漏洞 / 高级漏洞」。18 个节点按诞生地挂回浏览器、会话、数据库、文件、模板、解析器、序列化与外部请求；每节保留最小复现，但先讲清根因。先看图知道有什么，再自己找文章、手动复现。";
 
 
 /* ===== p7.js ===== */
-/* PART 9 · 渗透流程与解题方法论 */
+/* PART 8 · 渗透流程与解题方法论 */
 COURSE.modules.push({
   id: "p7",
-  title: "PART 9 · 渗透流程与解题方法论",
+  title: "PART 8 · 渗透流程与解题方法论",
   weeks: "第 18–20 周",
   summary: "Web 安全不只有漏洞：真实的渗透是一条从授权、信息收集、验证、利用到报告的完整流程，CTF 解题只是其中一个片段。这一 PART 先把流程走通，再给做题的方法论。",
   lessons: [
@@ -4531,10 +5048,10 @@ env | grep -i secret        # 有没有环境变量泄露
 
 
 /* ===== p8.js ===== */
-/* PART 8 · 实战与复盘 */
+/* PART 9 · 实战与复盘 */
 COURSE.modules.push({
   id: "p8",
-  title: "PART 10 · 实战复盘",
+  title: "PART 9 · 实战复盘",
   weeks: "第 20–22 周",
   summary: "把前面 10 个 PART 串起来，用真实题目跑一遍完整流程。这一 PART 不提供答案，提供的是「你自己能走完一遍」的路径。",
   lessons: [
@@ -4664,7 +5181,7 @@ print(q("0 union select 1,database(),3 -- "))
       sections: [
         { type: "table", title: "三个阶段的目标", head: ["阶段", "时间", "目标", "衡量方式"], rows: [
           ["打基础", "现在–3 个月", "走完零基础 10 节 + PART 1–4", "能独立起服务、改包、读 JS"],
-          ["能做题", "3–9 个月", "PART 7 / 8 共十八节能独立复现", "新手题 10 分钟内判断题型"],
+          ["能做题", "3–9 个月", "PART 7 的 18 个节点能独立复现，并说清根因", "新手题 10 分钟内判断题型"],
           ["能比赛", "9–18 个月", "打完整一场比赛并复盘", "有 WriteUp、有 payload 库、有稳定节奏"]
         ]},
         { type: "list", items: [
@@ -4736,6 +5253,28 @@ print(q("0 union select 1,database(),3 -- "))
     return -1;
   }
 
+  function vulnData() {
+    return COURSE.vulnmap || { scenes: [], nodes: [], edges: [] };
+  }
+  function vulnNode(id) {
+    var ns = vulnData().nodes;
+    for (var i = 0; i < ns.length; i++) if (ns[i].id === id) return ns[i];
+    return null;
+  }
+  function vulnNodeForLesson(lid) {
+    var ns = vulnData().nodes;
+    for (var i = 0; i < ns.length; i++) {
+      if (ns[i].lesson === lid) return ns[i];
+      if ((ns[i].extraLessons || []).indexOf(lid) !== -1) return ns[i];
+    }
+    return null;
+  }
+  function vulnScene(id) {
+    var ss = vulnData().scenes;
+    for (var i = 0; i < ss.length; i++) if (ss[i].id === id) return ss[i];
+    return null;
+  }
+
   var el = {
     tree: document.getElementById("tree"),
     main: document.getElementById("main"),
@@ -4746,6 +5285,7 @@ print(q("0 union select 1,database(),3 -- "))
     exportBtn: document.getElementById("export-btn"),
     themeBtn: document.getElementById("theme-btn"),
     mapbtn: document.getElementById("mapbtn"),
+    vulnbtn: document.getElementById("vulnbtn"),
     homeBtn: document.getElementById("homebtn"),
     reviewBtn: document.getElementById("reviewbtn"),
     discussBtn: document.getElementById("discussbtn"),
@@ -4891,6 +5431,10 @@ print(q("0 union select 1,database(),3 -- "))
       if (s.head) hay += " " + s.head.join(" ");
       if (s.rows) hay += " " + s.rows.map(function (r) { return r.join(" "); }).join(" ");
       if (s.src) hay += " " + s.src;
+      if (s.type === "touch") {
+        hay += " " + (s.title || "") + " " + (s.text || "");
+        (s.links || []).forEach(function (l) { hay += " " + l.name; });
+      }
     });
     (lesson.quiz || []).forEach(function (q2) {
       hay += " " + q2;
@@ -4994,6 +5538,56 @@ print(q("0 union select 1,database(),3 -- "))
     return wrap;
   }
 
+  function touchCard(s) {
+    var box = document.createElement("div");
+    box.className = "touchcard";
+    var label = document.createElement("div");
+    label.className = "tc-label";
+    label.textContent = "🧬 安全触点";
+    box.appendChild(label);
+    var h = document.createElement("div");
+    h.className = "tc-title";
+    h.textContent = s.title || "";
+    box.appendChild(h);
+    var p = document.createElement("div");
+    p.className = "tc-text";
+    p.innerHTML = s.text || "";
+    box.appendChild(p);
+    if (s.links && s.links.length) {
+      var links = document.createElement("div");
+      links.className = "tc-links";
+      s.links.forEach(function (l) {
+        var a = document.createElement("a");
+        a.href = l.href;
+        a.textContent = l.name;
+        links.appendChild(a);
+      });
+      box.appendChild(links);
+    }
+    return box;
+  }
+
+  function miniVulnCard(n) {
+    var card = document.createElement("div");
+    card.className = "vulncard";
+    card.innerHTML =
+      '<div class="vc-head"><span class="vc-label">🕸 图谱节点</span><span class="vc-scene"></span></div>' +
+      '<div class="vc-short"></div>' +
+      '<div class="vc-line"><b>生于</b><span class="vc-born"></span></div>' +
+      '<div class="vc-line"><b>根因</b><span class="vc-root"></span></div>' +
+      '<div class="vc-line"><b>修复</b><span class="vc-fix"></span></div>' +
+      '<div class="vc-foot"><span>先读根因，再看下面的利用与变体。</span><a class="vc-link">打开图谱节点 →</a></div>';
+    var sc = vulnScene(n.scene);
+    card.querySelector(".vc-scene").textContent = sc ? sc.name : "";
+    card.querySelector(".vc-short").textContent = n.short;
+    card.querySelector(".vc-born").textContent = n.born;
+    card.querySelector(".vc-root").textContent = n.root;
+    card.querySelector(".vc-fix").textContent = n.fix;
+    var a = card.querySelector(".vc-link");
+    a.href = "#vulnmap/" + n.id;
+    return card;
+  }
+
   function renderLesson(id) {
     var fi = flatIndex(id);
     if (fi < 0) fi = 0;
@@ -5055,6 +5649,9 @@ print(q("0 union select 1,database(),3 -- "))
       el.main.appendChild(g);
     }
 
+    var vn = vulnNodeForLesson(l.id);
+    if (vn && l.id.indexOf("p5") === 0) el.main.appendChild(miniVulnCard(vn));
+
     // 正文
     (l.sections || []).forEach(function (s) {
       if (s.type === "p") {
@@ -5070,6 +5667,8 @@ print(q("0 union select 1,database(),3 -- "))
           ul.appendChild(li);
         });
         el.main.appendChild(ul);
+      } else if (s.type === "touch") {
+        el.main.appendChild(touchCard(s));
       } else if (s.type === "note") {
         var nt = document.createElement("div");
         nt.className = "note";
@@ -5421,6 +6020,7 @@ print(q("0 union select 1,database(),3 -- "))
 
   function renderDiscuss() {
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.homeBtn.classList.remove("active");
     el.reviewBtn.classList.remove("active");
     el.discussBtn.classList.add("active");
@@ -5556,6 +6156,23 @@ print(q("0 union select 1,database(),3 -- "))
       check.appendChild(span);
       body.appendChild(check);
 
+      if (s.vulns && s.vulns.length) {
+        var vrow = document.createElement("div");
+        vrow.className = "stage-vulns";
+        var vlab = document.createElement("b");
+        vlab.textContent = "顺路会遇到：";
+        vrow.appendChild(vlab);
+        s.vulns.forEach(function (id) {
+          var n = vulnNode(id);
+          if (!n) return;
+          var a = document.createElement("a");
+          a.href = "#vulnmap/" + id;
+          a.textContent = n.name;
+          vrow.appendChild(a);
+        });
+        body.appendChild(vrow);
+      }
+
       card.appendChild(body);
       el.main.appendChild(card);
     });
@@ -5578,6 +6195,323 @@ print(q("0 union select 1,database(),3 -- "))
     el.main.appendChild(grid);
 
     window.scrollTo(0, 0);
+  }
+
+  /* ---------- 漏洞图谱 ---------- */
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (k) {
+        e.setAttribute(k, attrs[k]);
+      });
+    }
+    return e;
+  }
+
+  function gdBlock(parent, label, text) {
+    var b = document.createElement("div");
+    b.className = "gd-block";
+    var l = document.createElement("b");
+    l.textContent = label;
+    var p = document.createElement("p");
+    p.textContent = text;
+    b.appendChild(l);
+    b.appendChild(p);
+    parent.appendChild(b);
+  }
+
+  function renderVulnDetail(box, n) {
+    var vm = vulnData();
+    var sc = vulnScene(n.scene);
+    box.innerHTML = "";
+    var eye = document.createElement("div");
+    eye.className = "gd-eyebrow";
+    eye.textContent = "🕸 图谱节点";
+    box.appendChild(eye);
+    var h = document.createElement("h2");
+    h.className = "gd-title";
+    h.textContent = n.name;
+    box.appendChild(h);
+    var scene = document.createElement("div");
+    scene.className = "gd-scene";
+    scene.textContent = sc ? "生于：" + sc.name : "";
+    box.appendChild(scene);
+    var short = document.createElement("p");
+    short.className = "gd-short";
+    short.textContent = n.short;
+    box.appendChild(short);
+    gdBlock(box, "诞生条件", n.born);
+    gdBlock(box, "根因", n.root);
+    gdBlock(box, "怎么观察", n.observe);
+    gdBlock(box, "修复方向", n.fix);
+    gdBlock(box, "手动复现", n.repro);
+
+    var rel = vm.edges.filter(function (e) { return e.from === n.id || e.to === n.id; });
+    if (rel.length) {
+      var chain = document.createElement("div");
+      chain.className = "gd-block";
+      var cl = document.createElement("b");
+      cl.textContent = "可接成链";
+      chain.appendChild(cl);
+      rel.forEach(function (e) {
+        var other = vulnNode(e.from === n.id ? e.to : e.from);
+        if (!other) return;
+        var a = document.createElement("a");
+        a.className = "gd-chain";
+        a.href = "#vulnmap/" + other.id;
+        a.textContent = (e.from === n.id ? "→ " : "← ") + other.name + " · " + e.label;
+        chain.appendChild(a);
+      });
+      box.appendChild(chain);
+    }
+
+    var search = document.createElement("div");
+    search.className = "gd-search";
+    search.innerHTML = '<div class="gd-search-label">自己去找文章：</div>';
+    var kw = document.createElement("code");
+    kw.textContent = n.search;
+    search.appendChild(kw);
+    var bing = document.createElement("a");
+    bing.href = "https://www.bing.com/search?q=" + encodeURIComponent(n.search + " 原理");
+    bing.target = "_blank";
+    bing.rel = "noopener noreferrer";
+    bing.textContent = "Bing ↗";
+    var google = document.createElement("a");
+    google.href = "https://www.google.com/search?q=" + encodeURIComponent(n.search + " 原理");
+    google.target = "_blank";
+    google.rel = "noopener noreferrer";
+    google.textContent = "Google ↗";
+    search.appendChild(bing);
+    search.appendChild(google);
+    box.appendChild(search);
+
+    var foot = document.createElement("div");
+    foot.className = "gd-foot";
+    var lesson = flatIndex(n.lesson) >= 0 ? ALL[flatIndex(n.lesson)].lesson : null;
+    if (lesson) {
+      var la = document.createElement("a");
+      la.className = "gd-lesson";
+      la.href = "#" + lesson.id;
+      la.textContent = "读这一节：" + lesson.title + " →";
+      foot.appendChild(la);
+    }
+    var back = document.createElement("a");
+    back.href = "#vulnmap";
+    back.className = "gd-back";
+    back.textContent = "回到全图";
+    foot.appendChild(back);
+    box.appendChild(foot);
+  }
+
+  function renderVulnmap(selectedId, sceneFilter) {
+    var vm = vulnData();
+    var filter = sceneFilter || "";
+    el.mapbtn.classList.remove("active");
+    el.homeBtn.classList.remove("active");
+    el.reviewBtn.classList.remove("active");
+    el.discussBtn.classList.remove("active");
+    el.vulnbtn.classList.add("active");
+
+    el.main.innerHTML = "";
+    var crumb = document.createElement("div");
+    crumb.className = "crumb";
+    crumb.innerHTML = "<b></b> / 漏洞图谱";
+    crumb.querySelector("b").textContent = COURSE.name;
+    el.main.appendChild(crumb);
+
+    var h1 = document.createElement("h1");
+    h1.className = "ltitle-h";
+    h1.textContent = vm.title || "漏洞图谱";
+    el.main.appendChild(h1);
+
+    var sub = document.createElement("div");
+    sub.className = "vulnmap-sub";
+    sub.textContent = vm.subtitle || "";
+    el.main.appendChild(sub);
+
+    var note = document.createElement("div");
+    note.className = "note";
+    note.textContent = vm.note || "";
+    el.main.appendChild(note);
+
+    var toolbar = document.createElement("div");
+    toolbar.className = "gfilters";
+    var chips = [{ id: "", name: "全部" }].concat(vm.scenes || []);
+    chips.forEach(function (c) {
+      var b = document.createElement("button");
+      b.className = "gchip" + ((c.id === filter || (!c.id && !filter)) ? " active" : "");
+      b.textContent = c.id ? c.name.replace(/ \/.*$/, "") : c.name;
+      b.onclick = function () {
+        renderVulnmap(selectedId, c.id);
+      };
+      toolbar.appendChild(b);
+    });
+    el.main.appendChild(toolbar);
+
+    var layout = document.createElement("div");
+    layout.className = "vulnmap-layout";
+    var canvas = document.createElement("div");
+    canvas.className = "vulnmap-canvas";
+    var aside = document.createElement("aside");
+    aside.className = "vulnmap-detail";
+    layout.appendChild(canvas);
+    layout.appendChild(aside);
+    el.main.appendChild(layout);
+
+    var width = 600;
+    var nodeX = 235;
+    var nodeW = 310;
+    var nodeH = 34;
+    var rowGap = 44;
+    var groupGap = 12;
+    var startY = 66;
+    var yPos = startY;
+    var groups = (vm.scenes || []).map(function (s) {
+      var list = (vm.nodes || []).filter(function (n) { return n.scene === s.id; });
+      var g = { scene: s, nodes: list, y: yPos, h: Math.max(1, list.length) * rowGap + 8 };
+      list.forEach(function (n, i) {
+        n._cy = g.y + 8 + i * rowGap + nodeH / 2;
+        n._gy = g.y + 8 + i * rowGap;
+      });
+      yPos += g.h + groupGap;
+      return g;
+    });
+    var height = yPos + 8;
+
+    var svg = svgEl("svg", {
+      viewBox: "0 0 " + width + " " + height,
+      width: "100%",
+      role: "img",
+      "aria-label": "漏洞图谱：技术现场与漏洞节点的关系"
+    });
+
+    // 顶部：这张图的主线
+    var root = svgEl("text", { x: 10, y: 24, class: "map-root" });
+    root.textContent = "不可信数据 → 被当成：代码 / 路径 / 身份 / 查询 / 对象 / 请求";
+    svg.appendChild(root);
+
+    // 分组底色
+    groups.forEach(function (g, i) {
+      var bg = svgEl("rect", {
+        x: 0, y: g.y, width: width, height: g.h, rx: 10,
+        class: "map-group-bg" + (i % 2 ? " alt" : "")
+      });
+      svg.appendChild(bg);
+    });
+
+    // 技术现场 → 漏洞节点
+    groups.forEach(function (g) {
+      g.nodes.forEach(function (n) {
+        var dim = filter && n.scene !== filter;
+        var path = svgEl("path", {
+          d: "M 158 " + (g.y + 31) + " C 196 " + (g.y + 31) + ", 196 " + n._cy + ", " + nodeX + " " + n._cy,
+          class: "map-edge-birth" + (dim ? " dim" : "")
+        });
+        svg.appendChild(path);
+      });
+    });
+
+    // 漏洞 → 漏洞的链
+    (vm.edges || []).forEach(function (e) {
+      var a = vulnNode(e.from);
+      var b = vulnNode(e.to);
+      if (!a || !b) return;
+      var dim = filter && (a.scene !== filter || b.scene !== filter);
+      var path = svgEl("path", {
+        d: "M " + (nodeX + nodeW) + " " + a._cy + " C 596 " + a._cy + ", 596 " + b._cy + ", " + (nodeX + nodeW) + " " + b._cy,
+        class: "map-edge-chain" + (dim ? " dim" : "")
+      });
+      var title = svgEl("title");
+      title.textContent = e.label || "";
+      path.appendChild(title);
+      svg.appendChild(path);
+    });
+
+    // 技术现场卡片
+    groups.forEach(function (g) {
+      var dim = filter && g.scene.id !== filter;
+      var card = svgEl("g", { class: "map-scene-g" + (dim ? " dim" : "") });
+      card.appendChild(svgEl("rect", { x: 8, y: g.y + 6, width: 150, height: 48, rx: 8, class: "map-scene" }));
+      var name = svgEl("text", { x: 20, y: g.y + 26, class: "map-scene-name" });
+      name.textContent = g.scene.name;
+      card.appendChild(name);
+      var sub = svgEl("text", { x: 20, y: g.scene.sub ? g.y + 42 : g.y + 40, class: "map-scene-sub" });
+      sub.textContent = g.scene.sub || "";
+      card.appendChild(sub);
+      svg.appendChild(card);
+    });
+
+    // 漏洞节点
+    (vm.nodes || []).forEach(function (n) {
+      var dim = filter && n.scene !== filter;
+      var g = svgEl("g", {
+        class: "map-node-g" + (n.id === selectedId ? " selected" : "") + (dim ? " dim" : ""),
+        "data-id": n.id,
+        tabindex: "0",
+        role: "button",
+        "aria-label": n.name
+      });
+      var rect = svgEl("rect", {
+        x: nodeX, y: n._gy, width: nodeW, height: nodeH, rx: 7, class: "map-node"
+      });
+      g.appendChild(rect);
+      var dot = svgEl("circle", { cx: nodeX + 12, cy: n._gy + nodeH / 2, r: 3, class: "map-node-dot" });
+      g.appendChild(dot);
+      var label = svgEl("text", { x: nodeX + 23, y: n._cy + 4, class: "map-node-name" });
+      label.textContent = n.name;
+      g.appendChild(label);
+      var arrow = svgEl("text", { x: nodeX + nodeW - 18, y: n._cy + 4, class: "map-node-arrow" });
+      arrow.textContent = "↗";
+      g.appendChild(arrow);
+      g.addEventListener("click", function () {
+        location.hash = "vulnmap/" + n.id;
+      });
+      g.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          location.hash = "vulnmap/" + n.id;
+        }
+      });
+      var t = svgEl("title");
+      t.textContent = n.short;
+      g.appendChild(t);
+      svg.appendChild(g);
+    });
+
+    canvas.appendChild(svg);
+
+    var legend = document.createElement("div");
+    legend.className = "map-legend";
+    legend.innerHTML =
+      '<span><i class="lg-birth"></i>诞生关系</span>' +
+      '<span><i class="lg-chain"></i>可组合成链</span>' +
+      '<span class="lg-tip">点节点看根因、复现与搜索词</span>';
+    canvas.appendChild(legend);
+    var scrollHint = document.createElement("div");
+    scrollHint.className = "map-scroll-hint";
+    scrollHint.textContent = "← 左右滑动查看完整图谱 →";
+    canvas.appendChild(scrollHint);
+
+    if (selectedId && vulnNode(selectedId)) {
+      renderVulnDetail(aside, vulnNode(selectedId));
+    } else {
+      aside.innerHTML =
+        '<div class="gd-eyebrow">🕸 怎么用这张图</div>' +
+        '<h2 class="gd-title">先知道有什么，再自己深挖</h2>' +
+        '<p class="gd-short">左边是技术现场，右边是它最容易生出的漏洞。点任意节点，看它的「根因 / 观察 / 修复 / 复现」。</p>' +
+        '<ol class="gd-loop"></ol>' +
+        '<div class="gd-count"></div>' +
+        '<div class="gd-note">不要沿着这张图背 payload。每学一个节点，至少做一次本地复现，并写三行根因笔记。</div>';
+      var loop = aside.querySelector(".gd-loop");
+      (vm.loop || []).forEach(function (x) {
+        var li = document.createElement("li");
+        li.textContent = x;
+        loop.appendChild(li);
+      });
+      aside.querySelector(".gd-count").textContent = (vm.nodes || []).length + " 个节点 · " + (vm.scenes || []).length + " 个技术现场 · 虚线 " + (vm.edges || []).length + " 条链";
+    }
+
+    // 图谱页不再强制滚到顶部：点节点时保持当前阅读位置
   }
 
   /* ---------- 学习面板 ---------- */
@@ -5633,6 +6567,7 @@ print(q("0 union select 1,database(),3 -- "))
 
   function renderHome() {
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.reviewBtn.classList.remove("active");
     el.discussBtn.classList.remove("active");
     el.homeBtn.classList.add("active");
@@ -5700,7 +6635,7 @@ print(q("0 union select 1,database(),3 -- "))
 
     var h2 = document.createElement("h2");
     h2.className = "sec";
-    h2.textContent = "本周计划（22 周排完 82 节）";
+    h2.textContent = "本周计划（22 周排完 83 节）";
     el.main.appendChild(h2);
 
     var plan = document.createElement("div");
@@ -5796,6 +6731,7 @@ print(q("0 union select 1,database(),3 -- "))
   /* ---------- 复习卡页面 ---------- */
   function renderReview(practiceKey) {
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.homeBtn.classList.remove("active");
     el.discussBtn.classList.remove("active");
     el.reviewBtn.classList.add("active");
@@ -5893,12 +6829,26 @@ print(q("0 union select 1,database(),3 -- "))
   /* ---------- 路由 ---------- */
   function route() {
     var h = (location.hash || "").replace(/^#/, "");
+    var isGraph = h === "vulnmap" || h.indexOf("vulnmap/") === 0;
+    el.main.classList.toggle("graph-view", isGraph);
     if (h === "roadmap") {
       el.mapbtn.classList.add("active");
+      el.vulnbtn.classList.remove("active");
       el.homeBtn.classList.remove("active");
       el.reviewBtn.classList.remove("active");
       el.discussBtn.classList.remove("active");
       renderRoadmap();
+      renderTree(el.search.value);
+      return;
+    }
+    if (h === "vulnmap" || h.indexOf("vulnmap/") === 0) {
+      var sel = h.indexOf("vulnmap/") === 0 ? h.slice(8) : "";
+      el.mapbtn.classList.remove("active");
+      el.vulnbtn.classList.add("active");
+      el.homeBtn.classList.remove("active");
+      el.reviewBtn.classList.remove("active");
+      el.discussBtn.classList.remove("active");
+      renderVulnmap(sel);
       renderTree(el.search.value);
       return;
     }
@@ -5918,6 +6868,7 @@ print(q("0 union select 1,database(),3 -- "))
       return;
     }
     el.mapbtn.classList.remove("active");
+    el.vulnbtn.classList.remove("active");
     el.homeBtn.classList.remove("active");
     el.reviewBtn.classList.remove("active");
     el.discussBtn.classList.remove("active");
@@ -5980,6 +6931,9 @@ print(q("0 union select 1,database(),3 -- "))
   el.exportBtn.addEventListener("click", exportNotes);
   el.mapbtn.addEventListener("click", function () {
     location.hash = "roadmap";
+  });
+  el.vulnbtn.addEventListener("click", function () {
+    location.hash = "vulnmap";
   });
   el.homeBtn.addEventListener("click", function () {
     location.hash = "home";

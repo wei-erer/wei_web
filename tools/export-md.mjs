@@ -56,6 +56,19 @@ function stepsBlock(s) {
   return s.items.map((it, i) => `${i + 1}. ${esc(it)}`).join("\n") + "\n";
 }
 
+function touchBlock(s) {
+  const links = (s.links || []).map((l) => `[${esc(l.name)}](${l.href})`).join(" · ");
+  return `> 🧬 **安全触点 · ${esc(s.title || "")}**\n>\n> ${esc(s.text || "")}${links ? "\n>\n> " + links : ""}\n`;
+}
+
+function vulnmapTable(vm) {
+  const rows = vm.nodes.map((n) => {
+    const scene = vm.scenes.find((s) => s.id === n.scene);
+    return `| ${pipeEsc(scene ? scene.name : "")} | **${pipeEsc(n.name)}** | ${pipeEsc(n.short)} | ${pipeEsc(n.root)} | ${esc(n.lesson || "")} |`;
+  });
+  return `## 漏洞图谱（Markdown 版）\n\n> ${esc(vm.note)}\n\n| 技术现场 | 节点 | 一句话 | 根因 | 对应节 |\n| --- | --- | --- | --- | --- |\n${rows.join("\n")}\n`;
+}
+
 function sectionsToMd(sections) {
   const out = [];
   for (const s of sections) {
@@ -66,6 +79,7 @@ function sectionsToMd(sections) {
     else if (s.type === "code") out.push(codeBlock(s));
     else if (s.type === "table") out.push(tableBlock(s));
     else if (s.type === "steps") out.push(stepsBlock(s));
+    else if (s.type === "touch") out.push(touchBlock(s));
   }
   return out.join("\n");
 }
@@ -98,6 +112,7 @@ function moduleToMd(m) {
   out.push(`*${meta.join(" · ")}*\n`);
   if (m.summary) out.push(`> ${esc(m.summary)}\n`);
   out.push("---\n");
+  if (m.id === "p5" && C.vulnmap) out.push(vulnmapTable(C.vulnmap) + "\n---\n");
   for (const l of m.lessons) out.push(lessonToMd(l) + "\n---\n");
   return out.join("\n");
 }
@@ -119,11 +134,11 @@ const readme = `# ${C.name} · ${C.subtitle}
 
 > 面向 Web 安全初学者的开源课程中心：${C.modules.length} 个 PART、${total} 节，单文件离线可用，含间隔重复复习卡与靶场清单。
 
-**${C.name}** 把 Web 安全的学习路径拆成 ${C.modules.length} 个 PART、${total} 节，并按「四条线并行」组织：地基、工具、脚本（Python 先于 PHP）、漏洞与流程，给出 22 周的推荐节奏。工具与简单题从 PART 3 就开始，不需要学完语言才动手。
+**${C.name}** 把 Web 安全的学习路径拆成 ${C.modules.length} 个 PART、${total} 节，并按「四条线并行」组织：地基、工具、脚本（Python 先于 PHP）、漏洞与流程，给出 22 周的推荐节奏。漏洞不再分基础/高级，而是收进一张按「诞生地」组织的漏洞图谱。工具与简单题从 PART 3 就开始，不需要学完语言才动手。
 
 课程强调「动手」：每节都有最小复现代码、可执行步骤、靶场链接和自测题，全部 ${total} 节都要学、不设选修。整个课程打包成一个可离线打开的 HTML 文件，不需要服务器、账号或联网。
 
-内置能力：学习面板（总进度、连续打卡、20 周计划、今日一题）、间隔重复复习卡（1 / 3 / 7 / 15 / 30 天）、靶场清单勾选、本地笔记与进度，以及数据导出 / 导入迁移；所有数据只保存在浏览器本地。
+内置能力：学习面板（总进度、连续打卡、22 周计划、今日一题）、交互式漏洞图谱（18 个节点，按诞生地组织，含根因 / 复现 / 搜索词）、间隔重复复习卡（1 / 3 / 7 / 15 / 30 天）、靶场清单勾选、本地笔记与进度，以及数据导出 / 导入迁移；所有数据只保存在浏览器本地。
 
 > ${esc(C.intro)}
 
@@ -193,6 +208,10 @@ function htmlSections(sections) {
       );
     } else if (s.type === "steps")
       out.push(`<ol class="steps">${s.items.map((x) => `<li>${x}</li>`).join("")}</ol>`);
+    else if (s.type === "touch")
+      out.push(
+        `<div class="touch"><div class="tcap">🧬 安全触点 · ${escHtml(s.title || "")}</div><p>${s.text || ""}</p><div class="tlinks">${(s.links || []).map((l) => `<a href="${l.href}">${escHtml(l.name)}</a>`).join("")}</div></div>`
+      );
   }
   return out.join("\n");
 }
@@ -229,10 +248,19 @@ const toc = C.modules
   )
   .join("");
 
+const vulnmapHtml = C.vulnmap
+  ? `<div class="tablewrap"><div class="tcap">漏洞图谱 · 18 个节点按诞生地组织</div><table><thead><tr><th>技术现场</th><th>节点</th><th>一句话</th><th>根因</th></tr></thead><tbody>${C.vulnmap.nodes
+      .map((n) => {
+        const sc = C.vulnmap.scenes.find((s) => s.id === n.scene);
+        return `<tr><td>${escHtml(sc ? sc.name : "")}</td><td><strong>${escHtml(n.name)}</strong></td><td>${escHtml(n.short)}</td><td>${escHtml(n.root)}</td></tr>`;
+      })
+      .join("")}</tbody></table></div>`
+  : "";
+
 const body = C.modules
   .map(
     (m) =>
-      `<section class="mod" id="m-${m.id}"><h1>${m.title}</h1><div class="sub">${m.weeks || ""} · ${m.lessons.length} 节</div><blockquote class="note">${m.summary || ""}</blockquote>${m.lessons
+      `<section class="mod" id="m-${m.id}"><h1>${m.title}</h1><div class="sub">${m.weeks || ""} · ${m.lessons.length} 节</div><blockquote class="note">${m.summary || ""}</blockquote>${m.id === "p5" ? vulnmapHtml : ""}${m.lessons
         .map(lessonHtml)
         .join("\n")}</section>`
   )
@@ -265,6 +293,11 @@ h3 { font-size:15.5px; margin:22px 0 8px; }
 .meta, .sub { color:var(--dim); font-size:12.5px; }
 .goal { border:1px solid var(--border); border-left:3px solid var(--accent); background:var(--card); border-radius:8px; padding:12px 16px; margin:14px 0 20px; }
 .goal p { margin:4px 0 0; }
+.touch { border:1px solid var(--border); border-left:3px solid #3fb950; background:#121c16; border-radius:8px; padding:12px 16px; margin:0 0 18px; }
+.touch .tcap { font-size:12px; font-weight:700; color:#3fb950; margin-bottom:6px; }
+.touch p { margin:0 0 8px; font-size:14px; }
+.tlinks { display:flex; flex-wrap:wrap; gap:10px; }
+.tlinks a { font-size:12.5px; color:var(--accent); text-decoration:none; }
 blockquote.note { background:#161d33; border:1px solid var(--border); border-radius:8px; margin:0 0 16px; padding:12px 16px; font-size:14px; }
 ul, ol { padding-left:22px; }
 li { margin:4px 0; }

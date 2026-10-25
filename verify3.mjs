@@ -36,6 +36,8 @@ for (const m of C.modules) {
   for (const l of m.lessons) lessons.push({ m, l });
 }
 console.log("总节数:", lessons.length);
+ok(C.modules.length === 12, "共 12 个模块");
+ok(lessons.length === 83, "共 83 节");
 
 const lessonIds = new Set();
 for (const { m, l } of lessons) {
@@ -62,16 +64,52 @@ const optional = lessons.filter((x) => x.l.core === false);
 console.log("全部必学:", lessons.length, "节 | 选学:", optional.length, "节");
 ok(optional.length === 0, "没有选修节（全部必学）");
 
-console.log("=== PART 5 检查 ===");
-const p5 = C.modules.filter((m) => m.id.startsWith("p5"));
+console.log("=== PART 7 漏洞图谱检查 ===");
+const p5 = C.modules.filter((m) => m.id === "p5");
 const p5lessons = p5.flatMap((m) => m.lessons);
-console.log("PART 5 节数:", p5lessons.length);
-let tables = 0, steps = 0;
+console.log("PART 7 节数:", p5lessons.length);
+let tables = 0, steps = 0, touches = 0;
 for (const l of p5lessons) {
-  for (const s of l.sections) { if (s.type === "table") tables++; if (s.type === "steps") steps++; }
+  for (const s of l.sections) {
+    if (s.type === "table") tables++;
+    if (s.type === "steps") steps++;
+    if (s.type === "touch") touches++;
+  }
 }
-console.log("PART 5 表格数:", tables, "| 步骤块:", steps);
-ok(p5lessons.length === 18, "PART 5 共 18 节");
+console.log("PART 7 表格数:", tables, "| 步骤块:", steps);
+ok(p5.length === 1, "Part 7/8 已合并为单一模块");
+ok(!p5.some((m) => /PART 8|高级漏洞/.test(m.title)), "模块标题不再区分基础/高级");
+ok(p5lessons.length === 19, "PART 7 共 19 节（18 节点 + 总览）");
+
+let touchCount = 0;
+for (const { l } of lessons) for (const s of l.sections) if (s.type === "touch") touchCount++;
+ok(touchCount >= 6, `技术章节里的安全触点 >= 6（实际 ${touchCount}）`);
+
+const V = C.vulnmap;
+ok(!!V, "存在漏洞图谱数据");
+if (V) {
+  ok(V.nodes.length === 18, "图谱共 18 个漏洞节点");
+  ok(V.scenes.length >= 8, "图谱场景 >= 8");
+  const nodeIds = new Set(V.nodes.map((n) => n.id));
+  ok(nodeIds.size === V.nodes.length, "图谱节点 id 唯一");
+  const lessonIds = new Set(lessons.map((x) => x.l.id));
+  const badNode = V.nodes.find((n) => n.lesson && !lessonIds.has(n.lesson));
+  ok(!badNode, "每个图谱节点都能落到课程节" + (badNode ? "：" + badNode.id : ""));
+  const badExtra = V.nodes.find((n) => (n.extraLessons || []).some((id) => !lessonIds.has(id)));
+  ok(!badExtra, "图谱节点的关联课程都存在" + (badExtra ? "：" + badExtra.id : ""));
+  const sceneIds = new Set(V.scenes.map((s) => s.id));
+  const badScene = V.nodes.find((n) => !sceneIds.has(n.scene));
+  ok(!badScene, "每个节点都有合法场景" + (badScene ? "：" + badScene.id : ""));
+  const edgeIds = new Set();
+  let badEdge = null;
+  for (const e of V.edges) {
+    if (!nodeIds.has(e.from) || !nodeIds.has(e.to)) badEdge = e;
+    edgeIds.add(e.from + ">" + e.to);
+  }
+  ok(!badEdge, "图谱边端点合法" + (badEdge ? "：" + JSON.stringify(badEdge) : ""));
+  const vlessons = V.nodes.filter((n) => V.nodes.filter((x) => x.lesson === n.lesson).length > 1);
+  console.log("共享课程的节点:", vlessons.length ? vlessons.map((n) => n.id).join(", ") : "无");
+}
 
 console.log("=== 残留占位 / 敏感构建 ===");
 for (const bad of ["待编写", "TODO", "{{STYLE}}", "{{DATA}}", "{{APP}}"]) {

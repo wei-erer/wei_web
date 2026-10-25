@@ -70,6 +70,11 @@ await fetch("https://other.site/api", { credentials: "include" });` },
           "<b>忘了判 res.ok</b>：404 页面也会被当成成功，然后 json() 解析报错。",
           "<b>CORS 被拦</b>：浏览器里跨域请求会先发预检（OPTIONS），对方没放行就失败——这不是你的代码错，是浏览器在保护用户。"
         ]},
+        { type: "touch", title: "同一门 JS，两种运行环境", text: "浏览器里的 JS 受同源策略、CSP、DOM 边界约束，漏洞形态是 <b>XSS</b>；Node 里的 JS 能读文件、起子进程，漏洞形态是<b>原型链污染、沙箱逃逸、命令执行</b>。先问「这段代码跑在哪」，再问「它能碰到什么」——同一句 <code>eval</code> 在两个环境里的后果完全不同。", links: [
+          { name: "图谱 · XSS", href: "#vulnmap/xss" },
+          { name: "图谱 · 原型链污染", href: "#vulnmap/proto" },
+          { name: "图谱 · RCE", href: "#vulnmap/rce" }
+        ]},
         { type: "note", text: "CTF 里这个知识点的用处：<b>看到页面调用了什么接口、传了什么参数，就能自己构造请求重放</b>。前端代码在浏览器里，永远是可读可改可调用的。" }
       ],
       code: [],
@@ -146,6 +151,11 @@ for (const k in window) if (k.startsWith("__")) console.log(k);` },
       goal: "在自己的机器上装好 Python、会建虚拟环境、会跑 .py 文件、会用 pip 装库。",
       sections: [
         { type: "p", text: "Python 是 Web 选手的「手」：批量请求、编码处理、盲注自动化、日志分析，全靠它。先把它装顺手，后面每一节都会用到。" },
+        { type: "touch", title: "Python 的反序列化，以及「原型链」的误称", text: "Python 没有 JS 的原型链，<b>别把 prototype pollution 硬套过来</b>。Python 对应的是<b>对象图</b>：pickle 在还原对象时可以触发 <code>__reduce__</code>，Jinja2 沙箱逃逸走的是 <code>__class__.__mro__.__subclasses__()</code>。学习时抓住共同点：<b>用户可控的数据被还原成了对象/类引用</b>，而不是「Python 也有原型」。", links: [
+          { name: "图谱 · Python 反序列化", href: "#vulnmap/py-deser" },
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" },
+          { name: "读 Python 反序列化", href: "#p5l19" }
+        ]},
         { type: "h", text: "第一步：确认装没装" },
         { type: "code", lang: "bash", title: "Windows 与 Ubuntu 的差别", src: `# Windows（PowerShell / cmd）
 py --version            # 官方安装器默认带 py 启动器
@@ -339,6 +349,12 @@ if __name__ == "__main__":
       goal: "读懂一段 PHP 源码，指出用户输入从哪进来、进了哪个函数。",
       sections: [
         { type: "p", text: "PHP 是 CTF Web 出现频率最高的后端语言。语法松散、上手快，但正是这些「松散」制造了大部分考点。" },
+        { type: "touch", title: "PHP 的三个高频诞生点", text: "<code>$_FILES</code> + <code>move_uploaded_file</code> → 文件上传；<code>include($_GET['page'])</code> → 文件包含；<code>system($_GET['cmd'])</code> → 命令执行。它们不是三个孤立的「高级漏洞」，而是<b>三类 PHP API 被用户输入直接控制</b>的结果。先能指出「输入进了哪个函数」，再谈绕过。", links: [
+          { name: "图谱 · 文件上传", href: "#vulnmap/upload" },
+          { name: "图谱 · 包含/穿越", href: "#vulnmap/lfi" },
+          { name: "图谱 · RCE", href: "#vulnmap/rce" },
+          { name: "图谱 · PHP 反序列化", href: "#vulnmap/php-deser" }
+        ]},
         { type: "code", lang: "php", title: "基础语法：和 JS 的对照", src: `<?php
 $name = "wei";                 // 变量以 $ 开头，不用声明类型
 $arr  = [1, 2, 3];             // 数组（索引）
@@ -472,6 +488,10 @@ extract($_GET);                  // 用户能覆盖任意变量！?is_admin=1
       goal: "拿到一个 PHP 文件，10 分钟内定位可能的漏洞点，并写出对应的验证 payload。",
       sections: [
         { type: "p", text: "这节是手法训练。千变万化的代码，用固定四步就能扫出可疑点——这也是真实代码审计的最小流程。" },
+        { type: "touch", title: "读源码就是读「出生证明」", text: "同一个漏洞换语言就换写法，但根因不变：<b>入口 → 变量 → 落点 → 判断</b>。读源码时先找「哪一行让数据越过了边界」，再去看 payload；只会背 payload，等于只会抄答案。", links: [
+          { name: "打开漏洞图谱", href: "#vulnmap" },
+          { name: "图谱使用说明", href: "#p5l1" }
+        ]},
         { type: "table", title: "四步法", head: ["步骤", "搜什么", "产出"], rows: [
           ["① 找入口", "$_GET / $_POST / $_COOKIE / $_REQUEST / $_FILES / $_SERVER", "所有可控变量清单"],
           ["② 跟变量", "变量被赋给了谁、传给了谁", "数据流图（脑内画）"],

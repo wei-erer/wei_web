@@ -1,10 +1,5 @@
-/* PART 8 · 高级漏洞（下）：CSRF → 原型链污染 */
-COURSE.modules.push({
-  id: "p5b",
-  title: "PART 8 · 高级漏洞",
-  weeks: "第 15–18 周",
-  summary: "需要更多前置知识的漏洞：CSRF、模板注入、XML、反序列化、认证绕过、逻辑漏洞、NoSQL、原型链污染。全部要学，学到这里你已经开始「读源码找链」而不是「背 payload」。",
-  lessons: [
+/* PART 7 · 漏洞图谱（下）：不单独成 PART，追加到 p5 模块后按诞生地重排 */
+const P5_EXTRA = [
     {
       id: "p5l10",
       title: "CSRF：借你的手发请求",
@@ -190,7 +185,7 @@ echo $twig->createTemplate('Hello ' . $_GET['name'])->render([]);
     },
     {
       id: "p5l13",
-      title: "反序列化（PHP）",
+      title: "反序列化（PHP）：魔术方法与 pop 链",
       est: 40,
       goal: "看懂 PHP 序列化字符串，理解魔术方法如何被串成利用链（pop chain）。",
       sections: [
@@ -266,7 +261,7 @@ echo serialize($payload);
     },
     {
       id: "p5l14",
-      title: "反序列化（Java）与组件漏洞",
+      title: "反序列化（Java）：readObject 与组件链",
       est: 40,
       goal: "知道 Java 反序列化的入口、识别组件与版本，理解 ysoserial 与 JNDI 注入。",
       sections: [
@@ -534,6 +529,88 @@ console.log(b.isAdmin);  // true
         "污染之后通常要怎么才能造成实际危害？",
         "列出两种防御方式。"
       ]
+    },
+    {
+      id: "p5l19",
+      title: "反序列化（Python）：pickle 与对象图",
+      est: 35,
+      goal: "能解释 pickle 为什么能执行代码，分清 Python 对象图与 JS 原型链的区别，知道 safe_load / RestrictedUnpickler 的边界。",
+      sections: [
+        { type: "p", text: "先纠正一个容易混的说法：<b>Python 没有 JS 那种原型链</b>，把 prototype pollution 的术语硬套到 Python 上会越学越乱。Python 的反序列化问题来自另一件事：<b>pickle 在还原对象时，会按照字节流里的指令重建对象、导入模块、调用可调用对象</b>。用户可控的字节被还原成对象图，就等于把「构造对象」的权力交给了攻击者。" },
+        { type: "code", lang: "python", title: "最小原理：__reduce__ 决定怎么还原", src: `import pickle, os
+
+class Evil:
+    def __reduce__(self):
+        # 反序列化时，pickle 会调用 os.system("id")
+        return (os.system, ("id",))
+
+payload = pickle.dumps(Evil())
+pickle.loads(payload)      # 还原的那一刻执行命令` },
+        { type: "p", text: "`__reduce__` 只是最直观的入口。真实题目里，危险点可能是 <code>yaml.load</code>、<code>joblib.load</code>、Flask 的缓存、Celery 任务、机器学习模型。共同点只有一个：<b>不可信字节被当成了对象图</b>。" },
+        { type: "table", title: "别把概念混在一起：JS 与 Python 对照", head: ["你听到的说法", "JS 里是什么", "Python 里对应什么"], rows: [
+          ["原型链污染", "<code>__proto__</code> / <code>Object.prototype</code>", "没有原型链；对应对象图、MRO、子类遍历"],
+          ["沙箱逃逸", "vm / prototype gadget", "<code>__class__.__mro__.__subclasses__()</code>、pickle gadget"],
+          ["反序列化", "JSON 本身不执行；node-serialize 等库才危险", "pickle / yaml.load / joblib / torch.load"],
+          ["模板注入", "EJS / Pug 等模板", "Jinja2 表达式求值（SSTI，不是反序列化）"]
+        ]},
+        { type: "h", text: "怎么找入口" },
+        { type: "steps", items: [
+          "全局搜 <code>pickle.loads</code>、<code>pickle.load</code>、<code>yaml.load</code>、<code>joblib.load</code>、<code>torch.load</code>。",
+          "看数据是否可控：Cookie、上传文件、缓存、队列消息、模型文件。",
+          "看有没有安全替代：<code>yaml.safe_load</code>、<code>RestrictedUnpickler</code>、HMAC 签名。",
+          "看版本与依赖：老版本库可能默认不安全，或存在已知 gadget。",
+          "确认「还原时到底调用了什么」——这才是根因，不是 payload 长什么样。"
+        ]},
+        { type: "code", lang: "python", title: "安全与不安全的写法", src: `import yaml, pickle
+
+# ❌ 不安全：yaml.load 可以构造任意 Python 对象
+data = yaml.load(untrusted, Loader=yaml.Loader)
+
+# ✅ 安全：只解析基础类型
+data = yaml.safe_load(untrusted)
+
+# ✅ 如果必须用 pickle：白名单类 + 签名校验
+class SafeUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if (module, name) not in ALLOWED:
+            raise pickle.UnpicklingError("blocked")
+        return super().find_class(module, name)` },
+        { type: "h", text: "修复" },
+        { type: "list", items: [
+          "能不反序列化就不反序列化：跨边界优先用 JSON。",
+          "必须用 YAML 时用 <code>safe_load</code>；必须用 pickle 时用白名单 <code>RestrictedUnpickler</code>。",
+          "给序列化数据加 HMAC 签名，验证来源后再还原。",
+          "不要反序列化用户上传的模型/缓存/队列消息；隔离解析进程与权限。",
+          "升级依赖，排查历史上默认不安全的库。"
+        ]},
+        { type: "note", text: "Python 的 SSTI 也会走 <code>__class__.__mro__</code>，但那是<b>模板表达式求值</b>，不是反序列化。两者都涉及对象图，别混为一谈——这也是「按诞生地学」比「按 payload 学」更清楚的原因。" }
+      ],
+      code: [],
+      labs: [
+        { name: "Python 官方文档 · pickle", url: "https://docs.python.org/3/library/pickle.html" },
+        { name: "HackTricks · Python 沙箱与反序列化", url: "https://book.hacktricks.wiki/en/generic-methodologies-and-resources/python/bypass-python-sandboxes/index.html" }
+      ],
+      quiz: [
+        "Python 有原型链污染吗？如果没有，对应的风险是什么？",
+        "pickle 在反序列化时为什么会执行代码？",
+        "yaml.load 和 yaml.safe_load 的区别是什么？",
+        "RestrictedUnpickler 解决的是哪一层问题？",
+        "为什么说 SSTI 和反序列化都涉及对象图，但不是一回事？"
+      ]
     }
-  ]
+];
+
+const P5_MOD = COURSE.modules.filter(function (m) { return m.id === "p5"; })[0];
+P5_MOD.lessons = P5_MOD.lessons.concat(P5_EXTRA);
+
+// 按「诞生地」重排：浏览器 → 会话 → 鉴权 → 业务 → 数据 → 文件 → 模板 → 解析 → 序列化 → Node → 服务端请求
+const P5_ORDER = [
+  "p5l1",
+  "p5l5", "p5l10", "p5l15", "p5l16", "p5l2",
+  "p5l3", "p5l4", "p5l17", "p5l6", "p5l7", "p5l8",
+  "p5l11", "p5l12", "p5l13", "p5l19", "p5l14", "p5l18", "p5l9"
+];
+P5_MOD.lessons.sort(function (a, b) {
+  return P5_ORDER.indexOf(a.id) - P5_ORDER.indexOf(b.id);
 });
+P5_MOD.summary = "不再分「基础漏洞 / 高级漏洞」。18 个节点按诞生地挂回浏览器、会话、数据库、文件、模板、解析器、序列化与外部请求；每节保留最小复现，但先讲清根因。先看图知道有什么，再自己找文章、手动复现。";

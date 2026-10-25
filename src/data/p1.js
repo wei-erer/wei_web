@@ -121,6 +121,10 @@ box.onclick = () => alert("你点了我");` },
   .then(r => r.json())          // 把响应体当 JSON 解析
   .then(data => console.log(data))
   .catch(err => console.error(err));` },
+        { type: "touch", title: "为什么会有 XSS", text: "同一段字符串，放进 <code>textContent</code> 是文本，放进 <code>innerHTML</code> 就变成 HTML；浏览器一旦把它当标签/脚本解析，XSS 就诞生了。浏览器不是没防：<b>CSP</b> 限制能执行什么、<b>HttpOnly</b> 保护凭据不被脚本读取、<b>Trusted Types</b> 限制危险赋值，同源策略则限制跨源读取；但每种防护都有前提和绕过史——这正是图谱里 XSS 节点要追的主线。", links: [
+          { name: "图谱 · XSS", href: "#vulnmap/xss" },
+          { name: "读 XSS 的诞生", href: "#p5l5" }
+        ]},
         { type: "note", text: "fetch 是异步的。代码写完之后不会立刻拿到结果，所以要用 .then 或 async/await。<b>在控制台里直接写返回值，会看到 Promise {&lt;pending&gt;} —— 这不是错，是还没回来。</b>" }
       ],
       code: [],

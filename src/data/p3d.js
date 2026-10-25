@@ -137,6 +137,11 @@ def index():
         return redirect("/login")
     rows = db().execute("SELECT * FROM products").fetchall()
     return render_template_string(INDEX, rows=rows, uid=session["uid"])` },
+        { type: "touch", title: "登录鉴权：Session / Cookie / Token 各自信任谁", text: "Session 是服务端状态，Cookie 只是它的钥匙；JWT 是客户端保存的<b>签名声明</b>；Flask 默认把 session 放进签名 cookie，所以 <code>SECRET_KEY</code> 泄露就等于可以伪造身份。<b>CSRF 的根因也在这里</b>：浏览器会自动带 Cookie，但不会替你证明「这次操作是你想要的」。", links: [
+          { name: "图谱 · Session/JWT", href: "#vulnmap/auth" },
+          { name: "图谱 · CSRF", href: "#vulnmap/csrf" },
+          { name: "图谱 · 越权", href: "#vulnmap/idor" }
+        ]},
         { type: "table", title: "这一段里，哪些地方是「安全写法」", head: ["写法", "为什么安全"], rows: [
           ["session[\"uid\"] = row[\"id\"]", "身份由服务端签名，用户改不了"],
           ["SQL 用 ? 占位符", "参数化查询，杜绝注入"],
@@ -173,6 +178,18 @@ with db() as c:
         raise ValueError("库存不足")
     c.execute("INSERT INTO orders(user_id, product_id, qty, amount) VALUES(?,?,?,?)",
               (session["uid"], pid, qty, amount))` },
+        { type: "touch", title: "同一个注入，不同数据库", text: "SQLite 是教学环境，语法和权限模型都更简单；真实题目常见 MySQL / PostgreSQL。换数据库先做三件事：<b>确认元数据表、确认时间函数、确认当前账号权限</b>。注入的根因不变，但「怎么问出数据」和「拿到权限后能做什么」差别很大。", links: [
+          { name: "图谱 · SQL 注入", href: "#vulnmap/sqli" },
+          { name: "图谱 · NoSQL", href: "#vulnmap/nosql" },
+          { name: "图谱 · UDF 提权", href: "#vulnmap/udf" }
+        ]},
+        { type: "table", title: "SQLite / MySQL / PostgreSQL：指纹与打法差异", head: ["数据库", "指纹 / 元数据", "时间盲注", "常用取值", "高权限路径"], rows: [
+          ["SQLite", "<code>sqlite_master</code>；无 information_schema；<code>sqlite_version()</code>", "无 SLEEP；用重查询或 <code>randomblob</code> 计时", "<code>group_concat</code>、<code>substr</code>", "默认无 UDF；<code>load_extension</code> 通常关闭"],
+          ["MySQL", "<code>information_schema</code>；<code>@@version</code>、<code>database()</code>", "<code>SLEEP()</code>、<code>BENCHMARK()</code>", "<code>group_concat</code>、<code>0x3a</code>", "高权限 + 可写 plugin_dir → UDF；<code>INTO OUTFILE</code>"],
+          ["PostgreSQL", "<code>information_schema</code>、<code>pg_catalog</code>；<code>version()</code>", "<code>pg_sleep()</code>", "<code>string_agg</code>、<code>||</code> 拼接", "<code>COPY ... TO PROGRAM</code>（超级用户）、<code>pg_read_file</code>"],
+          ["SQL Server", "<code>sys.objects</code>；<code>@@version</code>", "<code>WAITFOR DELAY</code>", "<code>+</code> 拼接、<code>CHAR()</code>", "<code>xp_cmdshell</code>（高权限）"]
+        ]},
+        { type: "p", text: "关于 <b>MySQL UDF 提权</b>：它成立的前提是「数据库账号权限过高 + 能把共享库写进 plugin_dir + 数据库愿意加载它」。这不是「MySQL 默认就能提权」，而是 SQL 注入拿到高权限账号后的延伸。学习时重点看<b>权限从哪来、为什么能写文件、怎么修</b>，不要把它当成一套背下来就能打的 payload。只在本地隔离容器里验证。" },
         { type: "table", title: "数据层的三件事", head: ["事项", "做法", "防住了什么"], rows: [
           ["参数化", "永远用 ? 占位符", "SQL 注入"],
           ["事务", "扣库存与建订单放同一事务", "并发下超卖/半成功"],
@@ -208,6 +225,10 @@ orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (session["uid"],
           ["上传有白名单", "搜 .filename / save(", "文件上传"],
           ["错误信息不回显", "故意传错参数看报错", "信息泄露"],
           ["依赖没有已知漏洞", "pip list → 对照 CVE", "组件漏洞"]
+        ]},
+        { type: "touch", title: "扩展功能就是新的攻击面", text: "给站加两个功能：<code>/preview?url=</code> 远程取图 → <b>SSRF</b> 诞生；<code>render_template_string(\"Hi \" + name)</code> → <b>SSTI</b> 诞生。先写功能，再画出「输入 → 哪个函数 → 什么后果」，最后才想 payload。", links: [
+          { name: "图谱 · SSTI", href: "#vulnmap/ssti" },
+          { name: "图谱 · SSRF", href: "#vulnmap/ssrf" }
         ]},
         { type: "steps", items: [
           "本地跑起来：<code>flask --app app run --debug</code>，用浏览器把四个页面都走一遍。",

